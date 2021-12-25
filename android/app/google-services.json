@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "39464472146",
+    "project_id": "study-platform-7be51",
+    "storage_bucket": "study-platform-7be51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39464472146:android:247f8b88501bd70ba0598b",
+        "android_client_info": {
+          "package_name": "org.czobot.study_platform"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39464472146-c8au7uf40kaff0200veu2j2me9dh0ng8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBL3RW0nwZqZOKulUmPRvCY3Rc9YNycvqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39464472146-c8au7uf40kaff0200veu2j2me9dh0ng8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

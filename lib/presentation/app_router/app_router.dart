@@ -9,7 +9,7 @@ import 'package:study_platform/presentation/screens/user_info_screen.dart';
 import 'package:study_platform/presentation/screens/welcome_screen.dart';
 
 class AppRouter {
-  Route? onGenerateRoute(RouteSettings routeSettings) {
+  static Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case kWelcomeScreen:
         return MaterialPageRoute(

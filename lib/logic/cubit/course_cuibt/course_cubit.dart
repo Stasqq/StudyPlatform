@@ -9,10 +9,10 @@ import 'package:study_platform/data/repositories/courses_repository.dart';
 part 'course_state.dart';
 
 class CourseCubit extends Cubit<CourseState> {
-  CourseCubit(
-      {required AuthenticationRepository authenticationRepository,
-      required CoursesRepository coursesRepository})
-      : _authenticationRepository = authenticationRepository,
+  CourseCubit({
+    required AuthenticationRepository authenticationRepository,
+    required CoursesRepository coursesRepository,
+  })  : _authenticationRepository = authenticationRepository,
         _coursesRepository = coursesRepository,
         super(const CourseState());
 
@@ -21,6 +21,7 @@ class CourseCubit extends Cubit<CourseState> {
 
   void courseNameChanged(String value) {
     final courseName = CourseName.dirty(value);
+
     emit(state.copyWith(
       courseName: courseName,
       status: Formz.validate([

@@ -152,7 +152,10 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on firebase_auth.FirebaseAuthException catch (e) {
+    }
+    // throwy nie potrzebne, zobacz paczke freezed, lepiej na tym poziomie
+    // to oblsuzyc a wyzej psucic juz wiadomy status
+    on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();

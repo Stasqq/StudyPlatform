@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
@@ -9,6 +9,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final infoState = context.watch<UserInfoCubit>().state;
+
     return StudyPlatformScaffold(
       title: kHomeScreenText,
       child: Align(
@@ -16,17 +18,11 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              context.select((UserInfoCubit cubit) => cubit.state.email).value,
-            ),
+            Text(infoState.email.value),
             const SizedBox(height: 4),
-            Text(
-              context.select((UserInfoCubit cubit) => cubit.state.firstName).value,
-            ),
+            Text(infoState.firstName.value),
             const SizedBox(height: 4),
-            Text(
-              context.select((UserInfoCubit cubit) => cubit.state.surname).value,
-            ),
+            Text(infoState.surname.value),
           ],
         ),
       ),

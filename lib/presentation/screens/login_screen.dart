@@ -31,20 +31,18 @@ class LoginScreen extends StatelessWidget {
         },
         child: Align(
           alignment: const Alignment(0, -1 / 3),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 16),
-                _EmailInput(),
-                const SizedBox(height: 8),
-                _PasswordInput(),
-                const SizedBox(height: 8),
-                _LoginButton(),
-                const SizedBox(height: 4),
-                _SignUpButton(),
-              ],
-            ),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              const SizedBox(height: 16),
+              _EmailInput(),
+              const SizedBox(height: 8),
+              _PasswordInput(),
+              const SizedBox(height: 8),
+              _LoginButton(),
+              const SizedBox(height: 4),
+              _SignUpButton(),
+            ],
           ),
         ),
       ),
@@ -81,7 +79,8 @@ class _PasswordInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) => context.read<LoginCubit>().passwordChanged(password),
+          onChanged: (password) =>
+              context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',

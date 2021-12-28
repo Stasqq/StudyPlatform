@@ -14,17 +14,7 @@ class CreateCourseScreen extends StatelessWidget {
     return StudyPlatformScaffold(
       title: kCreateCourseScreenText,
       child: BlocListener<CourseCubit, CourseState>(
-        listener: (context, state) {
-          if (state.status.isSubmissionSuccess) {
-            Navigator.of(context).pushNamed(kCoursesScreen);
-          } else if (state.status.isSubmissionFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text(state.errorMessage ?? 'Course Creating Failure')),
-              );
-          }
-        },
+        listener: _onCourseChange,
         child: Align(
           alignment: const Alignment(0, -1 / 3),
           child: Column(
@@ -43,15 +33,31 @@ class CreateCourseScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _onCourseChange(context, state) {
+    if (state.status.isSubmissionSuccess) {
+      Navigator.of(context).pushNamed(kCoursesScreen);
+    } else if (state.status.isSubmissionFailure) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(state.errorMessage ?? 'Course Creating Failure'),
+          ),
+        );
+    }
+  }
 }
 
 class _CourseNameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) => previous.courseName != current.courseName,
+      buildWhen: (previous, current) =>
+          previous.courseName != current.courseName,
       builder: (context, state) {
         return TextField(
+          // Po co te klucze  wszedzie ?
           key: const Key('courseCreateForm_courseNameInput_textField'),
           onChanged: (courseName) =>
               context.read<CourseCubit>().courseNameChanged(courseName),
@@ -70,7 +76,10 @@ class _DescriptionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) => previous.description != current.description,
+      // idzie sie zajebac z tymii build when jak ich duzo, uwazaj na nie.
+      // jak wplywa to na preformance to nie ma sensu tego dawac
+      buildWhen: (previous, current) =>
+          previous.description != current.description,
       builder: (context, state) {
         return TextField(
           key: const Key('courseCreateForm_courseNameInput_textField'),
@@ -91,14 +100,16 @@ class _PublicInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) => previous.description != current.description,
+      buildWhen: (previous, current) =>
+          previous.description != current.description,
       builder: (context, state) {
         return ListTile(
           title: const Text('Set Public?'),
           leading: Radio<bool>(
             key: const Key('courseCreateForm_public_radioButton'),
             value: state.public,
-            onChanged: (value) => context.read<CourseCubit>().publicChanged(value!),
+            onChanged: (value) =>
+                context.read<CourseCubit>().publicChanged(value!),
             groupValue: false,
             activeColor: kButtonColor,
           ),
@@ -125,7 +136,8 @@ class _SubmitCreateCourseButton extends StatelessWidget {
                   primary: kButtonColor,
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<CourseCubit>().createCourseFormSubmitted()
+                    ? () =>
+                        context.read<CourseCubit>().createCourseFormSubmitted()
                     : null,
                 child: const Text(kSubmitText),
               );

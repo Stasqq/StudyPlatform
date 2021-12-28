@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+// uwazaj na importy, tutaj
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 
@@ -25,7 +25,7 @@ class StudyPlatformDrawer extends StatelessWidget {
               ),
             ),
           ),
-          DrawerItem(
+          _DrawerItem(
             iconData: Icons.home,
             title: kHomeScreenText,
             onTap: () {
@@ -33,7 +33,7 @@ class StudyPlatformDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(kHomeScreen);
             },
           ),
-          DrawerItem(
+          _DrawerItem(
             iconData: Icons.format_list_bulleted,
             title: kCoursesScreenText,
             onTap: () {
@@ -41,7 +41,7 @@ class StudyPlatformDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(kCoursesScreen);
             },
           ),
-          DrawerItem(
+          _DrawerItem(
             iconData: Icons.add,
             title: kCreateCourseScreenText,
             onTap: () {
@@ -49,17 +49,19 @@ class StudyPlatformDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(kCreateCourseScreen);
             },
           ),
-          DrawerItem(
+          _DrawerItem(
             iconData: Icons.logout,
             title: kLogoutText,
             onTap: () {
-              context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+              context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested());
               Navigator.of(context).pushNamed(kWelcomeScreen);
             },
           ),
           Visibility(
             visible: !kIsWeb,
-            child: DrawerItem(
+            child: _DrawerItem(
               iconData: Icons.close,
               title: kCloseText,
               onTap: () {
@@ -73,12 +75,13 @@ class StudyPlatformDrawer extends StatelessWidget {
   }
 }
 
-class DrawerItem extends StatelessWidget {
+// nicely done
+class _DrawerItem extends StatelessWidget {
   final IconData iconData;
   final String title;
   final VoidCallback? onTap;
 
-  const DrawerItem({
+  const _DrawerItem({
     Key? key,
     required this.iconData,
     required this.title,

@@ -38,6 +38,8 @@ class RoutingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      // jak ci sie style powtarzaja to mozesz zrobic globalne
+      // i tylko inlinowo je zmieniac jak potrzeba
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),

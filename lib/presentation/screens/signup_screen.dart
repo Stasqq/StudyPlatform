@@ -47,6 +47,11 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
+// Moznaby reuzywac jeden input na wsyztskie, i podawac jako prametry tylko
+// onChanged
+// keyboardType
+// label
+// errorText
 class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

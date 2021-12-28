@@ -21,18 +21,8 @@ import 'data/repositories/authentication_repository.dart';
 late final AuthenticationRepository _authenticationRepository;
 late final UserInfoRepository _userInfoRepository;
 late final CoursesRepository _coursesRepository;
-late final AppRouter _appRouter;
 
 void main() async {
-  await setUpApp();
-
-  BlocOverrides.runZoned(
-    () => {runApp(const StudyPlatform())},
-    blocObserver: AppBlocObserver(),
-  );
-}
-
-Future<void> setUpApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: kIsWeb
@@ -44,13 +34,10 @@ Future<void> setUpApp() async {
           )
         : null,
   );
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  _authenticationRepository = AuthenticationRepository(firebaseAuth: firebaseAuth);
-  await _authenticationRepository.user.first;
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  _userInfoRepository = UserInfoRepository(firebaseFirestore: firebaseFirestore);
-  _coursesRepository = CoursesRepository(firebaseFirestore: firebaseFirestore);
-  _appRouter = AppRouter();
+  BlocOverrides.runZoned(
+    () => {runApp(const StudyPlatform())},
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 class StudyPlatform extends StatelessWidget {
@@ -59,44 +46,77 @@ class StudyPlatform extends StatelessWidget {
   // ! This widget is the root of application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    final firebaseFirestore = FirebaseFirestore.instance;
+
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider<AuthenticationBloc>(
-          create: (authenticationBlocContext) => AuthenticationBloc(
-            authenticationRepository: _authenticationRepository,
-          ),
+        RepositoryProvider(
+          create: (context) =>
+              AuthenticationRepository(firebaseAuth: FirebaseAuth.instance),
         ),
-        BlocProvider<LoginCubit>(
-          create: (loginCubitContext) => LoginCubit(
-            authenticationRepository: _authenticationRepository,
-          ),
+        RepositoryProvider(
+          create: (context) =>
+              UserInfoRepository(firebaseFirestore: firebaseFirestore),
         ),
-        BlocProvider<SignUpCubit>(
-          create: (signUpCubitContext) => SignUpCubit(
-            authenticationRepository: _authenticationRepository,
-          ),
+        RepositoryProvider(
+          create: (context) =>
+              UserInfoRepository(firebaseFirestore: firebaseFirestore),
         ),
-        BlocProvider<UserInfoCubit>(
-          create: (userInfoCubitContext) => UserInfoCubit(
-            authenticationRepository: _authenticationRepository,
-            userInfoRepository: _userInfoRepository,
-          ),
-        ),
-        BlocProvider<CourseCubit>(
-          create: (userInfoCubitContext) => CourseCubit(
-            authenticationRepository: _authenticationRepository,
-            coursesRepository: _coursesRepository,
-          ),
+        RepositoryProvider(
+          create: (context) =>
+              CoursesRepository(firebaseFirestore: firebaseFirestore),
         ),
       ],
-      child: MaterialApp(
-        title: kAppTitle,
-        theme: ThemeData(
-          primaryColor: primaryColor,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        onGenerateRoute: _appRouter.onGenerateRoute,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+            create: (authenticationBlocContext) => AuthenticationBloc(
+              authenticationRepository: _authenticationRepository,
+            ),
+          ),
+          BlocProvider<LoginCubit>(
+            create: (loginCubitContext) => LoginCubit(
+              authenticationRepository: _authenticationRepository,
+            ),
+          ),
+          BlocProvider<SignUpCubit>(
+            create: (signUpCubitContext) => SignUpCubit(
+              authenticationRepository: _authenticationRepository,
+            ),
+          ),
+          BlocProvider<UserInfoCubit>(
+            create: (userInfoCubitContext) => UserInfoCubit(
+              authenticationRepository: _authenticationRepository,
+              userInfoRepository: _userInfoRepository,
+            ),
+          ),
+          BlocProvider<CourseCubit>(
+            create: (userInfoCubitContext) => CourseCubit(
+              authenticationRepository: _authenticationRepository,
+              coursesRepository: _coursesRepository,
+            ),
+          ),
+        ],
+        child: const _App(),
       ),
+    );
+  }
+}
+
+class _App extends StatelessWidget {
+  const _App({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: kAppTitle,
+      theme: ThemeData(
+        primaryColor: primaryColor,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }

@@ -42,7 +42,7 @@ class CourseCubit extends Cubit<CourseState> {
     ));
   }
 
-  Future<void> createCourseFormSubmitted() async {
+  Future<void> createCourseFormSubmitted(String ownerName) async {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
@@ -50,10 +50,12 @@ class CourseCubit extends Cubit<CourseState> {
         courseName: state.courseName.value,
         description: state.description ?? '',
         ownerUid: _authenticationRepository.currentUser.uid,
+        ownerName: ownerName,
         public: state.public,
       );
       emit(state.copyWith(
           ownerUid: _authenticationRepository.currentUser.uid,
+          ownerName: ownerName,
           status: FormzStatus.submissionSuccess));
     } on SaveNewCourseToFirestoreFailure catch (e) {
       print(e);

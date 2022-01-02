@@ -9,16 +9,17 @@ const String kSplashScreen = '/';
 const String kWelcomeScreen = '/welcome';
 const String kLoginScreen = '/login';
 const String kSignupScreen = '/signup';
-const String kHomeScreen = '/home';
+const String kProfileScreen = '/profile';
 const String kUserInfoScreen = '/user_info';
 const String kCoursesScreen = '/courses';
 const String kCreateCourseScreen = '/create_course';
+const String kCourseScreen = '/course';
 
 // * Routing text
 const String kWelcomeScreenText = 'Welcome Screen';
 const String kLoginScreenText = 'Login';
 const String kSignupScreenText = 'Sign up';
-const String kHomeScreenText = 'Home';
+const String kProfileScreenText = 'Profile';
 const String kUserInfoScreenText = 'User Info';
 const String kCoursesScreenText = 'Courses';
 const String kCreateCourseScreenText = 'Create Course';

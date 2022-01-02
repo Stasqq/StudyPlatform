@@ -6,14 +6,19 @@ import 'package:study_platform/presentation/widgets/study_platform_drawer.dart';
 class StudyPlatformScaffold extends StatelessWidget {
   final String title;
   final Widget child;
+  final List<Widget>? appBarActions;
 
-  const StudyPlatformScaffold({Key? key, required this.title, required this.child})
+  const StudyPlatformScaffold(
+      {Key? key, required this.title, required this.child, this.appBarActions})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(title),
+        actions: appBarActions,
+      ),
       drawer: kInvisibleDrawerScreensTitles.contains(title)
           ? null
           : const StudyPlatformDrawer(),

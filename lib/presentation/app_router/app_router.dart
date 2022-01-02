@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/data/models/course/course.dart';
+import 'package:study_platform/presentation/screens/course_screen.dart';
 import 'package:study_platform/presentation/screens/courses_screen.dart';
 import 'package:study_platform/presentation/screens/create_course_screen.dart';
-import 'package:study_platform/presentation/screens/home_screen.dart';
+import 'package:study_platform/presentation/screens/profile_screen.dart';
 import 'package:study_platform/presentation/screens/login_screen.dart';
 import 'package:study_platform/presentation/screens/signup_screen.dart';
 import 'package:study_platform/presentation/screens/splash_screen.dart';
@@ -28,9 +30,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => SignUpScreen(),
         );
-      case kHomeScreen:
+      case kProfileScreen:
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
+          builder: (_) => ProfileScreen(),
         );
       case kUserInfoScreen:
         return MaterialPageRoute(
@@ -43,6 +45,10 @@ class AppRouter {
       case kCreateCourseScreen:
         return MaterialPageRoute(
           builder: (_) => CreateCourseScreen(),
+        );
+      case kCourseScreen:
+        return MaterialPageRoute(
+          builder: (_) => CourseScreen(course: routeSettings.arguments as Course),
         );
       default:
         return null;

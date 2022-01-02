@@ -5,6 +5,7 @@ import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
+import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
 class CreateCourseScreen extends StatelessWidget {
@@ -112,6 +113,10 @@ class _PublicInput extends StatelessWidget {
 class _SubmitCreateCourseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final String ownerName = context.read<UserInfoCubit>().state.firstName.value +
+        ' ' +
+        context.read<UserInfoCubit>().state.surname.value;
+
     return BlocBuilder<CourseCubit, CourseState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
@@ -120,7 +125,8 @@ class _SubmitCreateCourseButton extends StatelessWidget {
             : ElevatedButton(
                 style: kButtonStyle,
                 onPressed: state.status.isValidated
-                    ? () => context.read<CourseCubit>().createCourseFormSubmitted()
+                    ? () =>
+                        context.read<CourseCubit>().createCourseFormSubmitted(ownerName)
                     : null,
                 child: const Text(kSubmitText),
               );

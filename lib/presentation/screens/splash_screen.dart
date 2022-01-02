@@ -18,8 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
-          context.read<UserInfoCubit>().readUserInfo();
-          Navigator.of(context).pushNamed(kHomeScreen);
+          context
+              .read<UserInfoCubit>()
+              .readUserInfo()
+              .whenComplete(() => Navigator.of(context).pushNamed(kCoursesScreen));
         } else {
           Navigator.of(context).pushNamed(kWelcomeScreen);
         }

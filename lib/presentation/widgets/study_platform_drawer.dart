@@ -26,14 +26,6 @@ class StudyPlatformDrawer extends StatelessWidget {
             ),
           ),
           _DrawerItem(
-            iconData: Icons.home,
-            title: kHomeScreenText,
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(kHomeScreen);
-            },
-          ),
-          _DrawerItem(
             iconData: Icons.format_list_bulleted,
             title: kCoursesScreenText,
             onTap: () {
@@ -50,12 +42,18 @@ class StudyPlatformDrawer extends StatelessWidget {
             },
           ),
           _DrawerItem(
+            iconData: Icons.perm_identity,
+            title: kProfileScreenText,
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(kProfileScreen);
+            },
+          ),
+          _DrawerItem(
             iconData: Icons.logout,
             title: kLogoutText,
             onTap: () {
-              context
-                  .read<AuthenticationBloc>()
-                  .add(AuthenticationLogoutRequested());
+              context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
               Navigator.of(context).pushNamed(kWelcomeScreen);
             },
           ),

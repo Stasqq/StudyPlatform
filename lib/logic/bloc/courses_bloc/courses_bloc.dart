@@ -9,6 +9,8 @@ import 'package:study_platform/data/repositories/courses_repository.dart';
 part 'courses_event.dart';
 part 'courses_state.dart';
 
+enum CoursesFilter { All, Owner, Joined }
+
 class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
   CoursesBloc({required CoursesRepository coursesRepository})
       : _coursesRepository = coursesRepository,
@@ -35,9 +37,27 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     });
     courses.clear();
     subscriptions.clear();
-    subscriptions.add(_coursesRepository.getCourses().listen((event) {
-      _handleStreamEvent(0, event);
-    }));
+
+    if (event.joinedCourses.isEmpty && event.coursesFilter == CoursesFilter.Joined) {
+      emit(CoursesStateEmpty());
+      return;
+    } else if (event.ownerUid == null && event.coursesFilter == CoursesFilter.Owner) {
+      emit(CoursesStateEmpty());
+      return;
+    }
+
+    subscriptions.add(
+      _coursesRepository
+          .getCourses(
+              coursesFilter: event.coursesFilter,
+              ownerUid: event.ownerUid,
+              joinedCourses: event.joinedCourses)
+          .listen(
+        (event) {
+          _handleStreamEvent(0, event);
+        },
+      ),
+    );
   }
 
   void _onLoadEvent(

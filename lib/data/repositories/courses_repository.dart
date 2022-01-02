@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:study_platform/data/models/course/class.dart';
 import 'package:study_platform/data/models/course/course.dart';
+import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 
 class SaveNewCourseToFirestoreFailure implements Exception {}
 
@@ -14,12 +15,13 @@ class CoursesRepository {
       {required String courseName,
       required String description,
       required String ownerUid,
+      required String ownerName,
       required bool public}) async {
     try {
       var document = _firebaseFirestore.collection('courses').doc();
       var documentReference = await document.get();
-      Course course = Course(
-          documentReference.id, ownerUid, courseName, description, <Class>[], public);
+      Course course = Course(documentReference.id, ownerUid, ownerName, courseName,
+          description, <Class>[], public);
       await _firebaseFirestore
           .collection('courses')
           .doc(documentReference.id)
@@ -29,9 +31,30 @@ class CoursesRepository {
     }
   }
 
-  Stream<QuerySnapshot> getCourses() {
-    print('getCourses');
-    return _firebaseFirestore.collection('courses').limit(15).snapshots();
+  Stream<QuerySnapshot> getCourses(
+      {required CoursesFilter coursesFilter,
+      String? ownerUid,
+      List<String>? joinedCourses}) {
+    switch (coursesFilter) {
+      case CoursesFilter.All:
+        return _firebaseFirestore
+            .collection('courses')
+            .where('public', isEqualTo: true)
+            .limit(15)
+            .snapshots();
+      case CoursesFilter.Owner:
+        return _firebaseFirestore
+            .collection('courses')
+            .where('ownerUid', isEqualTo: ownerUid)
+            .limit(15)
+            .snapshots();
+      case CoursesFilter.Joined:
+        return _firebaseFirestore
+            .collection('courses')
+            .where('id', whereIn: joinedCourses)
+            .limit(15)
+            .snapshots();
+    }
   }
 
   Stream<QuerySnapshot> getCoursesPage(DocumentSnapshot lastDoc) {

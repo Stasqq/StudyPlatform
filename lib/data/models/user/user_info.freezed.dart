@@ -22,13 +22,14 @@ class _$UserInfoTearOff {
   const _$UserInfoTearOff();
 
   _UserInfo call(String? email, String? uid, String firstName, String surname,
-      String? photoURL) {
+      String? photoURL, List<String> joinedCourses) {
     return _UserInfo(
       email,
       uid,
       firstName,
       surname,
       photoURL,
+      joinedCourses,
     );
   }
 
@@ -47,6 +48,7 @@ mixin _$UserInfo {
   String get firstName => throw _privateConstructorUsedError;
   String get surname => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
+  List<String> get joinedCourses => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,7 +65,8 @@ abstract class $UserInfoCopyWith<$Res> {
       String? uid,
       String firstName,
       String surname,
-      String? photoURL});
+      String? photoURL,
+      List<String> joinedCourses});
 }
 
 /// @nodoc
@@ -81,6 +84,7 @@ class _$UserInfoCopyWithImpl<$Res> implements $UserInfoCopyWith<$Res> {
     Object? firstName = freezed,
     Object? surname = freezed,
     Object? photoURL = freezed,
+    Object? joinedCourses = freezed,
   }) {
     return _then(_value.copyWith(
       email: email == freezed
@@ -103,6 +107,10 @@ class _$UserInfoCopyWithImpl<$Res> implements $UserInfoCopyWith<$Res> {
           ? _value.photoURL
           : photoURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      joinedCourses: joinedCourses == freezed
+          ? _value.joinedCourses
+          : joinedCourses // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -117,7 +125,8 @@ abstract class _$UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
       String? uid,
       String firstName,
       String surname,
-      String? photoURL});
+      String? photoURL,
+      List<String> joinedCourses});
 }
 
 /// @nodoc
@@ -136,6 +145,7 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
     Object? firstName = freezed,
     Object? surname = freezed,
     Object? photoURL = freezed,
+    Object? joinedCourses = freezed,
   }) {
     return _then(_UserInfo(
       email == freezed
@@ -158,6 +168,10 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
           ? _value.photoURL
           : photoURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      joinedCourses == freezed
+          ? _value.joinedCourses
+          : joinedCourses // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -165,8 +179,8 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_UserInfo implements _UserInfo {
-  const _$_UserInfo(
-      this.email, this.uid, this.firstName, this.surname, this.photoURL);
+  const _$_UserInfo(this.email, this.uid, this.firstName, this.surname,
+      this.photoURL, this.joinedCourses);
 
   factory _$_UserInfo.fromJson(Map<String, dynamic> json) =>
       _$$_UserInfoFromJson(json);
@@ -181,10 +195,12 @@ class _$_UserInfo implements _UserInfo {
   final String surname;
   @override
   final String? photoURL;
+  @override
+  final List<String> joinedCourses;
 
   @override
   String toString() {
-    return 'UserInfo(email: $email, uid: $uid, firstName: $firstName, surname: $surname, photoURL: $photoURL)';
+    return 'UserInfo(email: $email, uid: $uid, firstName: $firstName, surname: $surname, photoURL: $photoURL, joinedCourses: $joinedCourses)';
   }
 
   @override
@@ -196,7 +212,9 @@ class _$_UserInfo implements _UserInfo {
             const DeepCollectionEquality().equals(other.uid, uid) &&
             const DeepCollectionEquality().equals(other.firstName, firstName) &&
             const DeepCollectionEquality().equals(other.surname, surname) &&
-            const DeepCollectionEquality().equals(other.photoURL, photoURL));
+            const DeepCollectionEquality().equals(other.photoURL, photoURL) &&
+            const DeepCollectionEquality()
+                .equals(other.joinedCourses, joinedCourses));
   }
 
   @override
@@ -206,7 +224,8 @@ class _$_UserInfo implements _UserInfo {
       const DeepCollectionEquality().hash(uid),
       const DeepCollectionEquality().hash(firstName),
       const DeepCollectionEquality().hash(surname),
-      const DeepCollectionEquality().hash(photoURL));
+      const DeepCollectionEquality().hash(photoURL),
+      const DeepCollectionEquality().hash(joinedCourses));
 
   @JsonKey(ignore: true)
   @override
@@ -220,8 +239,13 @@ class _$_UserInfo implements _UserInfo {
 }
 
 abstract class _UserInfo implements UserInfo {
-  const factory _UserInfo(String? email, String? uid, String firstName,
-      String surname, String? photoURL) = _$_UserInfo;
+  const factory _UserInfo(
+      String? email,
+      String? uid,
+      String firstName,
+      String surname,
+      String? photoURL,
+      List<String> joinedCourses) = _$_UserInfo;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) = _$_UserInfo.fromJson;
 
@@ -235,6 +259,8 @@ abstract class _UserInfo implements UserInfo {
   String get surname;
   @override
   String? get photoURL;
+  @override
+  List<String> get joinedCourses;
   @override
   @JsonKey(ignore: true)
   _$UserInfoCopyWith<_UserInfo> get copyWith =>

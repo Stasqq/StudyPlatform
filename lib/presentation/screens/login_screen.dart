@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state.status.isSubmissionSuccess) {
             context.read<UserInfoCubit>().readUserInfo();
-            Navigator.of(context).pushNamed(kHomeScreen);
+            Navigator.of(context).pushNamed(kCoursesScreen);
           } else if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()

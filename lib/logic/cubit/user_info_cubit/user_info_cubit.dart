@@ -51,7 +51,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
               _authenticationRepository.currentUser.uid,
               state.firstName.value,
               state.surname.value,
-              null));
+              null, []));
       emit(state.copyWith(
           email: Email.dirty(_authenticationRepository.currentUser.email),
           status: FormzStatus.submissionSuccess));
@@ -72,7 +72,8 @@ class UserInfoCubit extends Cubit<UserInfoState> {
       emit(state.copyWith(
           firstName: Name.dirty(userInfo.firstName),
           surname: Name.dirty(userInfo.surname),
-          email: Email.dirty(userInfo.email ?? '')));
+          email: Email.dirty(userInfo.email ?? ''),
+          joinedCourses: userInfo.joinedCourses));
     } catch (e) {
       print(e);
       throw ReadUserInfoFromFirestoreFailure();

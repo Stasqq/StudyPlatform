@@ -19,6 +19,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
               ? AuthenticationState.authenticated(authenticationRepository.currentUser)
               : const AuthenticationState.unauthenticated(),
         ) {
+    on<AuthenticationAutomaticLogIn>(_onAutomaticLogIn);
     on<AuthenticationUserChanged>(_onUserChanged);
     on<AuthenticationLogoutRequested>(_onLogoutRequested);
     _userSubscription = _authenticationRepository.user.listen(
@@ -28,6 +29,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<User> _userSubscription;
+
+  void _onAutomaticLogIn(
+    AuthenticationAutomaticLogIn event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    emit(_authenticationRepository.isLoggedIn
+        ? AuthenticationState.authenticated(_authenticationRepository.currentUser)
+        : const AuthenticationState.unauthenticated());
+  }
 
   void _onUserChanged(
     AuthenticationUserChanged event,

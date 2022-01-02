@@ -20,7 +20,8 @@ class UserInfoRepository {
   Future<user_info.UserInfo> readUserInfo({required String email}) async {
     try {
       var document = await _firebaseFirestore.collection('users').doc(email).get();
-      return user_info.UserInfo.fromJson(document.data()!);
+      Map<String, dynamic>? userInfoMap = document.data();
+      return user_info.UserInfo.fromJson(userInfoMap!);
     } catch (e) {
       print(e);
       throw ReadUserInfoFromFirestoreFailure();

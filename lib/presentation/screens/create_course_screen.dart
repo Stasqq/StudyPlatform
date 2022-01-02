@@ -35,7 +35,6 @@ class CreateCourseScreen extends StatelessWidget {
     );
   }
 
-  //TODO: to nie działa jak się wstawi zamiast listenera wyżej
   void _onCourseChange(BuildContext context, CourseState state) {
     if (state.status.isSubmissionSuccess) {
       Navigator.of(context).pushNamed(kCoursesScreen);

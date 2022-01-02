@@ -5,7 +5,8 @@ const String kLogoutText = 'Logout';
 const String kCloseText = 'Close';
 
 // * Routing string
-const String kWelcomeScreen = '/';
+const String kSplashScreen = '/';
+const String kWelcomeScreen = '/welcome';
 const String kLoginScreen = '/login';
 const String kSignupScreen = '/signup';
 const String kHomeScreen = '/home';

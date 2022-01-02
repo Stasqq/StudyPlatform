@@ -5,12 +5,17 @@ import 'package:study_platform/presentation/screens/create_course_screen.dart';
 import 'package:study_platform/presentation/screens/home_screen.dart';
 import 'package:study_platform/presentation/screens/login_screen.dart';
 import 'package:study_platform/presentation/screens/signup_screen.dart';
+import 'package:study_platform/presentation/screens/splash_screen.dart';
 import 'package:study_platform/presentation/screens/user_info_screen.dart';
 import 'package:study_platform/presentation/screens/welcome_screen.dart';
 
 class AppRouter {
   static Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      case kSplashScreen:
+        return MaterialPageRoute(
+          builder: (_) => SplashScreen(),
+        );
       case kWelcomeScreen:
         return MaterialPageRoute(
           builder: (_) => WelcomeScreen(),

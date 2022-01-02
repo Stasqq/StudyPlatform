@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
@@ -34,7 +35,8 @@ class CreateCourseScreen extends StatelessWidget {
     );
   }
 
-  void _onCourseChange(context, state) {
+  //TODO: to nie działa jak się wstawi zamiast listenera wyżej
+  void _onCourseChange(BuildContext context, CourseState state) {
     if (state.status.isSubmissionSuccess) {
       Navigator.of(context).pushNamed(kCoursesScreen);
     } else if (state.status.isSubmissionFailure) {
@@ -53,12 +55,9 @@ class _CourseNameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) =>
-          previous.courseName != current.courseName,
+      buildWhen: (previous, current) => previous.courseName != current.courseName,
       builder: (context, state) {
         return TextField(
-          // Po co te klucze  wszedzie ?
-          key: const Key('courseCreateForm_courseNameInput_textField'),
           onChanged: (courseName) =>
               context.read<CourseCubit>().courseNameChanged(courseName),
           decoration: InputDecoration(
@@ -76,13 +75,9 @@ class _DescriptionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      // idzie sie zajebac z tymii build when jak ich duzo, uwazaj na nie.
-      // jak wplywa to na preformance to nie ma sensu tego dawac
-      buildWhen: (previous, current) =>
-          previous.description != current.description,
+      buildWhen: (previous, current) => previous.description != current.description,
       builder: (context, state) {
         return TextField(
-          key: const Key('courseCreateForm_courseNameInput_textField'),
           keyboardType: TextInputType.multiline,
           maxLines: null,
           onChanged: (description) =>
@@ -100,18 +95,14 @@ class _PublicInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) =>
-          previous.description != current.description,
+      buildWhen: (previous, current) => previous.public != current.public,
       builder: (context, state) {
         return ListTile(
-          title: const Text('Set Public?'),
-          leading: Radio<bool>(
-            key: const Key('courseCreateForm_public_radioButton'),
+          title: const Text('Set Public'),
+          leading: Checkbox(
+            checkColor: kButtonColor,
             value: state.public,
-            onChanged: (value) =>
-                context.read<CourseCubit>().publicChanged(value!),
-            groupValue: false,
-            activeColor: kButtonColor,
+            onChanged: (bool? value) => context.read<CourseCubit>().publicChanged(value!),
           ),
         );
       },
@@ -128,16 +119,9 @@ class _SubmitCreateCourseButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('courseCreateForm_continue_raisedButton'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  primary: kButtonColor,
-                ),
+                style: kButtonStyle,
                 onPressed: state.status.isValidated
-                    ? () =>
-                        context.read<CourseCubit>().createCourseFormSubmitted()
+                    ? () => context.read<CourseCubit>().createCourseFormSubmitted()
                     : null,
                 child: const Text(kSubmitText),
               );

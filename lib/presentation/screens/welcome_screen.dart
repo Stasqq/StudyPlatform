@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -38,14 +38,7 @@ class RoutingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      // jak ci sie style powtarzaja to mozesz zrobic globalne
-      // i tylko inlinowo je zmieniac jak potrzeba
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        primary: kButtonColor,
-      ),
+      style: kButtonStyle,
       onPressed: () => Navigator.of(context).pushNamed(route),
       child: Text(buttonText),
     );

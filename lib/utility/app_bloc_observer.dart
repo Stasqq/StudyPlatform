@@ -2,10 +2,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
-  void onCreate(BlocBase bloc) {}
+  void onCreate(BlocBase bloc) {
+    super.onCreate(bloc);
+  }
 
   @override
-  void onClose(BlocBase bloc) {}
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+  }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {

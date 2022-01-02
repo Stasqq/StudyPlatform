@@ -9,6 +9,7 @@ import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/data/repositories/courses_repository.dart';
 import 'package:study_platform/data/repositories/user_info_repository.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
 import 'package:study_platform/logic/cubit/login_cubit/login_cubit.dart';
 import 'package:study_platform/logic/cubit/signup_cubit/sign_cubit.dart';
@@ -18,9 +19,11 @@ import 'package:study_platform/utility/app_bloc_observer.dart';
 
 import 'data/repositories/authentication_repository.dart';
 
-late final AuthenticationRepository _authenticationRepository;
-late final UserInfoRepository _userInfoRepository;
-late final CoursesRepository _coursesRepository;
+final firebaseAuth = FirebaseAuth.instance;
+final firebaseFirestore = FirebaseFirestore.instance;
+final authenticationRepository = AuthenticationRepository(firebaseAuth: firebaseAuth);
+final userInfoRepository = UserInfoRepository(firebaseFirestore: firebaseFirestore);
+final coursesRepository = CoursesRepository(firebaseFirestore: firebaseFirestore);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,11 +37,16 @@ void main() async {
           )
         : null,
   );
+
+  await authenticationRepository.user.first;
+
   BlocOverrides.runZoned(
     () => {runApp(const StudyPlatform())},
     blocObserver: AppBlocObserver(),
   );
 }
+
+void setUp() {}
 
 class StudyPlatform extends StatelessWidget {
   const StudyPlatform({Key? key}) : super(key: key);
@@ -46,54 +54,50 @@ class StudyPlatform extends StatelessWidget {
   // ! This widget is the root of application.
   @override
   Widget build(BuildContext context) {
-    final firebaseFirestore = FirebaseFirestore.instance;
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) =>
-              AuthenticationRepository(firebaseAuth: FirebaseAuth.instance),
+          create: (context) => AuthenticationRepository(firebaseAuth: firebaseAuth),
         ),
         RepositoryProvider(
-          create: (context) =>
-              UserInfoRepository(firebaseFirestore: firebaseFirestore),
+          create: (context) => UserInfoRepository(firebaseFirestore: firebaseFirestore),
         ),
         RepositoryProvider(
-          create: (context) =>
-              UserInfoRepository(firebaseFirestore: firebaseFirestore),
-        ),
-        RepositoryProvider(
-          create: (context) =>
-              CoursesRepository(firebaseFirestore: firebaseFirestore),
+          create: (context) => CoursesRepository(firebaseFirestore: firebaseFirestore),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
             create: (authenticationBlocContext) => AuthenticationBloc(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
+            ),
+          ),
+          BlocProvider<CoursesBloc>(
+            create: (coursesContext) => CoursesBloc(
+              coursesRepository: coursesRepository,
             ),
           ),
           BlocProvider<LoginCubit>(
             create: (loginCubitContext) => LoginCubit(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
             ),
           ),
           BlocProvider<SignUpCubit>(
             create: (signUpCubitContext) => SignUpCubit(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
             ),
           ),
           BlocProvider<UserInfoCubit>(
             create: (userInfoCubitContext) => UserInfoCubit(
-              authenticationRepository: _authenticationRepository,
-              userInfoRepository: _userInfoRepository,
+              authenticationRepository: authenticationRepository,
+              userInfoRepository: userInfoRepository,
             ),
           ),
           BlocProvider<CourseCubit>(
             create: (userInfoCubitContext) => CourseCubit(
-              authenticationRepository: _authenticationRepository,
-              coursesRepository: _coursesRepository,
+              authenticationRepository: authenticationRepository,
+              coursesRepository: coursesRepository,
             ),
           ),
         ],

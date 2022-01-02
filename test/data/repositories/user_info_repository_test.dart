@@ -58,11 +58,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
 
-  const UserInfo userInfo = UserInfo(
-      email: 'test@email.com',
-      firstName: 'testFirstName',
-      surname: 'testSurname',
-      photoURL: 'testURL');
+  const UserInfo userInfo =
+      UserInfo('test@email.com', 'uidString', 'testFirstName', 'testSurname', 'testURL');
 
   group('UserInfoRepository', () {
     late firebase_firestore.FirebaseFirestore fireStore;

@@ -52,7 +52,6 @@ class _FirstNameInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.firstName != current.firstName,
       builder: (context, state) {
         return TextField(
-          key: const Key('usrInfoForm_firstNameInput_textField'),
           onChanged: (firstName) =>
               context.read<UserInfoCubit>().firstNameChanged(firstName),
           decoration: InputDecoration(
@@ -73,7 +72,6 @@ class _SurnameInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.surname != current.surname,
       builder: (context, state) {
         return TextField(
-          key: const Key('usrInfoForm_surnameInput_textField'),
           onChanged: (surname) => context.read<UserInfoCubit>().surnameChanged(surname),
           decoration: InputDecoration(
             labelText: 'Surname',
@@ -95,7 +93,6 @@ class _SaveUserInfoButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('userInfoForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),

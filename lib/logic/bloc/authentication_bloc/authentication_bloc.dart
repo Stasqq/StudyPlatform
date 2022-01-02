@@ -11,15 +11,12 @@ part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 // po co to jest bloc ?
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc(
-      {required AuthenticationRepository authenticationRepository})
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+  AuthenticationBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         super(
-          authenticationRepository.currentUser.isEmpty
-              ? AuthenticationState.authenticated(
-                  authenticationRepository.currentUser)
+          authenticationRepository.currentUser == User.empty
+              ? AuthenticationState.authenticated(authenticationRepository.currentUser)
               : const AuthenticationState.unauthenticated(),
         ) {
     on<AuthenticationUserChanged>(_onUserChanged);
@@ -36,7 +33,7 @@ class AuthenticationBloc
     AuthenticationUserChanged event,
     Emitter<AuthenticationState> emit,
   ) {
-    emit(event.user.isNotEmpty
+    emit(event.user != User.empty
         ? AuthenticationState.authenticated(event.user)
         : const AuthenticationState.unauthenticated());
   }

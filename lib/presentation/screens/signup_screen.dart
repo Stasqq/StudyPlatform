@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/cubit/signup_cubit/sign_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
@@ -59,7 +59,6 @@ class _EmailInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return TextField(
-          key: const Key('signUpForm_emailInput_textField'),
           onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -80,7 +79,6 @@ class _PasswordInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          key: const Key('signUpForm_passwordInput_textField'),
           onChanged: (password) => context.read<SignUpCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
@@ -103,7 +101,6 @@ class _ConfirmPasswordInput extends StatelessWidget {
           previous.confirmedPassword != current.confirmedPassword,
       builder: (context, state) {
         return TextField(
-          key: const Key('signUpForm_confirmedPasswordInput_textField'),
           onChanged: (confirmPassword) =>
               context.read<SignUpCubit>().confirmedPasswordChanged(confirmPassword),
           obscureText: true,
@@ -127,13 +124,7 @@ class _SignUpButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('signUpForm_continue_raisedButton'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  primary: kButtonColor,
-                ),
+                style: kButtonStyle,
                 onPressed: state.status.isValidated
                     ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,

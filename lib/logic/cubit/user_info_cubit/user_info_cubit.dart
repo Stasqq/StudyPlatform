@@ -47,13 +47,13 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     try {
       await _userInfoRepository.saveUserInfoToFirebase(
           userInfo: UserInfo(
-        email: _authenticationRepository.currentUser.email,
-        uid: _authenticationRepository.currentUser.uid,
-        firstName: state.firstName.value,
-        surname: state.surname.value,
-      ));
+              _authenticationRepository.currentUser.email,
+              _authenticationRepository.currentUser.uid,
+              state.firstName.value,
+              state.surname.value,
+              null));
       emit(state.copyWith(
-          email: Email.dirty(_authenticationRepository.currentUser.email ?? ''),
+          email: Email.dirty(_authenticationRepository.currentUser.email),
           status: FormzStatus.submissionSuccess));
     } on SaveUserInfoToFirestoreFailure catch (e) {
       print(e);
@@ -68,7 +68,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   Future<void> readUserInfo() async {
     try {
       UserInfo userInfo = await _userInfoRepository.readUserInfo(
-          email: _authenticationRepository.currentUser.email ?? '');
+          email: _authenticationRepository.currentUser.email);
       emit(state.copyWith(
           firstName: Name.dirty(userInfo.firstName),
           surname: Name.dirty(userInfo.surname),

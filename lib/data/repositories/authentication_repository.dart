@@ -180,6 +180,6 @@ class AuthenticationRepository {
 
 extension on firebase_auth.User {
   User get toUser {
-    return User(uid: uid, email: email);
+    return User(email!, uid);
   }
 }

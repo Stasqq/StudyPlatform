@@ -1,13 +1,10 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Class extends Equatable {
-  final String name;
-  final String description;
+part 'class.freezed.dart';
+part 'class.g.dart';
 
-  //TODO: some kind of files/documents/materials
-
-  Class(this.name, this.description);
-
-  @override
-  List<Object?> get props => [name, description];
+@freezed
+class Class with _$Class {
+  const factory Class(String name, String description) = _Class;
+  factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
 }

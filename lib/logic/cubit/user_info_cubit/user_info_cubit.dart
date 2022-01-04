@@ -79,4 +79,16 @@ class UserInfoCubit extends Cubit<UserInfoState> {
       throw ReadUserInfoFromFirestoreFailure();
     }
   }
+
+  void joinCourse(String courseId) {
+    List<String> newCoursesList = state.joinedCourses;
+    newCoursesList.add(courseId);
+    emit(state.copyWith(joinedCourses: newCoursesList));
+  }
+
+  void leaveCourse(String courseId) {
+    List<String> newCoursesList = state.joinedCourses;
+    newCoursesList.remove(courseId);
+    emit(state.copyWith(joinedCourses: newCoursesList));
+  }
 }

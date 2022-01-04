@@ -1,6 +1,5 @@
 import 'dart:io';
 
-// uwazaj na importy, tutaj
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

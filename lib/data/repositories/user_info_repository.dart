@@ -30,7 +30,22 @@ class UserInfoRepository {
 
   Future<void> saveUserInfoToFirebase({required user_info.UserInfo userInfo}) async {
     try {
-      _firebaseFirestore.collection('users').doc(userInfo.email).set(userInfo.toJson());
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userInfo.email)
+          .set(userInfo.toJson());
+    } catch (_) {
+      throw SaveUserInfoToFirestoreFailure();
+    }
+  }
+
+  Future<void> updateJoinedCourses(
+      {required String uid, required List<String> joinedCourses}) async {
+    try {
+      await _firebaseFirestore
+          .collection('users')
+          .doc(uid)
+          .update(({'joinedCourses', joinedCourses} as Map<String, dynamic>));
     } catch (_) {
       throw SaveUserInfoToFirestoreFailure();
     }

@@ -9,7 +9,7 @@ import 'package:study_platform/data/repositories/courses_repository.dart';
 part 'courses_event.dart';
 part 'courses_state.dart';
 
-enum CoursesFilter { All, Owner, Joined }
+enum CoursesFilter { Public, Owner, Joined }
 
 class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
   CoursesBloc({required CoursesRepository coursesRepository})
@@ -18,6 +18,11 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     on<CoursesEventStart>(_onStartEvent);
     on<CoursesEventLoad>(_onLoadEvent);
     on<CoursesEventFetchMore>(_onFetchMore);
+    on<CurrentCourseEvent>(_onCurrentCourse);
+    on<CourseJoinEvent>(_onCourseJoin);
+    on<CurrentCourseJoinEvent>(_onCurrentCourseJoin);
+    on<CurrentCourseLeaveEvent>(_onCurrentCourseLeave);
+    on<CurrentCourseDeleteEvent>(_onCurrentCourseDelete);
   }
 
   final CoursesRepository _coursesRepository;
@@ -53,11 +58,12 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
               ownerUid: event.ownerUid,
               joinedCourses: event.joinedCourses)
           .listen(
-        (event) {
-          _handleStreamEvent(0, event);
+        (snapshot) {
+          _handleStreamEvent(0, snapshot);
         },
       ),
     );
+    emit(CoursesStateEmpty());
   }
 
   void _onLoadEvent(
@@ -69,7 +75,7 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     if (elements.isEmpty) {
       emit(CoursesStateEmpty());
     } else {
-      emit(CoursesStateLoadSuccess(elements, hasMoreData));
+      emit(CoursesStateLoadSuccess(courses: elements, hasMoreData: hasMoreData));
     }
   }
 
@@ -84,6 +90,61 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     subscriptions.add(_coursesRepository.getCoursesPage(lastDoc!).listen((event) {
       _handleStreamEvent(index, event);
     }));
+  }
+
+  Future<void> _onCurrentCourse(
+    CurrentCourseEvent event,
+    Emitter<CoursesState> emit,
+  ) async {
+    emit((state as CoursesStateLoadSuccess).copyWith(
+      currentCourse: event.currentCourse,
+      owner: event.owner,
+      joined: event.joined,
+    ));
+  }
+
+  Future<void> _onCourseJoin(
+    CourseJoinEvent event,
+    Emitter<CoursesState> emit,
+  ) async {
+    List<String> newCoursesIdsList = [];
+    newCoursesIdsList.addAll(event.currentCoursesIds);
+    newCoursesIdsList.add(event.courseId);
+    await _coursesRepository.updateJoinedCourses(
+        userEmail: event.userEmail, coursesIds: newCoursesIdsList);
+    emit((state as CoursesStateLoadSuccess).copyWith(owner: false, joined: true));
+  }
+
+  Future<void> _onCurrentCourseJoin(
+    CurrentCourseJoinEvent event,
+    Emitter<CoursesState> emit,
+  ) async {
+    List<String> newCoursesIdsList = [];
+    newCoursesIdsList.addAll(event.currentCoursesIds);
+    newCoursesIdsList.add((state as CoursesStateLoadSuccess).currentCourse.id);
+    await _coursesRepository.updateJoinedCourses(
+        userEmail: event.userEmail, coursesIds: newCoursesIdsList);
+    emit((state as CoursesStateLoadSuccess).copyWith(joined: true));
+  }
+
+  Future<void> _onCurrentCourseLeave(
+    CurrentCourseLeaveEvent event,
+    Emitter<CoursesState> emit,
+  ) async {
+    List<String> newCoursesIdsList = [];
+    newCoursesIdsList.addAll(event.currentCoursesIds);
+    newCoursesIdsList.remove((state as CoursesStateLoadSuccess).currentCourse.id);
+    await _coursesRepository.updateJoinedCourses(
+        userEmail: event.userEmail, coursesIds: newCoursesIdsList);
+    emit((state as CoursesStateLoadSuccess).copyWith(joined: false));
+  }
+
+  Future<void> _onCurrentCourseDelete(
+    CurrentCourseDeleteEvent event,
+    Emitter<CoursesState> emit,
+  ) async {
+    await _coursesRepository.deleteCourse(
+        courseId: (state as CoursesStateLoadSuccess).currentCourse.id);
   }
 
   void _handleStreamEvent(int index, QuerySnapshot snapshot) {

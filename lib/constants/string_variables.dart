@@ -14,6 +14,7 @@ const String kUserInfoScreen = '/user_info';
 const String kCoursesScreen = '/courses';
 const String kCreateCourseScreen = '/create_course';
 const String kCourseScreen = '/course';
+const String kChatScreen = '/chat';
 
 // * Routing text
 const String kWelcomeScreenText = 'Welcome Screen';

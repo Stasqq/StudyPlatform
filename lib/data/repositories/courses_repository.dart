@@ -36,7 +36,7 @@ class CoursesRepository {
       String? ownerUid,
       List<String>? joinedCourses}) {
     switch (coursesFilter) {
-      case CoursesFilter.All:
+      case CoursesFilter.Public:
         return _firebaseFirestore
             .collection('courses')
             .where('public', isEqualTo: true)
@@ -58,11 +58,30 @@ class CoursesRepository {
   }
 
   Stream<QuerySnapshot> getCoursesPage(DocumentSnapshot lastDoc) {
-    print('getCoursesPage');
     return _firebaseFirestore
         .collection('courses')
         .startAfterDocument(lastDoc)
         .limit(15)
         .snapshots();
+  }
+
+  Future<void> deleteCourse({required String courseId}) async {
+    try {
+      await _firebaseFirestore.collection('courses').doc(courseId).delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> updateJoinedCourses(
+      {required String userEmail, required List<String> coursesIds}) async {
+    try {
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userEmail)
+          .update({'joinedCourses': coursesIds});
+    } catch (e) {
+      print(e);
+    }
   }
 }

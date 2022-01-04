@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study_platform/constants/string_variables.dart';
-import 'package:study_platform/data/models/course/course.dart';
+import 'package:study_platform/presentation/screens/chat_screen.dart';
 import 'package:study_platform/presentation/screens/course_screen.dart';
 import 'package:study_platform/presentation/screens/courses_screen.dart';
 import 'package:study_platform/presentation/screens/create_course_screen.dart';
@@ -48,7 +48,11 @@ class AppRouter {
         );
       case kCourseScreen:
         return MaterialPageRoute(
-          builder: (_) => CourseScreen(course: routeSettings.arguments as Course),
+          builder: (_) => CourseScreen(),
+        );
+      case kChatScreen:
+        return MaterialPageRoute(
+          builder: (_) => ChatScreen(),
         );
       default:
         return null;

@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/data/repositories/chat_repository.dart';
 import 'package:study_platform/data/repositories/courses_repository.dart';
 import 'package:study_platform/data/repositories/user_info_repository.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
 import 'package:study_platform/logic/cubit/login_cubit/login_cubit.dart';
@@ -24,6 +26,7 @@ final firebaseFirestore = FirebaseFirestore.instance;
 final authenticationRepository = AuthenticationRepository(firebaseAuth: firebaseAuth);
 final userInfoRepository = UserInfoRepository(firebaseFirestore: firebaseFirestore);
 final coursesRepository = CoursesRepository(firebaseFirestore: firebaseFirestore);
+final chatRepository = ChatRepository(firebaseFirestore: firebaseFirestore);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,13 +60,13 @@ class StudyPlatform extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) => AuthenticationRepository(firebaseAuth: firebaseAuth),
+          create: (context) => authenticationRepository,
         ),
         RepositoryProvider(
-          create: (context) => UserInfoRepository(firebaseFirestore: firebaseFirestore),
+          create: (context) => userInfoRepository,
         ),
         RepositoryProvider(
-          create: (context) => CoursesRepository(firebaseFirestore: firebaseFirestore),
+          create: (context) => coursesRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -95,9 +98,14 @@ class StudyPlatform extends StatelessWidget {
             ),
           ),
           BlocProvider<CourseCubit>(
-            create: (userInfoCubitContext) => CourseCubit(
+            create: (courseCubitContext) => CourseCubit(
               authenticationRepository: authenticationRepository,
               coursesRepository: coursesRepository,
+            ),
+          ),
+          BlocProvider<ChatBloc>(
+            create: (courseCubitContext) => ChatBloc(
+              chatRepository: chatRepository,
             ),
           ),
         ],

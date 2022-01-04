@@ -15,16 +15,15 @@ class CoursesScreen extends StatefulWidget {
 }
 
 class _CoursesScreenState extends State<CoursesScreen> {
-  final filterItems = [CoursesFilter.All, CoursesFilter.Joined, CoursesFilter.Owner];
-  CoursesFilter filter = CoursesFilter.All;
-  late final String ownerUid;
-  late final List<String> joinedCourses;
+  final filterItems = [CoursesFilter.Public, CoursesFilter.Joined, CoursesFilter.Owner];
+  CoursesFilter filter = CoursesFilter.Public;
+  late final String currentUserUid;
 
   @override
   void initState() {
-    ownerUid = context.read<AuthenticationBloc>().state.user.uid;
-    joinedCourses = context.read<UserInfoCubit>().state.joinedCourses;
-    context.read<CoursesBloc>().add(CoursesEventStart(coursesFilter: filter));
+    currentUserUid = context.read<AuthenticationBloc>().state.user.uid;
+    if (!(context.read<CoursesBloc>().state is CoursesStateLoadSuccess))
+      context.read<CoursesBloc>().add(CoursesEventStart(coursesFilter: filter));
     super.initState();
   }
 
@@ -35,6 +34,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
       appBarActions: [
         Row(
           children: [
+            JoinCourseDialogButton(),
+            SizedBox(width: 8),
             Icon(Icons.filter_list),
             SizedBox(width: 8),
             DropdownButton(
@@ -47,8 +48,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
                 context.read<CoursesBloc>().add(
                       CoursesEventStart(
                         coursesFilter: filter,
-                        ownerUid: ownerUid,
-                        joinedCourses: joinedCourses,
+                        ownerUid: currentUserUid,
+                        joinedCourses: context.read<UserInfoCubit>().state.joinedCourses,
                       ),
                     );
               },
@@ -85,8 +86,15 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       title: Text(state.courses[index].name),
                       subtitle: Text(state.courses[index].description),
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(kCourseScreen, arguments: state.courses[index]);
+                        context.read<CoursesBloc>().add(CurrentCourseEvent(
+                            currentCourse: state.courses[index],
+                            owner: currentUserUid == state.courses[index].ownerUid,
+                            joined: context
+                                .read<UserInfoCubit>()
+                                .state
+                                .joinedCourses
+                                .contains(state.courses[index].id)));
+                        Navigator.of(context).pushNamed(kCourseScreen);
                       },
                     );
                   },
@@ -110,4 +118,44 @@ class _CoursesScreenState extends State<CoursesScreen> {
           EnumToString.convertToString(item),
         ),
       );
+}
+
+class JoinCourseDialogButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    String courseId = '';
+    return ElevatedButton(
+      onPressed: () => showDialog(
+        context: context,
+        builder: (BuildContext context) => SimpleDialog(
+          title: const Text('Enter Course Id'),
+          children: [
+            TextField(
+              onChanged: (id) => courseId = id,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.read<CoursesBloc>().add(CourseJoinEvent(
+                      userEmail: context.read<AuthenticationBloc>().state.user.email,
+                      currentCoursesIds:
+                          context.read<UserInfoCubit>().state.joinedCourses,
+                      courseId: courseId,
+                    ));
+                context.read<UserInfoCubit>().readUserInfo();
+                Navigator.of(context).pop();
+              },
+              child: Text('Join'),
+            ),
+          ],
+        ),
+      ),
+      child: Text('Join Course'),
+    );
+  }
 }

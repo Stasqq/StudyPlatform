@@ -24,6 +24,7 @@ import 'package:study_platform/utility/app_bloc_observer.dart';
 
 import 'data/repositories/authentication_repository.dart';
 import 'logic/bloc/classes_bloc/classes_bloc.dart';
+import 'logic/cubit/class_content_edit_cubit/class_content_edit_cubit.dart';
 
 final firebaseAuth = FirebaseAuth.instance;
 final firebaseFirestore = FirebaseFirestore.instance;
@@ -121,13 +122,18 @@ class StudyPlatform extends StatelessWidget {
             ),
           ),
           BlocProvider<ChatBloc>(
-            create: (courseCubitContext) => ChatBloc(
+            create: (chatBlocContext) => ChatBloc(
               chatRepository: chatRepository,
             ),
           ),
           BlocProvider<ClassesBloc>(
-            create: (courseCubitContext) => ClassesBloc(
+            create: (classesBlocContext) => ClassesBloc(
               classesRepository: classesRepository,
+              filesRepository: filesRepository,
+            ),
+          ),
+          BlocProvider<ClassContentEditCubit>(
+            create: (classContentEditCubitContext) => ClassContentEditCubit(
               filesRepository: filesRepository,
             ),
           ),

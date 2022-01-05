@@ -13,6 +13,13 @@ class CoursesStateEmpty extends CoursesStateLoadSuccess {
   CoursesStateEmpty() : super(courses: [], hasMoreData: false);
 }
 
+class CoursesStateActionLoading extends CoursesStateLoadSuccess {
+  CoursesStateActionLoading({required CoursesStateLoadSuccess currentState})
+      : super(
+            courses: currentState.courses,
+            hasMoreData: currentState.hasMoreData);
+}
+
 class CoursesStateLoadSuccess extends CoursesState {
   final List<Course> courses;
   final bool hasMoreData;

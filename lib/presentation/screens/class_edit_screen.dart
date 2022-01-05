@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:study_platform/logic/bloc/classes_bloc/classes_bloc.dart';
+import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_edit_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
+
+import '../../constants/string_variables.dart';
 
 class ClassEditScreen extends StatelessWidget {
   const ClassEditScreen({Key? key}) : super(key: key);
@@ -25,7 +27,11 @@ class ClassEditScreen extends StatelessWidget {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        //TODO: edycja tekstu lekcji
+                        context
+                            .read<ClassContentEditCubit>()
+                            .loadClass(context.read<ClassesBloc>());
+                        Navigator.of(context)
+                            .pushNamed(kClassContentEditScreen);
                       },
                       child: Text('Content'),
                     ),
@@ -62,6 +68,7 @@ class _GetClassMaterials extends StatelessWidget {
             .currentClass
             .materials
             .map((element) => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(element),
                     SizedBox(width: 8),

@@ -43,10 +43,12 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     courses.clear();
     subscriptions.clear();
 
-    if (event.joinedCourses.isEmpty && event.coursesFilter == CoursesFilter.Joined) {
+    if (event.joinedCourses.isEmpty &&
+        event.coursesFilter == CoursesFilter.Joined) {
       emit(CoursesStateEmpty());
       return;
-    } else if (event.ownerUid == null && event.coursesFilter == CoursesFilter.Owner) {
+    } else if (event.ownerUid == null &&
+        event.coursesFilter == CoursesFilter.Owner) {
       emit(CoursesStateEmpty());
       return;
     }
@@ -75,7 +77,8 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     if (elements.isEmpty) {
       emit(CoursesStateEmpty());
     } else {
-      emit(CoursesStateLoadSuccess(courses: elements, hasMoreData: hasMoreData));
+      emit(
+          CoursesStateLoadSuccess(courses: elements, hasMoreData: hasMoreData));
     }
   }
 
@@ -87,7 +90,8 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
       throw Exception('Last doc is not set');
     }
     final index = courses.length;
-    subscriptions.add(_coursesRepository.getCoursesPage(lastDoc!).listen((event) {
+    subscriptions
+        .add(_coursesRepository.getCoursesPage(lastDoc!).listen((event) {
       _handleStreamEvent(index, event);
     }));
   }
@@ -107,18 +111,23 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     CourseJoinEvent event,
     Emitter<CoursesState> emit,
   ) async {
+    emit(CoursesStateActionLoading(
+        currentState: (state as CoursesStateLoadSuccess)));
     List<String> newCoursesIdsList = [];
     newCoursesIdsList.addAll(event.currentCoursesIds);
     newCoursesIdsList.add(event.courseId);
     await _coursesRepository.updateJoinedCourses(
         userEmail: event.userEmail, coursesIds: newCoursesIdsList);
-    emit((state as CoursesStateLoadSuccess).copyWith(owner: false, joined: true));
+    emit((state as CoursesStateLoadSuccess)
+        .copyWith(owner: false, joined: true));
   }
 
   Future<void> _onCurrentCourseJoin(
     CurrentCourseJoinEvent event,
     Emitter<CoursesState> emit,
   ) async {
+    emit(CoursesStateActionLoading(
+        currentState: (state as CoursesStateLoadSuccess)));
     List<String> newCoursesIdsList = [];
     newCoursesIdsList.addAll(event.currentCoursesIds);
     newCoursesIdsList.add((state as CoursesStateLoadSuccess).currentCourse.id);
@@ -131,9 +140,12 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     CurrentCourseLeaveEvent event,
     Emitter<CoursesState> emit,
   ) async {
+    emit(CoursesStateActionLoading(
+        currentState: (state as CoursesStateLoadSuccess)));
     List<String> newCoursesIdsList = [];
     newCoursesIdsList.addAll(event.currentCoursesIds);
-    newCoursesIdsList.remove((state as CoursesStateLoadSuccess).currentCourse.id);
+    newCoursesIdsList
+        .remove((state as CoursesStateLoadSuccess).currentCourse.id);
     await _coursesRepository.updateJoinedCourses(
         userEmail: event.userEmail, coursesIds: newCoursesIdsList);
     emit((state as CoursesStateLoadSuccess).copyWith(joined: false));
@@ -143,8 +155,16 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     CurrentCourseDeleteEvent event,
     Emitter<CoursesState> emit,
   ) async {
+    emit(CoursesStateActionLoading(
+        currentState: (state as CoursesStateLoadSuccess)));
     await _coursesRepository.deleteCourse(
         courseId: (state as CoursesStateLoadSuccess).currentCourse.id);
+    List<Course> newCourseList =
+        (state as CoursesStateLoadSuccess).courses.toList();
+    newCourseList.remove((state as CoursesStateLoadSuccess).currentCourse);
+    emit((state as CoursesStateLoadSuccess).copyWith(
+        courses: newCourseList,
+        currentCourse: CoursesStateLoadSuccess.emptyCourse));
   }
 
   void _handleStreamEvent(int index, QuerySnapshot snapshot) {

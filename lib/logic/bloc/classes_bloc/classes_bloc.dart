@@ -163,7 +163,7 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
               event.name +
               '/' +
               event.name +
-              'html',
+              '.html',
           <String>[]),
     );
 
@@ -177,10 +177,20 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     CurrentClassDeleteEvent event,
     Emitter<ClassesState> emit,
   ) async {
+    var loadState = (state as ClassesStateLoadSuccess);
+    emit(ClassesStateActionLoading(currentState: loadState));
     await _classesRepository.deleteClass(
-        courseId: state.courseId,
-        className: (state as ClassesStateLoadSuccess).currentClass.name);
-    //TODO: usuwanie materialow ze storage
+        courseId: loadState.courseId, className: loadState.currentClass.name);
+    await _filesRepository.deleteClassDirectory(
+        directoryPath: 'courses/' +
+            loadState.courseId +
+            '/' +
+            loadState.currentClass.name +
+            '/',
+        className: loadState.currentClass.name);
+    List<Class> newClassesList = loadState.classes;
+    newClassesList.remove(loadState.currentClass);
+    emit(loadState.copyWith(classes: newClassesList));
   }
 
   void _handleStreamEvent(int index, QuerySnapshot snapshot) {

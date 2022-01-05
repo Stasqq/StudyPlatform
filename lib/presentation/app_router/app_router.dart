@@ -5,12 +5,14 @@ import 'package:study_platform/presentation/screens/class_edit_screen.dart';
 import 'package:study_platform/presentation/screens/course_screen.dart';
 import 'package:study_platform/presentation/screens/courses_screen.dart';
 import 'package:study_platform/presentation/screens/create_course_screen.dart';
-import 'package:study_platform/presentation/screens/profile_screen.dart';
 import 'package:study_platform/presentation/screens/login_screen.dart';
+import 'package:study_platform/presentation/screens/profile_screen.dart';
 import 'package:study_platform/presentation/screens/signup_screen.dart';
 import 'package:study_platform/presentation/screens/splash_screen.dart';
 import 'package:study_platform/presentation/screens/user_info_screen.dart';
 import 'package:study_platform/presentation/screens/welcome_screen.dart';
+
+import '../screens/class_content_edit_screen.dart';
 
 class AppRouter {
   static Route? onGenerateRoute(RouteSettings routeSettings) {
@@ -58,6 +60,10 @@ class AppRouter {
       case kClassEditScreen:
         return MaterialPageRoute(
           builder: (_) => ClassEditScreen(),
+        );
+      case kClassContentEditScreen:
+        return MaterialPageRoute(
+          builder: (_) => ClassContentEditScreen(),
         );
       default:
         return null;

@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+class ReadFileFromFirebaseStorageFailure implements Exception {}
+
 class SaveFileToFirebaseStorageFailure implements Exception {}
 
 class FilesRepository {
@@ -28,14 +30,21 @@ class FilesRepository {
     }
   }
 
-  Future<File?> getFile(
-      {required String path, required String fileName}) async {
+  Future<File> getFile({required String path, required String fileName}) async {
     try {
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      File downloadedFile =
-          await File(appDocDir.absolute.path + '/' + fileName).create();
+      File downloadedFile = File('${appDocDir.path}/${fileName}');
       await _firebaseStorage.ref(path).writeToFile(downloadedFile);
       return downloadedFile;
+    } catch (e) {
+      print(e);
+      throw ReadFileFromFirebaseStorageFailure();
+    }
+  }
+
+  Future<void> saveFile({required String path, required File file}) async {
+    try {
+      await _firebaseStorage.ref(path).putFile(file);
     } catch (e) {
       print(e);
     }
@@ -63,6 +72,22 @@ class FilesRepository {
   Future<void> deleteFile({required String filePath}) async {
     try {
       await _firebaseStorage.ref(filePath).delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteClassDirectory(
+      {required String directoryPath, required String className}) async {
+    try {
+      await _firebaseStorage
+          .ref(directoryPath + '/' + className + '.html')
+          .delete();
+      ListResult referenceList =
+          await _firebaseStorage.ref(directoryPath + '/materials').listAll();
+      for (Reference fileReference in referenceList.items) {
+        await fileReference.delete();
+      }
     } catch (e) {
       print(e);
     }

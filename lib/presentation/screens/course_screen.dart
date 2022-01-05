@@ -98,6 +98,8 @@ class CourseScreen extends StatelessWidget {
                                     Center(child: CircularProgressIndicator()),
                               );
                             }
+                            if (state is ClassesStateActionLoading)
+                              return Center(child: CircularProgressIndicator());
                             return ListTile(
                               title: Text(state.classes[index].name),
                               subtitle: Text(state.classes[index].description),

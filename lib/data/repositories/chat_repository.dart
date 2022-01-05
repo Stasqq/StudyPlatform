@@ -24,8 +24,8 @@ class ChatRepository {
   Stream<QuerySnapshot> getChatMessages({required String courseId}) {
     return _firebaseFirestore
         .collection('courses/' + courseId + '/chat')
-        .limit(40)
         .orderBy('timestamp')
+        .limit(40)
         .snapshots();
   }
 

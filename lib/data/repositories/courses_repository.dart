@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:study_platform/data/models/course/class.dart';
 import 'package:study_platform/data/models/course/course.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 
@@ -20,8 +19,8 @@ class CoursesRepository {
     try {
       var document = _firebaseFirestore.collection('courses').doc();
       var documentReference = await document.get();
-      Course course = Course(documentReference.id, ownerUid, ownerName, courseName,
-          description, <Class>[], public);
+      Course course = Course(
+          documentReference.id, ownerUid, ownerName, courseName, description, public);
       await _firebaseFirestore
           .collection('courses')
           .doc(documentReference.id)
@@ -83,5 +82,12 @@ class CoursesRepository {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> addNewClass(
+      {required String description,
+      required int number,
+      required String courseId}) async {
+    await _firebaseFirestore.collection('');
   }
 }

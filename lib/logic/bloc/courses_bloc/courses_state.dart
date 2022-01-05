@@ -21,7 +21,7 @@ class CoursesStateLoadSuccess extends CoursesState {
   final bool owner;
   final bool joined;
 
-  static const emptyCourse = Course('', '', '', '', '', [], false);
+  static const emptyCourse = Course('', '', '', '', '', false);
 
   const CoursesStateLoadSuccess({
     required this.courses,

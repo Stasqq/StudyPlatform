@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/data/repositories/chat_repository.dart';
+import 'package:study_platform/data/repositories/classes_repository.dart';
 import 'package:study_platform/data/repositories/courses_repository.dart';
+import 'package:study_platform/data/repositories/files_repository.dart';
 import 'package:study_platform/data/repositories/user_info_repository.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
@@ -20,13 +23,21 @@ import 'package:study_platform/presentation/app_router/app_router.dart';
 import 'package:study_platform/utility/app_bloc_observer.dart';
 
 import 'data/repositories/authentication_repository.dart';
+import 'logic/bloc/classes_bloc/classes_bloc.dart';
 
 final firebaseAuth = FirebaseAuth.instance;
 final firebaseFirestore = FirebaseFirestore.instance;
-final authenticationRepository = AuthenticationRepository(firebaseAuth: firebaseAuth);
-final userInfoRepository = UserInfoRepository(firebaseFirestore: firebaseFirestore);
-final coursesRepository = CoursesRepository(firebaseFirestore: firebaseFirestore);
+final firebaseStorage = FirebaseStorage.instance;
+final authenticationRepository =
+    AuthenticationRepository(firebaseAuth: firebaseAuth);
+final userInfoRepository =
+    UserInfoRepository(firebaseFirestore: firebaseFirestore);
+final coursesRepository =
+    CoursesRepository(firebaseFirestore: firebaseFirestore);
 final chatRepository = ChatRepository(firebaseFirestore: firebaseFirestore);
+final classesRepository =
+    ClassesRepository(firebaseFirestore: firebaseFirestore);
+final filesRepository = FilesRepository(firebaseStorage: firebaseStorage);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +79,12 @@ class StudyPlatform extends StatelessWidget {
         RepositoryProvider(
           create: (context) => coursesRepository,
         ),
+        RepositoryProvider(
+          create: (context) => chatRepository,
+        ),
+        RepositoryProvider(
+          create: (context) => classesRepository,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -106,6 +123,12 @@ class StudyPlatform extends StatelessWidget {
           BlocProvider<ChatBloc>(
             create: (courseCubitContext) => ChatBloc(
               chatRepository: chatRepository,
+            ),
+          ),
+          BlocProvider<ClassesBloc>(
+            create: (courseCubitContext) => ClassesBloc(
+              classesRepository: classesRepository,
+              filesRepository: filesRepository,
             ),
           ),
         ],

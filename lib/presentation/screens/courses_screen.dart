@@ -7,6 +7,8 @@ import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
+import '../../logic/bloc/classes_bloc/classes_bloc.dart';
+
 class CoursesScreen extends StatefulWidget {
   const CoursesScreen({Key? key}) : super(key: key);
 
@@ -94,6 +96,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
                                 .state
                                 .joinedCourses
                                 .contains(state.courses[index].id)));
+                        context
+                            .read<ClassesBloc>()
+                            .add(ClassesEventStart(courseId: state.courses[index].id));
                         Navigator.of(context).pushNamed(kCourseScreen);
                       },
                     );
@@ -135,12 +140,6 @@ class JoinCourseDialogButton extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
                 context.read<CoursesBloc>().add(CourseJoinEvent(
                       userEmail: context.read<AuthenticationBloc>().state.user.email,
                       currentCoursesIds:
@@ -151,6 +150,12 @@ class JoinCourseDialogButton extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               child: Text('Join'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
             ),
           ],
         ),

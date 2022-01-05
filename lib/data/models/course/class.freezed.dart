@@ -21,10 +21,14 @@ Class _$ClassFromJson(Map<String, dynamic> json) {
 class _$ClassTearOff {
   const _$ClassTearOff();
 
-  _Class call(String name, String description) {
+  _Class call(String name, int orderIndex, String description,
+      String htmlBodyPath, List<String> materials) {
     return _Class(
       name,
+      orderIndex,
       description,
+      htmlBodyPath,
+      materials,
     );
   }
 
@@ -39,7 +43,10 @@ const $Class = _$ClassTearOff();
 /// @nodoc
 mixin _$Class {
   String get name => throw _privateConstructorUsedError;
+  int get orderIndex => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  String get htmlBodyPath => throw _privateConstructorUsedError;
+  List<String> get materials => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,7 +57,12 @@ mixin _$Class {
 abstract class $ClassCopyWith<$Res> {
   factory $ClassCopyWith(Class value, $Res Function(Class) then) =
       _$ClassCopyWithImpl<$Res>;
-  $Res call({String name, String description});
+  $Res call(
+      {String name,
+      int orderIndex,
+      String description,
+      String htmlBodyPath,
+      List<String> materials});
 }
 
 /// @nodoc
@@ -64,17 +76,32 @@ class _$ClassCopyWithImpl<$Res> implements $ClassCopyWith<$Res> {
   @override
   $Res call({
     Object? name = freezed,
+    Object? orderIndex = freezed,
     Object? description = freezed,
+    Object? htmlBodyPath = freezed,
+    Object? materials = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      orderIndex: orderIndex == freezed
+          ? _value.orderIndex
+          : orderIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      htmlBodyPath: htmlBodyPath == freezed
+          ? _value.htmlBodyPath
+          : htmlBodyPath // ignore: cast_nullable_to_non_nullable
+              as String,
+      materials: materials == freezed
+          ? _value.materials
+          : materials // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -84,7 +111,12 @@ abstract class _$ClassCopyWith<$Res> implements $ClassCopyWith<$Res> {
   factory _$ClassCopyWith(_Class value, $Res Function(_Class) then) =
       __$ClassCopyWithImpl<$Res>;
   @override
-  $Res call({String name, String description});
+  $Res call(
+      {String name,
+      int orderIndex,
+      String description,
+      String htmlBodyPath,
+      List<String> materials});
 }
 
 /// @nodoc
@@ -99,17 +131,32 @@ class __$ClassCopyWithImpl<$Res> extends _$ClassCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
+    Object? orderIndex = freezed,
     Object? description = freezed,
+    Object? htmlBodyPath = freezed,
+    Object? materials = freezed,
   }) {
     return _then(_Class(
       name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      orderIndex == freezed
+          ? _value.orderIndex
+          : orderIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      htmlBodyPath == freezed
+          ? _value.htmlBodyPath
+          : htmlBodyPath // ignore: cast_nullable_to_non_nullable
+              as String,
+      materials == freezed
+          ? _value.materials
+          : materials // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -117,7 +164,8 @@ class __$ClassCopyWithImpl<$Res> extends _$ClassCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Class implements _Class {
-  const _$_Class(this.name, this.description);
+  const _$_Class(this.name, this.orderIndex, this.description,
+      this.htmlBodyPath, this.materials);
 
   factory _$_Class.fromJson(Map<String, dynamic> json) =>
       _$$_ClassFromJson(json);
@@ -125,11 +173,17 @@ class _$_Class implements _Class {
   @override
   final String name;
   @override
+  final int orderIndex;
+  @override
   final String description;
+  @override
+  final String htmlBodyPath;
+  @override
+  final List<String> materials;
 
   @override
   String toString() {
-    return 'Class(name: $name, description: $description)';
+    return 'Class(name: $name, orderIndex: $orderIndex, description: $description, htmlBodyPath: $htmlBodyPath, materials: $materials)';
   }
 
   @override
@@ -139,14 +193,22 @@ class _$_Class implements _Class {
             other is _Class &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
-                .equals(other.description, description));
+                .equals(other.orderIndex, orderIndex) &&
+            const DeepCollectionEquality()
+                .equals(other.description, description) &&
+            const DeepCollectionEquality()
+                .equals(other.htmlBodyPath, htmlBodyPath) &&
+            const DeepCollectionEquality().equals(other.materials, materials));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(description));
+      const DeepCollectionEquality().hash(orderIndex),
+      const DeepCollectionEquality().hash(description),
+      const DeepCollectionEquality().hash(htmlBodyPath),
+      const DeepCollectionEquality().hash(materials));
 
   @JsonKey(ignore: true)
   @override
@@ -160,14 +222,21 @@ class _$_Class implements _Class {
 }
 
 abstract class _Class implements Class {
-  const factory _Class(String name, String description) = _$_Class;
+  const factory _Class(String name, int orderIndex, String description,
+      String htmlBodyPath, List<String> materials) = _$_Class;
 
   factory _Class.fromJson(Map<String, dynamic> json) = _$_Class.fromJson;
 
   @override
   String get name;
   @override
+  int get orderIndex;
+  @override
   String get description;
+  @override
+  String get htmlBodyPath;
+  @override
+  List<String> get materials;
   @override
   @JsonKey(ignore: true)
   _$ClassCopyWith<_Class> get copyWith => throw _privateConstructorUsedError;

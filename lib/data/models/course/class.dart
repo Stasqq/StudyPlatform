@@ -5,6 +5,7 @@ part 'class.g.dart';
 
 @freezed
 class Class with _$Class {
-  const factory Class(String name, String description) = _Class;
+  const factory Class(String name, int orderIndex, String description,
+      String htmlBodyPath, List<String> materials) = _Class;
   factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
 }

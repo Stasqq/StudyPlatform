@@ -54,3 +54,9 @@ class CurrentClassMaterialDeleteEvent extends ClassesEvent {
 
   CurrentClassMaterialDeleteEvent({required this.fileName});
 }
+
+class CurrentClassMaterialDownloadEvent extends ClassesEvent {
+  final String fileName;
+
+  CurrentClassMaterialDownloadEvent(this.fileName);
+}

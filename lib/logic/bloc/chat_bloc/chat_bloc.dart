@@ -48,7 +48,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         },
       ),
     );
-    emit(ChatStateEmpty(courseId: event.courseId, userName: event.userName));
+    emit(ChatStateEmpty(
+        courseId: event.courseId,
+        userEmail: event.userEmail,
+        userName: event.userName));
   }
 
   void _onLoadEvent(
@@ -58,12 +61,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final elements = messages.expand((i) => i).toList();
 
     if (elements.isEmpty) {
-      emit(ChatStateEmpty(userName: state.userName, courseId: state.courseId));
+      emit(ChatStateEmpty(
+          userName: state.userName,
+          userEmail: state.userEmail,
+          courseId: state.courseId));
     } else {
       emit(ChatStateLoadSuccess(
         messages: elements,
         hasMoreData: hasMoreData,
         userName: state.userName,
+        userEmail: state.userEmail,
         courseId: state.courseId,
         currentMessageText: state.currentMessageText,
       ));
@@ -89,9 +96,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ChatMessageSentEvent event,
     Emitter<ChatState> emit,
   ) async {
-    Message message = Message(
-        state.currentMessageText, state.userName, DateTime.now().millisecondsSinceEpoch);
-    await _chatRepository.sentNewMessage(courseId: state.courseId, message: message);
+    Message message = Message(state.currentMessageText, state.userEmail,
+        state.userName, DateTime.now().millisecondsSinceEpoch);
+    await _chatRepository.sentNewMessage(
+        courseId: state.courseId, message: message);
   }
 
   void _onMessageTextChanged(

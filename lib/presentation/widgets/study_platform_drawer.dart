@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:study_platform/presentation/screens/profile_screen.dart';
 
 class StudyPlatformDrawer extends StatelessWidget {
   const StudyPlatformDrawer({Key? key}) : super(key: key);
@@ -45,14 +46,21 @@ class StudyPlatformDrawer extends StatelessWidget {
             title: kProfileScreenText,
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(kProfileScreen);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                          currentUser: true,
+                        )),
+              );
             },
           ),
           _DrawerItem(
             iconData: Icons.logout,
             title: kLogoutText,
             onTap: () {
-              context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+              context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested());
               Navigator.of(context).pushNamed(kWelcomeScreen);
             },
           ),

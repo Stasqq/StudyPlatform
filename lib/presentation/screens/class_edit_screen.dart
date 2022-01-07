@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_platform/logic/bloc/classes_bloc/classes_bloc.dart';
-import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_edit_cubit.dart';
+import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
 import '../../constants/string_variables.dart';
@@ -28,7 +28,7 @@ class ClassEditScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         context
-                            .read<ClassContentEditCubit>()
+                            .read<ClassContentCubit>()
                             .loadClass(context.read<ClassesBloc>());
                         Navigator.of(context)
                             .pushNamed(kClassContentEditScreen);

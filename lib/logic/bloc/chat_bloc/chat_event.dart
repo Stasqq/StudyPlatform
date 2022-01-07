@@ -8,13 +8,17 @@ abstract class ChatEvent extends Equatable {
 }
 
 class ChatEventStart extends ChatEvent {
-  const ChatEventStart({required this.courseId, required this.userName});
+  const ChatEventStart(
+      {required this.courseId,
+      required this.userEmail,
+      required this.userName});
 
   final String courseId;
+  final String userEmail;
   final String userName;
 
   @override
-  List<Object> get props => [courseId, userName];
+  List<Object> get props => [courseId, userEmail, userName];
 }
 
 class ChatEventLoad extends ChatEvent {

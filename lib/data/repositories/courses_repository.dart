@@ -13,14 +13,14 @@ class CoursesRepository {
   Future<void> createCourse(
       {required String courseName,
       required String description,
-      required String ownerUid,
+      required String ownerEmail,
       required String ownerName,
       required bool public}) async {
     try {
       var document = _firebaseFirestore.collection('courses').doc();
       var documentReference = await document.get();
-      Course course = Course(
-          documentReference.id, ownerUid, ownerName, courseName, description, public);
+      Course course = Course(documentReference.id, ownerEmail, ownerName,
+          courseName, description, public);
       await _firebaseFirestore
           .collection('courses')
           .doc(documentReference.id)

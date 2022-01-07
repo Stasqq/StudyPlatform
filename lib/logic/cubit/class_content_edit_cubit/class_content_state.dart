@@ -1,13 +1,13 @@
-part of 'class_content_edit_cubit.dart';
+part of 'class_content_cubit.dart';
 
-class ClassContentEditState extends Equatable {
+class ClassContentState extends Equatable {
   @override
   List<Object?> get props => [throw UnimplementedError()];
 }
 
-class ClassContentDataLoadingState extends ClassContentEditState {}
+class ClassContentDataLoadingState extends ClassContentState {}
 
-class ClassContentDataLoadingSuccessState extends ClassContentEditState {
+class ClassContentDataLoadingSuccessState extends ClassContentState {
   final String? htmlText;
   final String? htmlFilePath;
   final ClassesBloc? classesBloc;
@@ -33,4 +33,4 @@ class ClassContentDataSavingState extends ClassContentDataLoadingSuccessState {
         );
 }
 
-class ClassContentDataSavingSuccessState extends ClassContentEditState {}
+class ClassContentDataSavingSuccessState extends ClassContentState {}

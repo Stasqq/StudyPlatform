@@ -2,10 +2,14 @@ part of 'chat_bloc.dart';
 
 abstract class ChatState extends Equatable {
   ChatState(
-      {required this.courseId, required this.userName, required this.currentMessageText});
+      {required this.courseId,
+      required this.userEmail,
+      required this.userName,
+      required this.currentMessageText});
 
   late String courseId;
   late String userName;
+  late String userEmail;
   late String currentMessageText;
 
   @override
@@ -13,15 +17,21 @@ abstract class ChatState extends Equatable {
 }
 
 class ChatStateLoading extends ChatState {
-  ChatStateLoading() : super(courseId: '', userName: '', currentMessageText: '');
+  ChatStateLoading()
+      : super(
+            courseId: '', userEmail: '', userName: '', currentMessageText: '');
 }
 
 class ChatStateEmpty extends ChatStateLoadSuccess {
-  ChatStateEmpty({required String courseId, required String userName})
+  ChatStateEmpty(
+      {required String courseId,
+      required String userEmail,
+      required String userName})
       : super(
             messages: [],
             hasMoreData: false,
             courseId: courseId,
+            userEmail: userEmail,
             userName: userName,
             currentMessageText: '');
 }
@@ -32,12 +42,14 @@ class ChatStateLoadSuccess extends ChatState {
 
   ChatStateLoadSuccess({
     required String userName,
+    required String userEmail,
     required String courseId,
     required String currentMessageText,
     required this.messages,
     required this.hasMoreData,
   }) : super(
             userName: userName,
+            userEmail: userEmail,
             courseId: courseId,
             currentMessageText: currentMessageText);
 
@@ -46,6 +58,7 @@ class ChatStateLoadSuccess extends ChatState {
     bool? hasMoreData,
     String? courseId,
     String? userName,
+    String? userEmail,
     String? currentMessageText,
   }) {
     return ChatStateLoadSuccess(
@@ -53,11 +66,18 @@ class ChatStateLoadSuccess extends ChatState {
       hasMoreData: hasMoreData ?? this.hasMoreData,
       courseId: courseId ?? this.courseId,
       userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
       currentMessageText: currentMessageText ?? this.currentMessageText,
     );
   }
 
   @override
-  List<Object> get props =>
-      [messages, hasMoreData, courseId, userName, currentMessageText];
+  List<Object> get props => [
+        messages,
+        hasMoreData,
+        courseId,
+        userEmail,
+        userName,
+        currentMessageText
+      ];
 }

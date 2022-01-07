@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:study_platform/utility/cache.dart';
 import 'package:study_platform/data/models/user/user_info.dart' as user_info;
+import 'package:study_platform/utility/cache.dart';
 
 class SaveUserInfoToFirestoreFailure implements Exception {}
 
@@ -19,7 +19,8 @@ class UserInfoRepository {
 
   Future<user_info.UserInfo> readUserInfo({required String email}) async {
     try {
-      var document = await _firebaseFirestore.collection('users').doc(email).get();
+      var document =
+          await _firebaseFirestore.collection('users').doc(email).get();
       Map<String, dynamic>? userInfoMap = document.data();
       return user_info.UserInfo.fromJson(userInfoMap!);
     } catch (e) {
@@ -28,7 +29,8 @@ class UserInfoRepository {
     }
   }
 
-  Future<void> saveUserInfoToFirebase({required user_info.UserInfo userInfo}) async {
+  Future<void> saveUserInfoToFirebase(
+      {required user_info.UserInfo userInfo}) async {
     try {
       await _firebaseFirestore
           .collection('users')

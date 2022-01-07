@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/presentation/screens/chat_screen.dart';
+import 'package:study_platform/presentation/screens/class_content_preview_screen.dart';
 import 'package:study_platform/presentation/screens/class_edit_screen.dart';
+import 'package:study_platform/presentation/screens/class_screen.dart';
 import 'package:study_platform/presentation/screens/course_screen.dart';
 import 'package:study_platform/presentation/screens/courses_screen.dart';
 import 'package:study_platform/presentation/screens/create_course_screen.dart';
 import 'package:study_platform/presentation/screens/login_screen.dart';
-import 'package:study_platform/presentation/screens/profile_screen.dart';
 import 'package:study_platform/presentation/screens/signup_screen.dart';
 import 'package:study_platform/presentation/screens/splash_screen.dart';
 import 'package:study_platform/presentation/screens/user_info_screen.dart';
@@ -32,10 +33,6 @@ class AppRouter {
       case kSignupScreen:
         return MaterialPageRoute(
           builder: (_) => SignUpScreen(),
-        );
-      case kProfileScreen:
-        return MaterialPageRoute(
-          builder: (_) => ProfileScreen(),
         );
       case kUserInfoScreen:
         return MaterialPageRoute(
@@ -64,6 +61,14 @@ class AppRouter {
       case kClassContentEditScreen:
         return MaterialPageRoute(
           builder: (_) => ClassContentEditScreen(),
+        );
+      case kClassContentPreviewScreen:
+        return MaterialPageRoute(
+          builder: (_) => ClassContentPreviewScreen(),
+        );
+      case kClassScreen:
+        return MaterialPageRoute(
+          builder: (_) => ClassScreen(),
         );
       default:
         return null;

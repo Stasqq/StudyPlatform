@@ -25,6 +25,7 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     on<CurrentClassMaterialDeleteEvent>(_onCurrentClassMaterialDelete);
     on<CurrentClassDeleteEvent>(_onCurrentClassDelete);
     on<ClassCreateEvent>(_onClassCreate);
+    on<CurrentClassMaterialDownloadEvent>(_onCurrentClassMaterialDownload);
   }
 
   final FilesRepository _filesRepository;
@@ -106,21 +107,26 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
   ) async {
     var loadState = (state as ClassesStateLoadSuccess);
     emit(ClassesStateActionLoading(currentState: loadState));
-    String fileName = await _filesRepository.pickAndSentFile(
-        pathToSent: 'courses/' +
-            loadState.courseId +
-            '/' +
-            loadState.currentClass.name +
-            '/materials/');
-    await _classesRepository.addClassMaterials(
-      fileName: fileName,
-      courseId: loadState.courseId,
-      className: loadState.currentClass.name,
-    );
-    loadState.currentClass.materials.add(fileName);
-    emit(loadState.copyWith(
-        currentClass: loadState.currentClass
-            .copyWith(materials: loadState.currentClass.materials)));
+    try {
+      String fileName = await _filesRepository.pickAndSentFile(
+          pathToSent: 'courses/' +
+              loadState.courseId +
+              '/' +
+              loadState.currentClass.name +
+              '/materials/');
+
+      await _classesRepository.addClassMaterials(
+        fileName: fileName,
+        courseId: loadState.courseId,
+        className: loadState.currentClass.name,
+      );
+      loadState.currentClass.materials.add(fileName);
+      emit(loadState.copyWith(
+          currentClass: loadState.currentClass
+              .copyWith(materials: loadState.currentClass.materials)));
+    } on NoFilePickedException {
+      emit(loadState);
+    }
   }
 
   Future<void> _onCurrentClassMaterialDelete(
@@ -191,6 +197,21 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     List<Class> newClassesList = loadState.classes;
     newClassesList.remove(loadState.currentClass);
     emit(loadState.copyWith(classes: newClassesList));
+  }
+
+  Future<void> _onCurrentClassMaterialDownload(
+    CurrentClassMaterialDownloadEvent event,
+    Emitter<ClassesState> emit,
+  ) async {
+    var loadState = (state as ClassesStateLoadSuccess);
+    emit(ClassesStateActionLoading(currentState: loadState));
+    await _filesRepository.downloadFile('courses/' +
+        loadState.courseId +
+        '/' +
+        loadState.currentClass.name +
+        '/materials/' +
+        event.fileName);
+    emit(loadState);
   }
 
   void _handleStreamEvent(int index, QuerySnapshot snapshot) {

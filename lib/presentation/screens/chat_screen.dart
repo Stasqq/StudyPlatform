@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
@@ -26,7 +25,8 @@ class _ChatScreenState extends State<ChatScreen> {
             .id,
         userName: context.read<UserInfoCubit>().state.firstName.value +
             ' ' +
-            context.read<UserInfoCubit>().state.surname.value));
+            context.read<UserInfoCubit>().state.surname.value,
+        userEmail: context.read<UserInfoCubit>().state.email.value));
     super.initState();
   }
 
@@ -64,9 +64,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           );
                         }
                         return MessageBubble(
-                            sender: state.messages[index].senderName,
+                            senderEmail: state.messages[index].senderEmail,
+                            senderName: state.messages[index].senderName,
                             text: state.messages[index].text,
-                            isMe: state.messages[index].senderName == state.userName);
+                            isMe: state.messages[index].senderName ==
+                                state.userName);
                       },
                       separatorBuilder: (context, i) {
                         return SizedBox(
@@ -94,7 +96,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              context.read<ChatBloc>().add(ChatMessageSentEvent());
+                              context
+                                  .read<ChatBloc>()
+                                  .add(ChatMessageSentEvent());
                               messageTextController.clear();
                             },
                             child: const Text(

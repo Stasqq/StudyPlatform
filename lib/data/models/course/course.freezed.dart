@@ -21,11 +21,11 @@ Course _$CourseFromJson(Map<String, dynamic> json) {
 class _$CourseTearOff {
   const _$CourseTearOff();
 
-  _Course call(String id, String ownerUid, String ownerName, String name,
+  _Course call(String id, String ownerEmail, String ownerName, String name,
       String description, bool public) {
     return _Course(
       id,
-      ownerUid,
+      ownerEmail,
       ownerName,
       name,
       description,
@@ -44,7 +44,7 @@ const $Course = _$CourseTearOff();
 /// @nodoc
 mixin _$Course {
   String get id => throw _privateConstructorUsedError;
-  String get ownerUid => throw _privateConstructorUsedError;
+  String get ownerEmail => throw _privateConstructorUsedError;
   String get ownerName => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -61,7 +61,7 @@ abstract class $CourseCopyWith<$Res> {
       _$CourseCopyWithImpl<$Res>;
   $Res call(
       {String id,
-      String ownerUid,
+      String ownerEmail,
       String ownerName,
       String name,
       String description,
@@ -79,7 +79,7 @@ class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? ownerUid = freezed,
+    Object? ownerEmail = freezed,
     Object? ownerName = freezed,
     Object? name = freezed,
     Object? description = freezed,
@@ -90,9 +90,9 @@ class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      ownerUid: ownerUid == freezed
-          ? _value.ownerUid
-          : ownerUid // ignore: cast_nullable_to_non_nullable
+      ownerEmail: ownerEmail == freezed
+          ? _value.ownerEmail
+          : ownerEmail // ignore: cast_nullable_to_non_nullable
               as String,
       ownerName: ownerName == freezed
           ? _value.ownerName
@@ -121,7 +121,7 @@ abstract class _$CourseCopyWith<$Res> implements $CourseCopyWith<$Res> {
   @override
   $Res call(
       {String id,
-      String ownerUid,
+      String ownerEmail,
       String ownerName,
       String name,
       String description,
@@ -140,7 +140,7 @@ class __$CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? ownerUid = freezed,
+    Object? ownerEmail = freezed,
     Object? ownerName = freezed,
     Object? name = freezed,
     Object? description = freezed,
@@ -151,9 +151,9 @@ class __$CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      ownerUid == freezed
-          ? _value.ownerUid
-          : ownerUid // ignore: cast_nullable_to_non_nullable
+      ownerEmail == freezed
+          ? _value.ownerEmail
+          : ownerEmail // ignore: cast_nullable_to_non_nullable
               as String,
       ownerName == freezed
           ? _value.ownerName
@@ -178,7 +178,7 @@ class __$CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Course implements _Course {
-  const _$_Course(this.id, this.ownerUid, this.ownerName, this.name,
+  const _$_Course(this.id, this.ownerEmail, this.ownerName, this.name,
       this.description, this.public);
 
   factory _$_Course.fromJson(Map<String, dynamic> json) =>
@@ -187,7 +187,7 @@ class _$_Course implements _Course {
   @override
   final String id;
   @override
-  final String ownerUid;
+  final String ownerEmail;
   @override
   final String ownerName;
   @override
@@ -199,7 +199,7 @@ class _$_Course implements _Course {
 
   @override
   String toString() {
-    return 'Course(id: $id, ownerUid: $ownerUid, ownerName: $ownerName, name: $name, description: $description, public: $public)';
+    return 'Course(id: $id, ownerEmail: $ownerEmail, ownerName: $ownerName, name: $name, description: $description, public: $public)';
   }
 
   @override
@@ -208,7 +208,8 @@ class _$_Course implements _Course {
         (other.runtimeType == runtimeType &&
             other is _Course &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.ownerUid, ownerUid) &&
+            const DeepCollectionEquality()
+                .equals(other.ownerEmail, ownerEmail) &&
             const DeepCollectionEquality().equals(other.ownerName, ownerName) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
@@ -220,7 +221,7 @@ class _$_Course implements _Course {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(ownerUid),
+      const DeepCollectionEquality().hash(ownerEmail),
       const DeepCollectionEquality().hash(ownerName),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(description),
@@ -238,7 +239,7 @@ class _$_Course implements _Course {
 }
 
 abstract class _Course implements Course {
-  const factory _Course(String id, String ownerUid, String ownerName,
+  const factory _Course(String id, String ownerEmail, String ownerName,
       String name, String description, bool public) = _$_Course;
 
   factory _Course.fromJson(Map<String, dynamic> json) = _$_Course.fromJson;
@@ -246,7 +247,7 @@ abstract class _Course implements Course {
   @override
   String get id;
   @override
-  String get ownerUid;
+  String get ownerEmail;
   @override
   String get ownerName;
   @override

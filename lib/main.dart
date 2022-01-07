@@ -17,6 +17,8 @@ import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
 import 'package:study_platform/logic/cubit/login_cubit/login_cubit.dart';
+import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
+import 'package:study_platform/logic/cubit/photo_uri_cubit/photo_uri_cubit.dart';
 import 'package:study_platform/logic/cubit/signup_cubit/sign_cubit.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/app_router/app_router.dart';
@@ -24,7 +26,7 @@ import 'package:study_platform/utility/app_bloc_observer.dart';
 
 import 'data/repositories/authentication_repository.dart';
 import 'logic/bloc/classes_bloc/classes_bloc.dart';
-import 'logic/cubit/class_content_edit_cubit/class_content_edit_cubit.dart';
+import 'logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
 
 final firebaseAuth = FirebaseAuth.instance;
 final firebaseFirestore = FirebaseFirestore.instance;
@@ -45,10 +47,13 @@ void main() async {
   await Firebase.initializeApp(
     options: kIsWeb
         ? const FirebaseOptions(
-            apiKey: "AIzaSyBL3RW0nwZqZOKulUmPRvCY3Rc9YNycvqg", // Your apiKey
-            appId: "1:39464472146:web:3f1c2deacd5a6d1da0598b", // Your appId
-            messagingSenderId: "39464472146", // Your messagingSenderId
-            projectId: "study-platform-7be51", // Your projectId
+            apiKey: "AIzaSyB0fZ_iUIr7qzyI9Ygek3TntbIX9Upf2YQ",
+            authDomain: "study-platform-7be51.firebaseapp.com",
+            projectId: "study-platform-7be51",
+            storageBucket: "study-platform-7be51.appspot.com",
+            messagingSenderId: "39464472146",
+            appId: "1:39464472146:web:3f1c2deacd5a6d1da0598b",
+            measurementId: "G-YT1FRMQYZ0",
           )
         : null,
   );
@@ -132,8 +137,19 @@ class StudyPlatform extends StatelessWidget {
               filesRepository: filesRepository,
             ),
           ),
-          BlocProvider<ClassContentEditCubit>(
-            create: (classContentEditCubitContext) => ClassContentEditCubit(
+          BlocProvider<ClassContentCubit>(
+            create: (classContentEditCubitContext) => ClassContentCubit(
+              filesRepository: filesRepository,
+            ),
+          ),
+          BlocProvider<OtherUserInfoCubit>(
+            create: (otherUserInfoCubitContext) => OtherUserInfoCubit(
+              userInfoRepository: userInfoRepository,
+            ),
+          ),
+          BlocProvider<PhotoUriCubit>(
+            create: (photoUriCubitContext) => PhotoUriCubit(
+              userInfoRepository: userInfoRepository,
               filesRepository: filesRepository,
             ),
           ),

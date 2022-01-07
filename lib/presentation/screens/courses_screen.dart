@@ -17,13 +17,17 @@ class CoursesScreen extends StatefulWidget {
 }
 
 class _CoursesScreenState extends State<CoursesScreen> {
-  final filterItems = [CoursesFilter.Public, CoursesFilter.Joined, CoursesFilter.Owner];
+  final filterItems = [
+    CoursesFilter.Public,
+    CoursesFilter.Joined,
+    CoursesFilter.Owner
+  ];
   CoursesFilter filter = CoursesFilter.Public;
-  late final String currentUserUid;
+  late final String currentUserEmail;
 
   @override
   void initState() {
-    currentUserUid = context.read<AuthenticationBloc>().state.user.uid;
+    currentUserEmail = context.read<AuthenticationBloc>().state.user.email;
     if (!(context.read<CoursesBloc>().state is CoursesStateLoadSuccess))
       context.read<CoursesBloc>().add(CoursesEventStart(coursesFilter: filter));
     super.initState();
@@ -50,8 +54,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
                 context.read<CoursesBloc>().add(
                       CoursesEventStart(
                         coursesFilter: filter,
-                        ownerUid: currentUserUid,
-                        joinedCourses: context.read<UserInfoCubit>().state.joinedCourses,
+                        ownerUid: currentUserEmail,
+                        joinedCourses:
+                            context.read<UserInfoCubit>().state.joinedCourses,
                       ),
                     );
               },
@@ -72,8 +77,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
               } else if (state is CoursesStateLoadSuccess) {
                 return ListView.separated(
                   padding: EdgeInsets.all(8),
-                  itemCount:
-                      state.hasMoreData ? state.courses.length + 1 : state.courses.length,
+                  itemCount: state.hasMoreData
+                      ? state.courses.length + 1
+                      : state.courses.length,
                   itemBuilder: (BuildContext context, int index) {
                     if (index >= state.courses.length) {
                       context.read<CoursesBloc>().add(CoursesEventFetchMore());
@@ -90,15 +96,15 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       onTap: () {
                         context.read<CoursesBloc>().add(CurrentCourseEvent(
                             currentCourse: state.courses[index],
-                            owner: currentUserUid == state.courses[index].ownerUid,
+                            owner: currentUserEmail ==
+                                state.courses[index].ownerEmail,
                             joined: context
                                 .read<UserInfoCubit>()
                                 .state
                                 .joinedCourses
                                 .contains(state.courses[index].id)));
-                        context
-                            .read<ClassesBloc>()
-                            .add(ClassesEventStart(courseId: state.courses[index].id));
+                        context.read<ClassesBloc>().add(ClassesEventStart(
+                            courseId: state.courses[index].id));
                         Navigator.of(context).pushNamed(kCourseScreen);
                       },
                     );
@@ -117,7 +123,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
     );
   }
 
-  DropdownMenuItem<CoursesFilter> buildMenuItem(CoursesFilter item) => DropdownMenuItem(
+  DropdownMenuItem<CoursesFilter> buildMenuItem(CoursesFilter item) =>
+      DropdownMenuItem(
         value: item,
         child: Text(
           EnumToString.convertToString(item),
@@ -141,7 +148,8 @@ class JoinCourseDialogButton extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 context.read<CoursesBloc>().add(CourseJoinEvent(
-                      userEmail: context.read<AuthenticationBloc>().state.user.email,
+                      userEmail:
+                          context.read<AuthenticationBloc>().state.user.email,
                       currentCoursesIds:
                           context.read<UserInfoCubit>().state.joinedCourses,
                       courseId: courseId,

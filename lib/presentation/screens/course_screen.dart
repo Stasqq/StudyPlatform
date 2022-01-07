@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,9 @@ import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
+import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
+import 'package:study_platform/presentation/screens/profile_screen.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
 import '../../logic/bloc/classes_bloc/classes_bloc.dart';
@@ -26,7 +29,7 @@ class CourseScreen extends StatelessWidget {
               (previous as CoursesStateLoadSuccess).joined !=
               (current as CoursesStateLoadSuccess).joined,
           builder: (context, state) {
-            state = state as CoursesStateLoadSuccess;
+            var loadState = state as CoursesStateLoadSuccess;
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -40,9 +43,36 @@ class CourseScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(state.currentCourse.description),
-                              Text(state.currentCourse.ownerName),
-                              if (state.owner) Text(state.currentCourse.id),
+                              Text(loadState.currentCourse.description),
+                              RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: loadState.currentCourse.ownerName,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          context
+                                              .read<OtherUserInfoCubit>()
+                                              .loadOtherUserInfo(loadState
+                                                  .currentCourse.ownerEmail);
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfileScreen(
+                                                      currentUser: false,
+                                                    )),
+                                          );
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (loadState.owner)
+                                Text(loadState.currentCourse.id),
                             ],
                           ),
                         ),
@@ -53,11 +83,14 @@ class CourseScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (state.joined || state.owner) _ChatButton(),
-                              if (!state.owner)
-                                (state.joined) ? _LeaveButton() : _JoinButton(),
-                              if (state.owner) _DeleteButton(),
-                              if (state.owner) _NewClassDialog(),
+                              if (loadState.joined || loadState.owner)
+                                _ChatButton(),
+                              if (!loadState.owner)
+                                (loadState.joined)
+                                    ? _LeaveButton()
+                                    : _JoinButton(),
+                              if (loadState.owner) _DeleteButton(),
+                              if (loadState.owner) _NewClassDialog(),
                             ],
                           ),
                         ),
@@ -117,9 +150,19 @@ class CourseScreen extends StatelessWidget {
                                       },
                                       child: Icon(Icons.edit),
                                     )
-                                  : Container(),
+                                  : SizedBox(),
                               onTap: () {
-                                //TODO: wyswietlanie pojedynczej classy
+                                if ((context.read<CoursesBloc>().state
+                                            as CoursesStateLoadSuccess)
+                                        .owner ||
+                                    (context.read<CoursesBloc>().state
+                                            as CoursesStateLoadSuccess)
+                                        .joined) {
+                                  context.read<ClassesBloc>().add(
+                                      CurrentClassEvent(
+                                          currentClass: state.classes[index]));
+                                  Navigator.of(context).pushNamed(kClassScreen);
+                                }
                               },
                             );
                           },

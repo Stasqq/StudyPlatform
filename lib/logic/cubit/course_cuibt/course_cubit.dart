@@ -49,7 +49,7 @@ class CourseCubit extends Cubit<CourseState> {
       await _coursesRepository.createCourse(
         courseName: state.courseName.value,
         description: state.description ?? '',
-        ownerUid: _authenticationRepository.currentUser.uid,
+        ownerEmail: _authenticationRepository.currentUser.email,
         ownerName: ownerName,
         public: state.public,
       );

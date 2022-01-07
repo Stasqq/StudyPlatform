@@ -17,6 +17,7 @@ class CoursesStateActionLoading extends CoursesStateLoadSuccess {
   CoursesStateActionLoading({required CoursesStateLoadSuccess currentState})
       : super(
             courses: currentState.courses,
+            currentCourse: currentState.currentCourse,
             hasMoreData: currentState.hasMoreData);
 }
 
@@ -33,7 +34,8 @@ class CoursesStateLoadSuccess extends CoursesState {
   const CoursesStateLoadSuccess({
     required this.courses,
     required this.hasMoreData,
-  })  : currentCourse = emptyCourse,
+    Course? currentCourse,
+  })  : currentCourse = currentCourse ?? emptyCourse,
         owner = false,
         joined = false;
 

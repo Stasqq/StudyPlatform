@@ -1,12 +1,21 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
+import 'package:study_platform/presentation/screens/profile_screen.dart';
 
 class MessageBubble extends StatelessWidget {
-  final String sender;
+  final String senderEmail;
+  final String senderName;
   final String text;
   final bool isMe;
 
   const MessageBubble(
-      {Key? key, required this.sender, required this.text, required this.isMe})
+      {Key? key,
+      required this.senderEmail,
+      required this.senderName,
+      required this.text,
+      required this.isMe})
       : super(key: key);
 
   @override
@@ -14,13 +23,33 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(
-            sender,
-            style: const TextStyle(
-              fontSize: 12.0,
-              color: Colors.black54,
+          RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                  text: senderName,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.black54,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      context
+                          .read<OtherUserInfoCubit>()
+                          .loadOtherUserInfo(senderEmail);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                            currentUser: false,
+                          ),
+                        ),
+                      );
+                    },
+                ),
+              ],
             ),
           ),
           Material(

@@ -23,6 +23,7 @@ class ClassesStateActionLoading extends ClassesStateLoadSuccess {
       : super(
             courseId: currentState.courseId,
             classes: currentState.classes,
+            currentClass: currentState.currentClass,
             hasMoreData: currentState.hasMoreData);
 }
 
@@ -34,11 +35,12 @@ class ClassesStateLoadSuccess extends ClassesState {
 
   static const emptyClass = Class('', 0, '', '', <String>[]);
 
-  ClassesStateLoadSuccess({
-    required String courseId,
-    required this.classes,
-    required this.hasMoreData,
-  })  : currentClass = emptyClass,
+  ClassesStateLoadSuccess(
+      {required String courseId,
+      required this.classes,
+      required this.hasMoreData,
+      Class? currentClass})
+      : currentClass = currentClass ?? emptyClass,
         super(courseId: courseId);
 
   ClassesStateLoadSuccess.forCopy(

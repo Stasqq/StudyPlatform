@@ -21,9 +21,11 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 class _$MessageTearOff {
   const _$MessageTearOff();
 
-  _Message call(String text, String senderName, int timestamp) {
+  _Message call(
+      String text, String senderEmail, String senderName, int timestamp) {
     return _Message(
       text,
+      senderEmail,
       senderName,
       timestamp,
     );
@@ -40,6 +42,7 @@ const $Message = _$MessageTearOff();
 /// @nodoc
 mixin _$Message {
   String get text => throw _privateConstructorUsedError;
+  String get senderEmail => throw _privateConstructorUsedError;
   String get senderName => throw _privateConstructorUsedError;
   int get timestamp => throw _privateConstructorUsedError;
 
@@ -52,7 +55,8 @@ mixin _$Message {
 abstract class $MessageCopyWith<$Res> {
   factory $MessageCopyWith(Message value, $Res Function(Message) then) =
       _$MessageCopyWithImpl<$Res>;
-  $Res call({String text, String senderName, int timestamp});
+  $Res call(
+      {String text, String senderEmail, String senderName, int timestamp});
 }
 
 /// @nodoc
@@ -66,6 +70,7 @@ class _$MessageCopyWithImpl<$Res> implements $MessageCopyWith<$Res> {
   @override
   $Res call({
     Object? text = freezed,
+    Object? senderEmail = freezed,
     Object? senderName = freezed,
     Object? timestamp = freezed,
   }) {
@@ -73,6 +78,10 @@ class _$MessageCopyWithImpl<$Res> implements $MessageCopyWith<$Res> {
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
+              as String,
+      senderEmail: senderEmail == freezed
+          ? _value.senderEmail
+          : senderEmail // ignore: cast_nullable_to_non_nullable
               as String,
       senderName: senderName == freezed
           ? _value.senderName
@@ -91,7 +100,8 @@ abstract class _$MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
   factory _$MessageCopyWith(_Message value, $Res Function(_Message) then) =
       __$MessageCopyWithImpl<$Res>;
   @override
-  $Res call({String text, String senderName, int timestamp});
+  $Res call(
+      {String text, String senderEmail, String senderName, int timestamp});
 }
 
 /// @nodoc
@@ -106,6 +116,7 @@ class __$MessageCopyWithImpl<$Res> extends _$MessageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? text = freezed,
+    Object? senderEmail = freezed,
     Object? senderName = freezed,
     Object? timestamp = freezed,
   }) {
@@ -113,6 +124,10 @@ class __$MessageCopyWithImpl<$Res> extends _$MessageCopyWithImpl<$Res>
       text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
+              as String,
+      senderEmail == freezed
+          ? _value.senderEmail
+          : senderEmail // ignore: cast_nullable_to_non_nullable
               as String,
       senderName == freezed
           ? _value.senderName
@@ -129,7 +144,8 @@ class __$MessageCopyWithImpl<$Res> extends _$MessageCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Message implements _Message {
-  const _$_Message(this.text, this.senderName, this.timestamp);
+  const _$_Message(
+      this.text, this.senderEmail, this.senderName, this.timestamp);
 
   factory _$_Message.fromJson(Map<String, dynamic> json) =>
       _$$_MessageFromJson(json);
@@ -137,13 +153,15 @@ class _$_Message implements _Message {
   @override
   final String text;
   @override
+  final String senderEmail;
+  @override
   final String senderName;
   @override
   final int timestamp;
 
   @override
   String toString() {
-    return 'Message(text: $text, senderName: $senderName, timestamp: $timestamp)';
+    return 'Message(text: $text, senderEmail: $senderEmail, senderName: $senderName, timestamp: $timestamp)';
   }
 
   @override
@@ -153,6 +171,8 @@ class _$_Message implements _Message {
             other is _Message &&
             const DeepCollectionEquality().equals(other.text, text) &&
             const DeepCollectionEquality()
+                .equals(other.senderEmail, senderEmail) &&
+            const DeepCollectionEquality()
                 .equals(other.senderName, senderName) &&
             const DeepCollectionEquality().equals(other.timestamp, timestamp));
   }
@@ -161,6 +181,7 @@ class _$_Message implements _Message {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(text),
+      const DeepCollectionEquality().hash(senderEmail),
       const DeepCollectionEquality().hash(senderName),
       const DeepCollectionEquality().hash(timestamp));
 
@@ -176,13 +197,16 @@ class _$_Message implements _Message {
 }
 
 abstract class _Message implements Message {
-  const factory _Message(String text, String senderName, int timestamp) =
+  const factory _Message(
+          String text, String senderEmail, String senderName, int timestamp) =
       _$_Message;
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$_Message.fromJson;
 
   @override
   String get text;
+  @override
+  String get senderEmail;
   @override
   String get senderName;
   @override

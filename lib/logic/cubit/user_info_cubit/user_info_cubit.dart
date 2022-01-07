@@ -51,7 +51,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
               _authenticationRepository.currentUser.uid,
               state.firstName.value,
               state.surname.value,
-              null, []));
+              '', []));
       emit(state.copyWith(
           email: Email.dirty(_authenticationRepository.currentUser.email),
           status: FormzStatus.submissionSuccess));
@@ -72,12 +72,19 @@ class UserInfoCubit extends Cubit<UserInfoState> {
       emit(state.copyWith(
           firstName: Name.dirty(userInfo.firstName),
           surname: Name.dirty(userInfo.surname),
+          photoURL: userInfo.photoURL,
           email: Email.dirty(userInfo.email ?? ''),
+          uid: userInfo.uid,
           joinedCourses: userInfo.joinedCourses));
     } catch (e) {
       print(e);
       throw ReadUserInfoFromFirestoreFailure();
     }
+  }
+
+  UserInfo getUserInfoObject() {
+    return UserInfo(state.email.value, state.uid, state.firstName.value,
+        state.surname.value, state.photoURL, state.joinedCourses);
   }
 
   void joinCourse(String courseId) {

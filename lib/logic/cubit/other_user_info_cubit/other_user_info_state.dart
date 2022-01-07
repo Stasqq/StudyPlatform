@@ -10,5 +10,7 @@ class OtherUserInfoLoadingState extends OtherUserInfoState {}
 class OtherUserInfoLoadingSuccessState extends OtherUserInfoState {
   final UserInfo otherUserInfo;
 
-  OtherUserInfoLoadingSuccessState({required this.otherUserInfo});
+  OtherUserInfoLoadingSuccessState({
+    required this.otherUserInfo,
+  });
 }

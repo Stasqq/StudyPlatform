@@ -22,60 +22,94 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
   void firstNameChanged(String value) {
     final firstName = Name.dirty(value);
-    emit(state.copyWith(
+
+    emit(
+      state.copyWith(
         firstName: firstName,
-        status: Formz.validate([
-          firstName,
-          state.surname,
-        ])));
+        status: Formz.validate(
+          [
+            firstName,
+            state.surname,
+          ],
+        ),
+      ),
+    );
   }
 
   void surnameChanged(String value) {
     final surname = Name.dirty(value);
-    emit(state.copyWith(
-      surname: surname,
-      status: Formz.validate([
-        state.firstName,
-        surname,
-      ]),
-    ));
+
+    emit(
+      state.copyWith(
+        surname: surname,
+        status: Formz.validate(
+          [
+            state.firstName,
+            surname,
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> userInfoFormSubmitted() async {
     if (!state.status.isValidated) return;
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionInProgress,
+      ),
+    );
+
     try {
       await _userInfoRepository.saveUserInfoToFirebase(
-          userInfo: UserInfo(
-              _authenticationRepository.currentUser.email,
-              _authenticationRepository.currentUser.uid,
-              state.firstName.value,
-              state.surname.value,
-              '', []));
-      emit(state.copyWith(
-          email: Email.dirty(_authenticationRepository.currentUser.email),
-          status: FormzStatus.submissionSuccess));
+        userInfo: UserInfo(
+          _authenticationRepository.currentUser.email,
+          _authenticationRepository.currentUser.uid,
+          state.firstName.value,
+          state.surname.value,
+          '',
+          [],
+        ),
+      );
+
+      emit(
+        state.copyWith(
+            email: Email.dirty(_authenticationRepository.currentUser.email),
+            status: FormzStatus.submissionSuccess),
+      );
     } on SaveUserInfoToFirestoreFailure catch (e) {
       print(e);
-      emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
-      ));
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     } catch (_) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     }
   }
 
   Future<void> readUserInfo() async {
     try {
       UserInfo userInfo = await _userInfoRepository.readUserInfo(
-          email: _authenticationRepository.currentUser.email);
-      emit(state.copyWith(
+        email: _authenticationRepository.currentUser.email,
+      );
+
+      emit(
+        state.copyWith(
           firstName: Name.dirty(userInfo.firstName),
           surname: Name.dirty(userInfo.surname),
           photoURL: userInfo.photoURL,
           email: Email.dirty(userInfo.email ?? ''),
           uid: userInfo.uid,
-          joinedCourses: userInfo.joinedCourses));
+          joinedCourses: userInfo.joinedCourses,
+        ),
+      );
     } catch (e) {
       print(e);
       throw ReadUserInfoFromFirestoreFailure();
@@ -90,12 +124,22 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   void joinCourse(String courseId) {
     List<String> newCoursesList = state.joinedCourses;
     newCoursesList.add(courseId);
-    emit(state.copyWith(joinedCourses: newCoursesList));
+
+    emit(
+      state.copyWith(
+        joinedCourses: newCoursesList,
+      ),
+    );
   }
 
   void leaveCourse(String courseId) {
     List<String> newCoursesList = state.joinedCourses;
     newCoursesList.remove(courseId);
-    emit(state.copyWith(joinedCourses: newCoursesList));
+
+    emit(
+      state.copyWith(
+        joinedCourses: newCoursesList,
+      ),
+    );
   }
 }

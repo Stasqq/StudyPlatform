@@ -8,7 +8,9 @@ abstract class ClassesEvent extends Equatable {
 }
 
 class ClassesEventStart extends ClassesEvent {
-  const ClassesEventStart({required this.courseId});
+  const ClassesEventStart({
+    required this.courseId,
+  });
 
   final String courseId;
 
@@ -30,7 +32,9 @@ class ClassesEventFetchMore extends ClassesEvent {}
 class CurrentClassEvent extends ClassesEvent {
   final Class currentClass;
 
-  CurrentClassEvent({required this.currentClass});
+  CurrentClassEvent({
+    required this.currentClass,
+  });
 
   @override
   List<Object> get props => [currentClass];
@@ -41,8 +45,11 @@ class ClassCreateEvent extends ClassesEvent {
   final String description;
   final int index;
 
-  ClassCreateEvent(
-      {required this.name, required this.description, required this.index});
+  ClassCreateEvent({
+    required this.name,
+    required this.description,
+    required this.index,
+  });
 }
 
 class CurrentClassDeleteEvent extends ClassesEvent {}
@@ -52,7 +59,9 @@ class CurrentClassMaterialAddEvent extends ClassesEvent {}
 class CurrentClassMaterialDeleteEvent extends ClassesEvent {
   final String fileName;
 
-  CurrentClassMaterialDeleteEvent({required this.fileName});
+  CurrentClassMaterialDeleteEvent({
+    required this.fileName,
+  });
 }
 
 class CurrentClassMaterialDownloadEvent extends ClassesEvent {

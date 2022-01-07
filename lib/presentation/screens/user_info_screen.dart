@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -23,7 +22,9 @@ class UserInfoScreen extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(content: Text(state.errorMessage ?? 'User Info Saving Failure')),
+                SnackBar(
+                    content:
+                        Text(state.errorMessage ?? kUserInfoSavingFailure)),
               );
           }
         },
@@ -55,9 +56,9 @@ class _FirstNameInput extends StatelessWidget {
           onChanged: (firstName) =>
               context.read<UserInfoCubit>().firstNameChanged(firstName),
           decoration: InputDecoration(
-            labelText: 'First Name',
-            helperText: '',
-            errorText: state.surname.invalid ? 'invalid firstName' : null,
+            labelText: kFirstNameLabel,
+            helperText: kFirstNameLabelHelper,
+            errorText: state.surname.invalid ? kFirstNameLabelInvalid : null,
           ),
         );
       },
@@ -72,11 +73,12 @@ class _SurnameInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.surname != current.surname,
       builder: (context, state) {
         return TextField(
-          onChanged: (surname) => context.read<UserInfoCubit>().surnameChanged(surname),
+          onChanged: (surname) =>
+              context.read<UserInfoCubit>().surnameChanged(surname),
           decoration: InputDecoration(
-            labelText: 'Surname',
-            helperText: '',
-            errorText: state.surname.invalid ? 'invalid surname' : null,
+            labelText: kSurnameLabel,
+            helperText: kSurnameLabelHelper,
+            errorText: state.surname.invalid ? kSurnameLabelInvalid : null,
           ),
         );
       },
@@ -100,7 +102,8 @@ class _SaveUserInfoButton extends StatelessWidget {
                   primary: kButtonColor,
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<UserInfoCubit>().userInfoFormSubmitted()
+                    ? () =>
+                        context.read<UserInfoCubit>().userInfoFormSubmitted()
                     : null,
                 child: const Text(kSubmitText),
               );

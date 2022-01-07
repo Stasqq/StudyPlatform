@@ -16,29 +16,30 @@ class ClassScreen extends StatelessWidget {
           .currentClass
           .name,
       child: Align(
-          alignment: const Alignment(0, -1 / 3),
-          child: BlocBuilder<ClassesBloc, ClassesState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<ClassContentCubit>()
-                            .loadClass(context.read<ClassesBloc>());
-                        Navigator.of(context)
-                            .pushNamed(kClassContentPreviewScreen);
-                      },
-                      child: Text('Content'),
-                    ),
+        alignment: const Alignment(0, -1 / 3),
+        child: BlocBuilder<ClassesBloc, ClassesState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<ClassContentCubit>()
+                          .loadClass(context.read<ClassesBloc>());
+                      Navigator.of(context)
+                          .pushNamed(kClassContentPreviewScreen);
+                    },
+                    child: Text(kContent),
                   ),
-                  Text('Materials'),
-                  _GetClassMaterials(),
-                ],
-              );
-            },
-          )),
+                ),
+                Text(kMaterialsText),
+                _GetClassMaterials(),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }

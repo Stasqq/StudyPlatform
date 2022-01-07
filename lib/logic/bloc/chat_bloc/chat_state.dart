@@ -1,11 +1,12 @@
 part of 'chat_bloc.dart';
 
 abstract class ChatState extends Equatable {
-  ChatState(
-      {required this.courseId,
-      required this.userEmail,
-      required this.userName,
-      required this.currentMessageText});
+  ChatState({
+    required this.courseId,
+    required this.userEmail,
+    required this.userName,
+    required this.currentMessageText,
+  });
 
   late String courseId;
   late String userName;
@@ -19,21 +20,26 @@ abstract class ChatState extends Equatable {
 class ChatStateLoading extends ChatState {
   ChatStateLoading()
       : super(
-            courseId: '', userEmail: '', userName: '', currentMessageText: '');
+          courseId: '',
+          userEmail: '',
+          userName: '',
+          currentMessageText: '',
+        );
 }
 
 class ChatStateEmpty extends ChatStateLoadSuccess {
-  ChatStateEmpty(
-      {required String courseId,
-      required String userEmail,
-      required String userName})
-      : super(
-            messages: [],
-            hasMoreData: false,
-            courseId: courseId,
-            userEmail: userEmail,
-            userName: userName,
-            currentMessageText: '');
+  ChatStateEmpty({
+    required String courseId,
+    required String userEmail,
+    required String userName,
+  }) : super(
+          messages: [],
+          hasMoreData: false,
+          courseId: courseId,
+          userEmail: userEmail,
+          userName: userName,
+          currentMessageText: '',
+        );
 }
 
 class ChatStateLoadSuccess extends ChatState {
@@ -48,10 +54,11 @@ class ChatStateLoadSuccess extends ChatState {
     required this.messages,
     required this.hasMoreData,
   }) : super(
-            userName: userName,
-            userEmail: userEmail,
-            courseId: courseId,
-            currentMessageText: currentMessageText);
+          userName: userName,
+          userEmail: userEmail,
+          courseId: courseId,
+          currentMessageText: currentMessageText,
+        );
 
   ChatStateLoadSuccess copyWith({
     List<Message>? messages,

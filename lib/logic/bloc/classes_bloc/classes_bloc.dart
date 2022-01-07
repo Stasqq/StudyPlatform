@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/data/models/course/class.dart';
 import 'package:study_platform/data/repositories/classes_repository.dart';
 import 'package:study_platform/data/repositories/files_repository.dart';
@@ -41,9 +42,11 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
   ) {
     hasMoreData = true;
     lastDoc = null;
-    subscriptions.forEach((subscription) {
-      subscription.cancel();
-    });
+    subscriptions.forEach(
+      (subscription) {
+        subscription.cancel();
+      },
+    );
     classes.clear();
     subscriptions.clear();
 
@@ -58,7 +61,12 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
         },
       ),
     );
-    emit(ClassesStateEmpty(courseId: event.courseId));
+
+    emit(
+      ClassesStateEmpty(
+        courseId: event.courseId,
+      ),
+    );
   }
 
   void _onLoadEvent(
@@ -68,12 +76,19 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     final elements = classes.expand((i) => i).toList();
 
     if (elements.isEmpty) {
-      emit(ClassesStateEmpty(courseId: state.courseId));
+      emit(
+        ClassesStateEmpty(
+          courseId: state.courseId,
+        ),
+      );
     } else {
-      emit(ClassesStateLoadSuccess(
+      emit(
+        ClassesStateLoadSuccess(
           classes: elements,
           hasMoreData: hasMoreData,
-          courseId: state.courseId));
+          courseId: state.courseId,
+        ),
+      );
     }
   }
 
@@ -82,23 +97,32 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     Emitter<ClassesState> emit,
   ) {
     if (lastDoc == null) {
-      throw Exception('Last doc is not set');
+      throw Exception(kLastDocNotSet);
     }
     final index = classes.length;
-    subscriptions.add(_classesRepository
-        .getClassesPage(lastDoc: lastDoc!, courseId: state.courseId)
-        .listen((event) {
-      _handleStreamEvent(index, event);
-    }));
+    subscriptions.add(
+      _classesRepository
+          .getClassesPage(
+        lastDoc: lastDoc!,
+        courseId: state.courseId,
+      )
+          .listen(
+        (event) {
+          _handleStreamEvent(index, event);
+        },
+      ),
+    );
   }
 
   void _onCurrentClass(
     CurrentClassEvent event,
     Emitter<ClassesState> emit,
   ) {
-    emit((state as ClassesStateLoadSuccess).copyWith(
-      currentClass: event.currentClass,
-    ));
+    emit(
+      (state as ClassesStateLoadSuccess).copyWith(
+        currentClass: event.currentClass,
+      ),
+    );
   }
 
   Future<void> _onCurrentClassMaterialAdd(
@@ -106,14 +130,18 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     Emitter<ClassesState> emit,
   ) async {
     var loadState = (state as ClassesStateLoadSuccess);
-    emit(ClassesStateActionLoading(currentState: loadState));
+
+    emit(
+      ClassesStateActionLoading(
+        currentState: loadState,
+      ),
+    );
+
     try {
       String fileName = await _filesRepository.pickAndSentFile(
-          pathToSent: 'courses/' +
-              loadState.courseId +
-              '/' +
-              loadState.currentClass.name +
-              '/materials/');
+        pathToSent:
+            '$kCourses/${loadState.courseId}/${loadState.currentClass.name}/$kMaterials/',
+      );
 
       await _classesRepository.addClassMaterials(
         fileName: fileName,
@@ -121,11 +149,17 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
         className: loadState.currentClass.name,
       );
       loadState.currentClass.materials.add(fileName);
-      emit(loadState.copyWith(
-          currentClass: loadState.currentClass
-              .copyWith(materials: loadState.currentClass.materials)));
+      emit(
+        loadState.copyWith(
+          currentClass: loadState.currentClass.copyWith(
+            materials: loadState.currentClass.materials,
+          ),
+        ),
+      );
     } on NoFilePickedException {
-      emit(loadState);
+      emit(
+        loadState,
+      );
     }
   }
 
@@ -134,23 +168,33 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     Emitter<ClassesState> emit,
   ) async {
     var loadState = (state as ClassesStateLoadSuccess);
-    emit(ClassesStateActionLoading(currentState: loadState));
+    emit(
+      ClassesStateActionLoading(
+        currentState: loadState,
+      ),
+    );
+
     await _filesRepository.deleteFile(
-        filePath: 'courses/' +
-            loadState.courseId +
-            '/' +
-            loadState.currentClass.name +
-            '/materials/' +
-            event.fileName);
+      filePath:
+          '$kCourses/${loadState.currentClass.name}/$kMaterials/${event.fileName}',
+    );
+
     await _classesRepository.deleteClassMaterials(
-        courseId: loadState.courseId,
-        className: loadState.currentClass.name,
-        fileName: event.fileName);
+      courseId: loadState.courseId,
+      className: loadState.currentClass.name,
+      fileName: event.fileName,
+    );
+
     List<String> newMaterialsList = loadState.currentClass.materials;
     newMaterialsList.remove(event.fileName);
-    emit(loadState.copyWith(
-        currentClass:
-            loadState.currentClass.copyWith(materials: newMaterialsList)));
+
+    emit(
+      loadState.copyWith(
+        currentClass: loadState.currentClass.copyWith(
+          materials: newMaterialsList,
+        ),
+      ),
+    );
   }
 
   Future<void> _onClassCreate(
@@ -160,17 +204,12 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     await _classesRepository.sentNewClass(
       courseId: state.courseId,
       newClass: Class(
-          event.name,
-          event.index,
-          event.description,
-          'courses/' +
-              state.courseId +
-              '/' +
-              event.name +
-              '/' +
-              event.name +
-              '.html',
-          <String>[]),
+        event.name,
+        event.index,
+        event.description,
+        '$kCourses/${state.courseId}/${event.name}/${event.name}.html',
+        <String>[],
+      ),
     );
 
     await _filesRepository.createNewClassFiles(
@@ -184,19 +223,30 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     Emitter<ClassesState> emit,
   ) async {
     var loadState = (state as ClassesStateLoadSuccess);
-    emit(ClassesStateActionLoading(currentState: loadState));
+    emit(
+      ClassesStateActionLoading(
+        currentState: loadState,
+      ),
+    );
+
     await _classesRepository.deleteClass(
-        courseId: loadState.courseId, className: loadState.currentClass.name);
+      courseId: loadState.courseId,
+      className: loadState.currentClass.name,
+    );
     await _filesRepository.deleteClassDirectory(
-        directoryPath: 'courses/' +
-            loadState.courseId +
-            '/' +
-            loadState.currentClass.name +
-            '/',
-        className: loadState.currentClass.name);
+      directoryPath:
+          '$kCourses/${loadState.courseId}/${loadState.currentClass.name}/',
+      className: loadState.currentClass.name,
+    );
+
     List<Class> newClassesList = loadState.classes;
     newClassesList.remove(loadState.currentClass);
-    emit(loadState.copyWith(classes: newClassesList));
+
+    emit(
+      loadState.copyWith(
+        classes: newClassesList,
+      ),
+    );
   }
 
   Future<void> _onCurrentClassMaterialDownload(
@@ -204,14 +254,19 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     Emitter<ClassesState> emit,
   ) async {
     var loadState = (state as ClassesStateLoadSuccess);
-    emit(ClassesStateActionLoading(currentState: loadState));
-    await _filesRepository.downloadFile('courses/' +
-        loadState.courseId +
-        '/' +
-        loadState.currentClass.name +
-        '/materials/' +
-        event.fileName);
-    emit(loadState);
+    emit(
+      ClassesStateActionLoading(
+        currentState: loadState,
+      ),
+    );
+
+    await _filesRepository.downloadFile(
+      '$kCourses/${loadState.courseId}/${loadState.currentClass.name}/$kMaterials/${event.fileName}',
+    );
+
+    emit(
+      loadState,
+    );
   }
 
   void _handleStreamEvent(int index, QuerySnapshot snapshot) {
@@ -224,9 +279,11 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
     }
 
     List<Class> newList = [];
-    snapshot.docs.forEach((doc) {
-      newList.add(Class.fromJson(doc.data() as Map<String, dynamic>));
-    });
+    snapshot.docs.forEach(
+      (doc) {
+        newList.add(Class.fromJson(doc.data() as Map<String, dynamic>));
+      },
+    );
 
     if (classes.length <= index) {
       classes.add(newList);
@@ -234,14 +291,20 @@ class ClassesBloc extends Bloc<ClassesEvent, ClassesState> {
       classes[index].clear();
       classes[index] = newList;
     }
-    add(ClassesEventLoad(classes));
+    add(
+      ClassesEventLoad(
+        classes,
+      ),
+    );
   }
 
   @override
   Future<void> close() async {
-    subscriptions.forEach((subscription) {
-      subscription.cancel();
-    });
+    subscriptions.forEach(
+      (subscription) {
+        subscription.cancel();
+      },
+    );
     super.close();
   }
 

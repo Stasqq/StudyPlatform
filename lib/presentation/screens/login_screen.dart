@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text(state.errorMessage ?? 'Authentication Failure'),
+                  content: Text(state.errorMessage ?? kAuthenticationFailure),
                 ),
               );
           }
@@ -60,9 +60,9 @@ class _EmailInput extends StatelessWidget {
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'email',
-            helperText: '',
-            errorText: state.email.invalid ? 'invalid email' : null,
+            labelText: kEmailLabel,
+            helperText: kEmailLabelHelper,
+            errorText: state.email.invalid ? kEmailLabelInvalid : null,
           ),
         );
       },
@@ -77,12 +77,13 @@ class _PasswordInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          onChanged: (password) => context.read<LoginCubit>().passwordChanged(password),
+          onChanged: (password) =>
+              context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
+            labelText: kPasswordLabel,
+            helperText: kPasswordLabelHelper,
+            errorText: state.password.invalid ? kPasswordLabelInvalid : null,
           ),
         );
       },
@@ -117,7 +118,7 @@ class _SignUpButton extends StatelessWidget {
     return TextButton(
       onPressed: () => Navigator.of(context).pushNamed(kSignupScreen),
       child: Text(
-        'CREATE ACCOUNT',
+        kCreateAccount,
         style: TextStyle(color: theme.primaryColor),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
 
 import '../widgets/study_platform_scaffold.dart';
@@ -30,7 +31,7 @@ class _ClassContentEditScreenState extends State<ClassContentEditScreen> {
               }
             },
             child: StudyPlatformScaffold(
-              title: 'Context editor',
+              title: kClassContentEditor,
               appBarActions: [
                 ElevatedButton(
                   onPressed: () async {
@@ -46,7 +47,7 @@ class _ClassContentEditScreenState extends State<ClassContentEditScreen> {
                 onPressed: () {
                   controller.toggleCodeView();
                 },
-                child: Text(r'<\>',
+                child: Text(kEditorTextConvert,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               ),
@@ -68,7 +69,7 @@ class _ClassContentEditScreenState extends State<ClassContentEditScreen> {
             ),
           );
         } else {
-          return Text('Error');
+          return Text(kError);
         }
       },
     );

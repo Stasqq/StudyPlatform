@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
@@ -18,10 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
-          context
-              .read<UserInfoCubit>()
-              .readUserInfo()
-              .whenComplete(() => Navigator.of(context).pushNamed(kCoursesScreen));
+          context.read<UserInfoCubit>().readUserInfo().whenComplete(
+              () => Navigator.of(context).pushNamed(kCoursesScreen));
         } else {
           Navigator.of(context).pushNamed(kWelcomeScreen);
         }

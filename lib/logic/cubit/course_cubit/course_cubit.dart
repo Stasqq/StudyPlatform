@@ -22,29 +22,43 @@ class CourseCubit extends Cubit<CourseState> {
   void courseNameChanged(String value) {
     final courseName = CourseName.dirty(value);
 
-    emit(state.copyWith(
-      courseName: courseName,
-      status: Formz.validate([
-        courseName,
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        courseName: courseName,
+        status: Formz.validate(
+          [
+            courseName,
+          ],
+        ),
+      ),
+    );
   }
 
   void descriptionChanged(String value) {
-    emit(state.copyWith(
-      description: value,
-    ));
+    emit(
+      state.copyWith(
+        description: value,
+      ),
+    );
   }
 
   void publicChanged(bool value) {
-    emit(state.copyWith(
-      public: value,
-    ));
+    emit(
+      state.copyWith(
+        public: value,
+      ),
+    );
   }
 
   Future<void> createCourseFormSubmitted(String ownerName) async {
     if (!state.status.isValidated) return;
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionInProgress,
+      ),
+    );
+
     try {
       await _coursesRepository.createCourse(
         courseName: state.courseName.value,
@@ -53,17 +67,26 @@ class CourseCubit extends Cubit<CourseState> {
         ownerName: ownerName,
         public: state.public,
       );
-      emit(state.copyWith(
+
+      emit(
+        state.copyWith(
           ownerUid: _authenticationRepository.currentUser.uid,
           ownerName: ownerName,
-          status: FormzStatus.submissionSuccess));
-    } on SaveNewCourseToFirestoreFailure catch (e) {
-      print(e);
-      emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
-      ));
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    } on SaveNewCourseToFirestoreFailure catch (_) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     } catch (_) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     }
   }
 }

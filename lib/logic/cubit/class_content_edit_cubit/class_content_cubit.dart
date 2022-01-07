@@ -13,37 +13,55 @@ class ClassContentCubit extends Cubit<ClassContentState> {
   final FilesRepository _filesRepository;
 
   Future<void> loadClass(ClassesBloc classesBloc) async {
-    emit(ClassContentDataLoadingState());
+    emit(
+      ClassContentDataLoadingState(),
+    );
+
     String htmlFilePath = (classesBloc.state as ClassesStateLoadSuccess)
         .currentClass
         .htmlBodyPath;
+
     String htmlText = await _filesRepository.getFileDataAsString(
       path: htmlFilePath,
       fileName:
-          (classesBloc.state as ClassesStateLoadSuccess).currentClass.name +
-              '.html',
+          '${(classesBloc.state as ClassesStateLoadSuccess).currentClass.name}.html',
     );
-    emit(ClassContentDataLoadingSuccessState(
+
+    emit(
+      ClassContentDataLoadingSuccessState(
         htmlFilePath: htmlFilePath,
         htmlText: htmlText,
-        classesBloc: classesBloc));
+        classesBloc: classesBloc,
+      ),
+    );
   }
 
   Future<void> saveContent({required String htmlText}) async {
     var loadedState = state as ClassContentDataLoadingSuccessState;
+
     emit(
       ClassContentDataSavingState(
-          htmlFilePath: loadedState.htmlFilePath!,
-          htmlText: loadedState.htmlText!,
-          classesBloc: loadedState.classesBloc!),
+        htmlFilePath: loadedState.htmlFilePath!,
+        htmlText: loadedState.htmlText!,
+        classesBloc: loadedState.classesBloc!,
+      ),
     );
+
     var savingState = state as ClassContentDataSavingState;
-    await _filesRepository.deleteFile(filePath: savingState.htmlFilePath!);
+
+    await _filesRepository.deleteFile(
+      filePath: savingState.htmlFilePath!,
+    );
+
     await _filesRepository.saveTextFile(
-        path: (savingState.classesBloc?.state as ClassesStateLoadSuccess)
-            .currentClass
-            .htmlBodyPath,
-        text: htmlText);
-    emit(ClassContentDataSavingSuccessState());
+      path: (savingState.classesBloc?.state as ClassesStateLoadSuccess)
+          .currentClass
+          .htmlBodyPath,
+      text: htmlText,
+    );
+
+    emit(
+      ClassContentDataSavingSuccessState(),
+    );
   }
 }

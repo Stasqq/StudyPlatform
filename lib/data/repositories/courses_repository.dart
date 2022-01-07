@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/data/models/course/course.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 
@@ -10,19 +11,20 @@ class CoursesRepository {
   CoursesRepository({required FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore;
 
-  Future<void> createCourse(
-      {required String courseName,
-      required String description,
-      required String ownerEmail,
-      required String ownerName,
-      required bool public}) async {
+  Future<void> createCourse({
+    required String courseName,
+    required String description,
+    required String ownerEmail,
+    required String ownerName,
+    required bool public,
+  }) async {
     try {
-      var document = _firebaseFirestore.collection('courses').doc();
+      var document = _firebaseFirestore.collection(kCourses).doc();
       var documentReference = await document.get();
       Course course = Course(documentReference.id, ownerEmail, ownerName,
           courseName, description, public);
       await _firebaseFirestore
-          .collection('courses')
+          .collection(kCourses)
           .doc(documentReference.id)
           .set(course.toJson());
     } catch (_) {
@@ -37,20 +39,20 @@ class CoursesRepository {
     switch (coursesFilter) {
       case CoursesFilter.Public:
         return _firebaseFirestore
-            .collection('courses')
-            .where('public', isEqualTo: true)
+            .collection(kCourses)
+            .where(kPublic, isEqualTo: true)
             .limit(15)
             .snapshots();
       case CoursesFilter.Owner:
         return _firebaseFirestore
-            .collection('courses')
-            .where('ownerUid', isEqualTo: ownerUid)
+            .collection(kCourses)
+            .where(kOwnerUid, isEqualTo: ownerUid)
             .limit(15)
             .snapshots();
       case CoursesFilter.Joined:
         return _firebaseFirestore
-            .collection('courses')
-            .where('id', whereIn: joinedCourses)
+            .collection(kCourses)
+            .where(kId, whereIn: joinedCourses)
             .limit(15)
             .snapshots();
     }
@@ -58,36 +60,33 @@ class CoursesRepository {
 
   Stream<QuerySnapshot> getCoursesPage(DocumentSnapshot lastDoc) {
     return _firebaseFirestore
-        .collection('courses')
+        .collection(kCourses)
         .startAfterDocument(lastDoc)
         .limit(15)
         .snapshots();
   }
 
-  Future<void> deleteCourse({required String courseId}) async {
+  Future<void> deleteCourse({
+    required String courseId,
+  }) async {
     try {
-      await _firebaseFirestore.collection('courses').doc(courseId).delete();
+      await _firebaseFirestore.collection(kCourses).doc(courseId).delete();
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> updateJoinedCourses(
-      {required String userEmail, required List<String> coursesIds}) async {
+  Future<void> updateJoinedCourses({
+    required String userEmail,
+    required List<String> coursesIds,
+  }) async {
     try {
       await _firebaseFirestore
-          .collection('users')
+          .collection(kCourses)
           .doc(userEmail)
-          .update({'joinedCourses': coursesIds});
+          .update({kJoinedCourses: coursesIds});
     } catch (e) {
       print(e);
     }
-  }
-
-  Future<void> addNewClass(
-      {required String description,
-      required int number,
-      required String courseId}) async {
-    await _firebaseFirestore.collection('');
   }
 }

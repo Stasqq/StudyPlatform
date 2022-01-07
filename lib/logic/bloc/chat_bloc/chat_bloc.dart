@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/data/models/course/message.dart';
 import 'package:study_platform/data/repositories/chat_repository.dart';
 
@@ -35,23 +36,33 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     hasMoreData = true;
     lastDoc = null;
-    subscriptions.forEach((subscription) {
-      subscription.cancel();
-    });
+    subscriptions.forEach(
+      (subscription) {
+        subscription.cancel();
+      },
+    );
     messages.clear();
     subscriptions.clear();
 
     subscriptions.add(
-      _chatRepository.getChatMessages(courseId: event.courseId).listen(
+      _chatRepository
+          .getChatMessages(
+        courseId: event.courseId,
+      )
+          .listen(
         (snapshot) {
           _handleStreamEvent(0, snapshot);
         },
       ),
     );
-    emit(ChatStateEmpty(
+
+    emit(
+      ChatStateEmpty(
         courseId: event.courseId,
         userEmail: event.userEmail,
-        userName: event.userName));
+        userName: event.userName,
+      ),
+    );
   }
 
   void _onLoadEvent(
@@ -61,19 +72,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final elements = messages.expand((i) => i).toList();
 
     if (elements.isEmpty) {
-      emit(ChatStateEmpty(
+      emit(
+        ChatStateEmpty(
           userName: state.userName,
           userEmail: state.userEmail,
-          courseId: state.courseId));
+          courseId: state.courseId,
+        ),
+      );
     } else {
-      emit(ChatStateLoadSuccess(
-        messages: elements,
-        hasMoreData: hasMoreData,
-        userName: state.userName,
-        userEmail: state.userEmail,
-        courseId: state.courseId,
-        currentMessageText: state.currentMessageText,
-      ));
+      emit(
+        ChatStateLoadSuccess(
+          messages: elements,
+          hasMoreData: hasMoreData,
+          userName: state.userName,
+          userEmail: state.userEmail,
+          courseId: state.courseId,
+          currentMessageText: state.currentMessageText,
+        ),
+      );
     }
   }
 
@@ -82,14 +98,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Emitter<ChatState> emit,
   ) {
     if (lastDoc == null) {
-      throw Exception('Last doc is not set');
+      throw Exception(kLastDocNotSet);
     }
     final index = messages.length;
-    subscriptions.add(_chatRepository
-        .getMessagesPage(lastDoc: lastDoc!, courseId: state.courseId)
-        .listen((event) {
-      _handleStreamEvent(index, event);
-    }));
+    subscriptions.add(
+      _chatRepository
+          .getMessagesPage(
+        lastDoc: lastDoc!,
+        courseId: state.courseId,
+      )
+          .listen(
+        (event) {
+          _handleStreamEvent(index, event);
+        },
+      ),
+    );
   }
 
   Future<void> _onChatMessageSent(
@@ -99,16 +122,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Message message = Message(state.currentMessageText, state.userEmail,
         state.userName, DateTime.now().millisecondsSinceEpoch);
     await _chatRepository.sentNewMessage(
-        courseId: state.courseId, message: message);
+      courseId: state.courseId,
+      message: message,
+    );
   }
 
   void _onMessageTextChanged(
     MessageTextChangedEvent event,
     Emitter<ChatState> emit,
   ) async {
-    emit((state as ChatStateLoadSuccess).copyWith(
-      currentMessageText: event.messageText,
-    ));
+    emit(
+      (state as ChatStateLoadSuccess).copyWith(
+        currentMessageText: event.messageText,
+      ),
+    );
   }
 
   void _handleStreamEvent(int index, QuerySnapshot snapshot) {
@@ -121,9 +148,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
 
     List<Message> newList = [];
-    snapshot.docs.reversed.forEach((doc) {
-      newList.add(Message.fromJson(doc.data() as Map<String, dynamic>));
-    });
+    snapshot.docs.reversed.forEach(
+      (doc) {
+        newList.add(Message.fromJson(doc.data() as Map<String, dynamic>));
+      },
+    );
 
     if (messages.length <= index) {
       messages.add(newList);
@@ -131,14 +160,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       messages[index].clear();
       messages[index] = newList;
     }
-    add(ChatEventLoad(messages));
+    add(
+      ChatEventLoad(messages),
+    );
   }
 
   @override
   Future<void> close() async {
-    subscriptions.forEach((subscription) {
-      subscription.cancel();
-    });
+    subscriptions.forEach(
+      (subscription) {
+        subscription.cancel();
+      },
+    );
     super.close();
   }
 

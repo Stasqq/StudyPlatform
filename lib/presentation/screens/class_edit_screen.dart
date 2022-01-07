@@ -19,37 +19,37 @@ class ClassEditScreen extends StatelessWidget {
         _DeleteClassDialogButton(),
       ],
       child: Align(
-          alignment: const Alignment(0, -1 / 3),
-          child: BlocBuilder<ClassesBloc, ClassesState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<ClassContentCubit>()
-                            .loadClass(context.read<ClassesBloc>());
-                        Navigator.of(context)
-                            .pushNamed(kClassContentEditScreen);
-                      },
-                      child: Text('Content'),
-                    ),
-                  ),
-                  Text('Materials'),
-                  _GetClassMaterials(),
-                  ElevatedButton(
+        alignment: const Alignment(0, -1 / 3),
+        child: BlocBuilder<ClassesBloc, ClassesState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                Center(
+                  child: ElevatedButton(
                     onPressed: () {
                       context
-                          .read<ClassesBloc>()
-                          .add(CurrentClassMaterialAddEvent());
+                          .read<ClassContentCubit>()
+                          .loadClass(context.read<ClassesBloc>());
+                      Navigator.of(context).pushNamed(kClassContentEditScreen);
                     },
-                    child: Icon(Icons.add),
-                  )
-                ],
-              );
-            },
-          )),
+                    child: Text(kContent),
+                  ),
+                ),
+                Text(kMaterialsText),
+                _GetClassMaterials(),
+                ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<ClassesBloc>()
+                        .add(CurrentClassMaterialAddEvent());
+                  },
+                  child: Icon(Icons.add),
+                )
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -90,15 +90,15 @@ class _DeleteClassDialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: Text('Delete'),
+      child: Text(kDelete),
       onPressed: () => showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Delete this class?'),
+            title: Text(kDeleteClass),
             actions: [
               TextButton(
-                child: Text('Yes'),
+                child: Text(kYes),
                 onPressed: () {
                   context.read<ClassesBloc>().add(CurrentClassDeleteEvent());
                   Navigator.of(context).pop();
@@ -106,7 +106,7 @@ class _DeleteClassDialogButton extends StatelessWidget {
                 },
               ),
               TextButton(
-                child: Text('No'),
+                child: Text(kNo),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

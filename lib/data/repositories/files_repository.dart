@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:universal_html/html.dart' as html;
 
 class ReadFileFromFirebaseStorageFailure implements Exception {}
@@ -19,28 +20,35 @@ class PlatformNotSupportedException implements Exception {}
 class FilesRepository {
   final FirebaseStorage _firebaseStorage;
 
-  FilesRepository({required FirebaseStorage firebaseStorage})
-      : _firebaseStorage = firebaseStorage;
+  FilesRepository({
+    required FirebaseStorage firebaseStorage,
+  }) : _firebaseStorage = firebaseStorage;
 
-  Future<String> getDownloadUriFromPath({required String filePath}) async {
+  Future<String> getDownloadUriFromPath({
+    required String filePath,
+  }) async {
     var fileReference = _firebaseStorage.ref(filePath);
     return await fileReference.getDownloadURL();
   }
 
-  Future<void> createNewClassFiles(
-      {required String courseId, required String className}) async {
+  Future<void> createNewClassFiles({
+    required String courseId,
+    required String className,
+  }) async {
     try {
       Uint8List? data = Uint8List(0);
       await _firebaseStorage
-          .ref('courses/$courseId/$className/$className.html')
+          .ref('$kCourses/$courseId/$className/$className.html')
           .putData(data);
     } catch (e) {
       print(e);
     }
   }
 
-  Future<String> getFileDataAsString(
-      {required String path, required String fileName}) async {
+  Future<String> getFileDataAsString({
+    required String path,
+    required String fileName,
+  }) async {
     try {
       Uint8List? data = await _firebaseStorage.ref(path).getData();
 
@@ -69,19 +77,21 @@ class FilesRepository {
   Future<void> _webDownload(String filePath) async {
     var fileReference = _firebaseStorage.ref(filePath);
     var downloadUrl = await fileReference.getDownloadURL();
-    html.AnchorElement anchorElement =
-        new html.AnchorElement(href: downloadUrl);
+    html.AnchorElement anchorElement = new html.AnchorElement(
+      href: downloadUrl,
+    );
     anchorElement.download = downloadUrl;
     anchorElement.click();
   }
 
   Future<void> _androidDownload(String filePath) async {
-    List<Directory>? directoriesList =
-        await getExternalStorageDirectories(type: StorageDirectory.downloads);
+    List<Directory>? directoriesList = await getExternalStorageDirectories(
+      type: StorageDirectory.downloads,
+    );
     if (directoriesList != null) {
       if (directoriesList.isNotEmpty) {
         File downloadedFile =
-            File(directoriesList.first.path + '/' + basename(filePath));
+            File('${directoriesList.first.path}/${basename(filePath)}');
         await _firebaseStorage.ref(filePath).writeToFile(downloadedFile);
       }
     }
@@ -89,8 +99,10 @@ class FilesRepository {
 
   Future<void> _iosDownload(String filePath) async {}
 
-  Future<void> saveTextFile(
-      {required String path, required String text}) async {
+  Future<void> saveTextFile({
+    required String path,
+    required String text,
+  }) async {
     try {
       List<int> list = text.codeUnits;
       await _firebaseStorage.ref(path).putData(Uint8List.fromList(list));
@@ -99,7 +111,9 @@ class FilesRepository {
     }
   }
 
-  Future<String> pickAndSentFile({required String pathToSent}) async {
+  Future<String> pickAndSentFile({
+    required String pathToSent,
+  }) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         withData: true,
@@ -109,7 +123,7 @@ class FilesRepository {
         Uint8List? fileBytes = result.files.first.bytes;
         String fileName = result.files.first.name;
 
-        await _firebaseStorage.ref(pathToSent + fileName).putData(fileBytes!);
+        await _firebaseStorage.ref('$pathToSent$fileName').putData(fileBytes!);
 
         return fileName;
       } else {
@@ -121,11 +135,13 @@ class FilesRepository {
     throw (SaveFileToFirebaseStorageFailure());
   }
 
-  Future<String> pickAndSentUserPhoto({required String userId}) async {
+  Future<String> pickAndSentUserPhoto({
+    required String userId,
+  }) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['png'],
+        allowedExtensions: [kPng],
         withData: true,
         allowMultiple: false,
       );
@@ -134,10 +150,10 @@ class FilesRepository {
         Uint8List? fileBytes = result.files.first.bytes;
 
         await _firebaseStorage
-            .ref('users/' + userId + '/photo.png')
+            .ref('$kUsers/$userId/$kPhotoFile')
             .putData(fileBytes!);
 
-        return 'users/' + userId + '/photo.png';
+        return '$kUsers/$userId/$kPhotoFile';
       } else {
         throw (NoFilePickedException());
       }
@@ -147,7 +163,9 @@ class FilesRepository {
     throw (SaveFileToFirebaseStorageFailure());
   }
 
-  Future<void> deleteFile({required String filePath}) async {
+  Future<void> deleteFile({
+    required String filePath,
+  }) async {
     try {
       await _firebaseStorage.ref(filePath).delete();
     } catch (e) {
@@ -155,14 +173,16 @@ class FilesRepository {
     }
   }
 
-  Future<void> deleteClassDirectory(
-      {required String directoryPath, required String className}) async {
+  Future<void> deleteClassDirectory({
+    required String directoryPath,
+    required String className,
+  }) async {
     try {
-      await _firebaseStorage
-          .ref(directoryPath + '/' + className + '.html')
-          .delete();
+      await _firebaseStorage.ref('$directoryPath/$className.html').delete();
+
       ListResult referenceList =
-          await _firebaseStorage.ref(directoryPath + '/materials').listAll();
+          await _firebaseStorage.ref('$directoryPath/$kMaterials').listAll();
+
       for (Reference fileReference in referenceList.items) {
         await fileReference.delete();
       }

@@ -4,7 +4,7 @@ import 'package:formz/formz.dart';
 import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
-import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
+import 'package:study_platform/logic/cubit/course_cubit/course_cubit.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
@@ -44,7 +44,7 @@ class CreateCourseScreen extends StatelessWidget {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(state.errorMessage ?? 'Course Creating Failure'),
+            content: Text(state.errorMessage ?? kCourseCreatingFailure),
           ),
         );
     }
@@ -55,15 +55,17 @@ class _CourseNameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) => previous.courseName != current.courseName,
+      buildWhen: (previous, current) =>
+          previous.courseName != current.courseName,
       builder: (context, state) {
         return TextField(
           onChanged: (courseName) =>
               context.read<CourseCubit>().courseNameChanged(courseName),
           decoration: InputDecoration(
-            labelText: 'Course Name',
-            helperText: '',
-            errorText: state.courseName.invalid ? 'invalid course name' : null,
+            labelText: kCourseNameLabel,
+            helperText: kCourseNameLabelHelper,
+            errorText:
+                state.courseName.invalid ? kCourseNameLabelInvalid : null,
           ),
         );
       },
@@ -75,7 +77,8 @@ class _DescriptionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseCubit, CourseState>(
-      buildWhen: (previous, current) => previous.description != current.description,
+      buildWhen: (previous, current) =>
+          previous.description != current.description,
       builder: (context, state) {
         return TextField(
           keyboardType: TextInputType.multiline,
@@ -83,7 +86,7 @@ class _DescriptionInput extends StatelessWidget {
           onChanged: (description) =>
               context.read<CourseCubit>().descriptionChanged(description),
           decoration: const InputDecoration(
-            labelText: 'Description',
+            labelText: kDescriptionLabel,
           ),
         );
       },
@@ -98,11 +101,12 @@ class _PublicInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.public != current.public,
       builder: (context, state) {
         return ListTile(
-          title: const Text('Set Public'),
+          title: const Text(kSetPublic),
           leading: Checkbox(
             checkColor: kButtonColor,
             value: state.public,
-            onChanged: (bool? value) => context.read<CourseCubit>().publicChanged(value!),
+            onChanged: (bool? value) =>
+                context.read<CourseCubit>().publicChanged(value!),
           ),
         );
       },
@@ -113,9 +117,7 @@ class _PublicInput extends StatelessWidget {
 class _SubmitCreateCourseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final String ownerName = context.read<UserInfoCubit>().state.firstName.value +
-        ' ' +
-        context.read<UserInfoCubit>().state.surname.value;
+    final String ownerName = context.read<UserInfoCubit>().state.userName;
 
     return BlocBuilder<CourseCubit, CourseState>(
       buildWhen: (previous, current) => previous.status != current.status,
@@ -125,8 +127,9 @@ class _SubmitCreateCourseButton extends StatelessWidget {
             : ElevatedButton(
                 style: kButtonStyle,
                 onPressed: state.status.isValidated
-                    ? () =>
-                        context.read<CourseCubit>().createCourseFormSubmitted(ownerName)
+                    ? () => context
+                        .read<CourseCubit>()
+                        .createCourseFormSubmitted(ownerName)
                     : null,
                 child: const Text(kSubmitText),
               );

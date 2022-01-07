@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
@@ -10,7 +11,7 @@ class ClassContentPreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StudyPlatformScaffold(
-      title: 'Content',
+      title: kClassContent,
       child: BlocBuilder<ClassContentCubit, ClassContentState>(
         builder: (context, state) {
           if (state is ClassContentDataLoadingState)
@@ -20,16 +21,11 @@ class ClassContentPreviewScreen extends StatelessWidget {
               child: GestureDetector(
                 child: HtmlWidget(
                   state.htmlText!,
-                  // onTapUrl: (string) async {
-                  //   print(string);
-                  //   await Future.delayed(Duration(seconds: 1));
-                  //   return true;
-                  // },
                 ),
               ),
             );
           } else {
-            return Text('Error');
+            return Text(kError);
           }
         },
       ),

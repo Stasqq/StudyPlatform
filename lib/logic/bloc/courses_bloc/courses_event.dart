@@ -8,9 +8,11 @@ abstract class CoursesEvent extends Equatable {
 }
 
 class CoursesEventStart extends CoursesEvent {
-  const CoursesEventStart(
-      {required this.coursesFilter, this.ownerUid, List<String>? joinedCourses})
-      : joinedCourses = joinedCourses ?? const [];
+  const CoursesEventStart({
+    required this.coursesFilter,
+    this.ownerUid,
+    List<String>? joinedCourses,
+  }) : joinedCourses = joinedCourses ?? const [];
 
   final CoursesFilter coursesFilter;
   final String? ownerUid;
@@ -36,8 +38,11 @@ class CurrentCourseEvent extends CoursesEvent {
   final bool owner;
   final bool joined;
 
-  CurrentCourseEvent(
-      {required this.currentCourse, required this.owner, required this.joined});
+  CurrentCourseEvent({
+    required this.currentCourse,
+    required this.owner,
+    required this.joined,
+  });
 
   @override
   List<Object> get props => [currentCourse, owner, joined];
@@ -47,7 +52,10 @@ class CurrentCourseJoinEvent extends CoursesEvent {
   final List<String> currentCoursesIds;
   final String userEmail;
 
-  CurrentCourseJoinEvent({required this.userEmail, required this.currentCoursesIds});
+  CurrentCourseJoinEvent({
+    required this.userEmail,
+    required this.currentCoursesIds,
+  });
 
   @override
   List<Object> get props => [userEmail, currentCoursesIds];
@@ -57,7 +65,10 @@ class CurrentCourseLeaveEvent extends CoursesEvent {
   final List<String> currentCoursesIds;
   final String userEmail;
 
-  CurrentCourseLeaveEvent({required this.userEmail, required this.currentCoursesIds});
+  CurrentCourseLeaveEvent({
+    required this.userEmail,
+    required this.currentCoursesIds,
+  });
 
   @override
   List<Object> get props => [userEmail, currentCoursesIds];
@@ -68,8 +79,11 @@ class CourseJoinEvent extends CoursesEvent {
   final String userEmail;
   final String courseId;
 
-  CourseJoinEvent(
-      {required this.currentCoursesIds, required this.userEmail, required this.courseId});
+  CourseJoinEvent({
+    required this.currentCoursesIds,
+    required this.userEmail,
+    required this.courseId,
+  });
 
   @override
   List<Object> get props => [userEmail, currentCoursesIds, courseId];

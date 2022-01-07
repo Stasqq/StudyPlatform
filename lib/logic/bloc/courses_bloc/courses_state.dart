@@ -10,15 +10,20 @@ abstract class CoursesState extends Equatable {
 class CoursesStateLoading extends CoursesState {}
 
 class CoursesStateEmpty extends CoursesStateLoadSuccess {
-  CoursesStateEmpty() : super(courses: [], hasMoreData: false);
+  CoursesStateEmpty()
+      : super(
+          courses: [],
+          hasMoreData: false,
+        );
 }
 
 class CoursesStateActionLoading extends CoursesStateLoadSuccess {
   CoursesStateActionLoading({required CoursesStateLoadSuccess currentState})
       : super(
-            courses: currentState.courses,
-            currentCourse: currentState.currentCourse,
-            hasMoreData: currentState.hasMoreData);
+          courses: currentState.courses,
+          currentCourse: currentState.currentCourse,
+          hasMoreData: currentState.hasMoreData,
+        );
 }
 
 class CoursesStateLoadSuccess extends CoursesState {

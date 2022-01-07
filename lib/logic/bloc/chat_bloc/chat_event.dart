@@ -8,10 +8,11 @@ abstract class ChatEvent extends Equatable {
 }
 
 class ChatEventStart extends ChatEvent {
-  const ChatEventStart(
-      {required this.courseId,
-      required this.userEmail,
-      required this.userName});
+  const ChatEventStart({
+    required this.courseId,
+    required this.userEmail,
+    required this.userName,
+  });
 
   final String courseId;
   final String userEmail;

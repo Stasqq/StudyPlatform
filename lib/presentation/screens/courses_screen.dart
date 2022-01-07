@@ -73,7 +73,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
               if (state is CoursesStateLoading) {
                 return CircularProgressIndicator();
               } else if (state is CoursesStateEmpty) {
-                return Text('No available courses!');
+                return Text(kNoAvailableCourses);
               } else if (state is CoursesStateLoadSuccess) {
                 return ListView.separated(
                   padding: EdgeInsets.all(8),
@@ -114,7 +114,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                   },
                 );
               } else {
-                return Text('Error');
+                return Text(kError);
               }
             },
           ),
@@ -140,7 +140,7 @@ class JoinCourseDialogButton extends StatelessWidget {
       onPressed: () => showDialog(
         context: context,
         builder: (BuildContext context) => SimpleDialog(
-          title: const Text('Enter Course Id'),
+          title: const Text(kEnterCourseId),
           children: [
             TextField(
               onChanged: (id) => courseId = id,
@@ -157,18 +157,18 @@ class JoinCourseDialogButton extends StatelessWidget {
                 context.read<UserInfoCubit>().readUserInfo();
                 Navigator.of(context).pop();
               },
-              child: Text('Join'),
+              child: Text(kJoin),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(kCancel),
             ),
           ],
         ),
       ),
-      child: Text('Join Course'),
+      child: Text(kJoinCourse),
     );
   }
 }

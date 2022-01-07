@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/variables.dart';
 import 'package:study_platform/data/repositories/chat_repository.dart';
 import 'package:study_platform/data/repositories/classes_repository.dart';
 import 'package:study_platform/data/repositories/courses_repository.dart';
@@ -15,7 +16,7 @@ import 'package:study_platform/data/repositories/user_info_repository.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
-import 'package:study_platform/logic/cubit/course_cuibt/course_cubit.dart';
+import 'package:study_platform/logic/cubit/course_cubit/course_cubit.dart';
 import 'package:study_platform/logic/cubit/login_cubit/login_cubit.dart';
 import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
 import 'package:study_platform/logic/cubit/photo_uri_cubit/photo_uri_cubit.dart';
@@ -45,17 +46,7 @@ final filesRepository = FilesRepository(firebaseStorage: firebaseStorage);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: kIsWeb
-        ? const FirebaseOptions(
-            apiKey: "AIzaSyB0fZ_iUIr7qzyI9Ygek3TntbIX9Upf2YQ",
-            authDomain: "study-platform-7be51.firebaseapp.com",
-            projectId: "study-platform-7be51",
-            storageBucket: "study-platform-7be51.appspot.com",
-            messagingSenderId: "39464472146",
-            appId: "1:39464472146:web:3f1c2deacd5a6d1da0598b",
-            measurementId: "G-YT1FRMQYZ0",
-          )
-        : null,
+    options: kIsWeb ? kWebFirebaseOptions : null,
   );
 
   await authenticationRepository.user.first;
@@ -65,8 +56,6 @@ void main() async {
     blocObserver: AppBlocObserver(),
   );
 }
-
-void setUp() {}
 
 class StudyPlatform extends StatelessWidget {
   const StudyPlatform({Key? key}) : super(key: key);
@@ -161,9 +150,7 @@ class StudyPlatform extends StatelessWidget {
 }
 
 class _App extends StatelessWidget {
-  const _App({
-    Key? key,
-  }) : super(key: key);
+  const _App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

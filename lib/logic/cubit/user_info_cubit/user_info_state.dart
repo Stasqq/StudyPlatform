@@ -48,4 +48,6 @@ class UserInfoState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  String get userName => this.firstName.value + ' ' + this.surname.value;
 }

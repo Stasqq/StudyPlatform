@@ -101,7 +101,7 @@ class CourseScreen extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Center(
-                    child: Text('Classes'),
+                    child: Text(kClassesText),
                   ),
                 ),
                 Expanded(
@@ -111,7 +111,7 @@ class CourseScreen extends StatelessWidget {
                       if (state is ClassesStateLoading) {
                         return CircularProgressIndicator();
                       } else if (state is ClassesStateEmpty) {
-                        return Text('No available classes!');
+                        return Text(kNoAvailableClasses);
                       } else if (state is ClassesStateLoadSuccess) {
                         return ListView.separated(
                           padding: EdgeInsets.all(8),
@@ -171,7 +171,7 @@ class CourseScreen extends StatelessWidget {
                           },
                         );
                       } else {
-                        return Text('Error');
+                        return Text(kError);
                       }
                     },
                   ),
@@ -202,7 +202,7 @@ class _ChatButton extends StatelessWidget {
                 Icons.chat,
               ),
               SizedBox(width: 8),
-              Text('Chat'),
+              Text(kChatText),
             ],
           ),
         );
@@ -227,7 +227,7 @@ class _JoinButton extends StatelessWidget {
                 ));
             context.read<UserInfoCubit>().readUserInfo();
           },
-          child: const Text('Join'),
+          child: const Text(kJoin),
         );
       },
     );
@@ -250,7 +250,7 @@ class _LeaveButton extends StatelessWidget {
                 ));
             context.read<UserInfoCubit>().readUserInfo();
           },
-          child: const Text('Leave'),
+          child: const Text(kLeave),
         );
       },
     );
@@ -268,7 +268,7 @@ class _DeleteButton extends StatelessWidget {
             context.read<CoursesBloc>().add(CurrentCourseDeleteEvent());
             Navigator.of(context).pop();
           },
-          child: const Text('Delete'),
+          child: const Text(kDelete),
         );
       },
     );
@@ -286,7 +286,7 @@ class _NewClassDialog extends StatelessWidget {
       onPressed: () => showDialog(
         context: context,
         builder: (BuildContext context) => SimpleDialog(
-          title: const Text('Enter Class Description'),
+          title: const Text(kEnterClassDescription),
           children: [
             TextField(
               onChanged: (value) => name = value,
@@ -307,18 +307,18 @@ class _NewClassDialog extends StatelessWidget {
                     name: name, description: description, index: index));
                 Navigator.of(context).pop();
               },
-              child: Text('Confirm'),
+              child: Text(kConfirm),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(kCancel),
             ),
           ],
         ),
       ),
-      child: Text('Add Class'),
+      child: Text(kAddClass),
     );
   }
 }

@@ -13,9 +13,18 @@ class OtherUserInfoCubit extends Cubit<OtherUserInfoState> {
   final UserInfoRepository _userInfoRepository;
 
   Future<void> loadOtherUserInfo(String otherUserEmail) async {
-    emit(OtherUserInfoLoadingState());
-    UserInfo otherUserInfo =
-        await _userInfoRepository.readUserInfo(email: otherUserEmail);
-    emit(OtherUserInfoLoadingSuccessState(otherUserInfo: otherUserInfo));
+    emit(
+      OtherUserInfoLoadingState(),
+    );
+
+    UserInfo otherUserInfo = await _userInfoRepository.readUserInfo(
+      email: otherUserEmail,
+    );
+
+    emit(
+      OtherUserInfoLoadingSuccessState(
+        otherUserInfo: otherUserInfo,
+      ),
+    );
   }
 }

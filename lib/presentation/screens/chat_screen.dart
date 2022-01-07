@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
@@ -23,9 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
         courseId: (context.read<CoursesBloc>().state as CoursesStateLoadSuccess)
             .currentCourse
             .id,
-        userName: context.read<UserInfoCubit>().state.firstName.value +
-            ' ' +
-            context.read<UserInfoCubit>().state.surname.value,
+        userName: context.read<UserInfoCubit>().state.userName,
         userEmail: context.read<UserInfoCubit>().state.email.value));
     super.initState();
   }
@@ -36,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
       title: (context.read<CoursesBloc>().state as CoursesStateLoadSuccess)
               .currentCourse
               .name +
-          ' Chat',
+          kClassChatTitleEnding,
       child: Center(
         child: BlocBuilder<ChatBloc, ChatState>(
           builder: (context, state) {
@@ -102,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               messageTextController.clear();
                             },
                             child: const Text(
-                              'Send',
+                              kSend,
                               style: kSendButtonTextStyle,
                             ),
                           ),
@@ -113,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               );
             } else {
-              return Text('Error');
+              return Text(kError);
             }
           },
         ),

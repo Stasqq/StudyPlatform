@@ -7,16 +7,17 @@ import 'package:study_platform/data/models/user/user.dart';
 import 'package:study_platform/data/repositories/authentication_repository.dart';
 
 part 'authentication_event.dart';
-
 part 'authentication_state.dart';
 
-// po co to jest bloc ?
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({required AuthenticationRepository authenticationRepository})
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
+  AuthenticationBloc(
+      {required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         super(
           authenticationRepository.currentUser == User.empty
-              ? AuthenticationState.authenticated(authenticationRepository.currentUser)
+              ? AuthenticationState.authenticated(
+                  authenticationRepository.currentUser)
               : const AuthenticationState.unauthenticated(),
         ) {
     on<AuthenticationAutomaticLogIn>(_onAutomaticLogIn);
@@ -34,25 +35,32 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     AuthenticationAutomaticLogIn event,
     Emitter<AuthenticationState> emit,
   ) {
-    emit(_authenticationRepository.isLoggedIn
-        ? AuthenticationState.authenticated(_authenticationRepository.currentUser)
-        : const AuthenticationState.unauthenticated());
+    emit(
+      _authenticationRepository.isLoggedIn
+          ? AuthenticationState.authenticated(
+              _authenticationRepository.currentUser)
+          : const AuthenticationState.unauthenticated(),
+    );
   }
 
   void _onUserChanged(
     AuthenticationUserChanged event,
     Emitter<AuthenticationState> emit,
   ) {
-    emit(event.user != User.empty
-        ? AuthenticationState.authenticated(event.user)
-        : const AuthenticationState.unauthenticated());
+    emit(
+      event.user != User.empty
+          ? AuthenticationState.authenticated(event.user)
+          : const AuthenticationState.unauthenticated(),
+    );
   }
 
   void _onLogoutRequested(
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) {
-    unawaited(_authenticationRepository.logOut());
+    unawaited(
+      _authenticationRepository.logOut(),
+    );
   }
 
   @override

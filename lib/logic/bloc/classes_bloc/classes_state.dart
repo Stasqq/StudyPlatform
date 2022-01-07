@@ -1,7 +1,9 @@
 part of 'classes_bloc.dart';
 
 abstract class ClassesState extends Equatable {
-  ClassesState({required this.courseId});
+  ClassesState({
+    required this.courseId,
+  });
 
   late String courseId;
 
@@ -10,21 +12,32 @@ abstract class ClassesState extends Equatable {
 }
 
 class ClassesStateLoading extends ClassesState {
-  ClassesStateLoading() : super(courseId: '');
+  ClassesStateLoading()
+      : super(
+          courseId: '',
+        );
 }
 
 class ClassesStateEmpty extends ClassesStateLoadSuccess {
-  ClassesStateEmpty({required String courseId, Class? currentClass})
-      : super(classes: [], hasMoreData: false, courseId: courseId);
+  ClassesStateEmpty({
+    required String courseId,
+    Class? currentClass,
+  }) : super(
+          classes: [],
+          hasMoreData: false,
+          courseId: courseId,
+        );
 }
 
 class ClassesStateActionLoading extends ClassesStateLoadSuccess {
-  ClassesStateActionLoading({required ClassesStateLoadSuccess currentState})
-      : super(
-            courseId: currentState.courseId,
-            classes: currentState.classes,
-            currentClass: currentState.currentClass,
-            hasMoreData: currentState.hasMoreData);
+  ClassesStateActionLoading({
+    required ClassesStateLoadSuccess currentState,
+  }) : super(
+          courseId: currentState.courseId,
+          classes: currentState.classes,
+          currentClass: currentState.currentClass,
+          hasMoreData: currentState.hasMoreData,
+        );
 }
 
 class ClassesStateLoadSuccess extends ClassesState {
@@ -35,20 +48,24 @@ class ClassesStateLoadSuccess extends ClassesState {
 
   static const emptyClass = Class('', 0, '', '', <String>[]);
 
-  ClassesStateLoadSuccess(
-      {required String courseId,
-      required this.classes,
-      required this.hasMoreData,
-      Class? currentClass})
-      : currentClass = currentClass ?? emptyClass,
-        super(courseId: courseId);
+  ClassesStateLoadSuccess({
+    required String courseId,
+    required this.classes,
+    required this.hasMoreData,
+    Class? currentClass,
+  })  : currentClass = currentClass ?? emptyClass,
+        super(
+          courseId: courseId,
+        );
 
-  ClassesStateLoadSuccess.forCopy(
-      {required this.classes,
-      required this.hasMoreData,
-      required this.currentClass,
-      required String courseId})
-      : super(courseId: courseId);
+  ClassesStateLoadSuccess.forCopy({
+    required this.classes,
+    required this.hasMoreData,
+    required this.currentClass,
+    required String courseId,
+  }) : super(
+          courseId: courseId,
+        );
 
   ClassesStateLoadSuccess copyWith({
     List<Class>? classes,

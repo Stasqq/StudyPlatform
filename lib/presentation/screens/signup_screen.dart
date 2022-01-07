@@ -22,7 +22,7 @@ class SignUpScreen extends StatelessWidget {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text(state.errorMessage ?? 'Sign Up Failure'),
+                  content: Text(state.errorMessage ?? kSignUpFailure),
                 ),
               );
           }
@@ -47,11 +47,6 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-// Moznaby reuzywac jeden input na wsyztskie, i podawac jako prametry tylko
-// onChanged
-// keyboardType
-// label
-// errorText
 class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -62,9 +57,9 @@ class _EmailInput extends StatelessWidget {
           onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'email',
-            helperText: '',
-            errorText: state.email.invalid ? 'invalid email' : null,
+            labelText: kEmailLabel,
+            helperText: kEmailLabelHelper,
+            errorText: state.email.invalid ? kEmailLabelInvalid : null,
           ),
         );
       },
@@ -79,12 +74,13 @@ class _PasswordInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          onChanged: (password) => context.read<SignUpCubit>().passwordChanged(password),
+          onChanged: (password) =>
+              context.read<SignUpCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
+            labelText: kPasswordLabel,
+            helperText: kPasswordLabelHelper,
+            errorText: state.password.invalid ? kPasswordLabelInvalid : null,
           ),
         );
       },
@@ -101,13 +97,16 @@ class _ConfirmPasswordInput extends StatelessWidget {
           previous.confirmedPassword != current.confirmedPassword,
       builder: (context, state) {
         return TextField(
-          onChanged: (confirmPassword) =>
-              context.read<SignUpCubit>().confirmedPasswordChanged(confirmPassword),
+          onChanged: (confirmPassword) => context
+              .read<SignUpCubit>()
+              .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'confirm password',
-            helperText: '',
-            errorText: state.confirmedPassword.invalid ? 'passwords do not match' : null,
+            labelText: kConfirmPasswordLabel,
+            helperText: kConfirmPasswordLabelHelper,
+            errorText: state.confirmedPassword.invalid
+                ? kConfirmPasswordLabelInvalid
+                : null,
           ),
         );
       },

@@ -10,7 +10,9 @@ class PhotoUriNotGenerated extends PhotoUriState {}
 class PhotoUriGenerated extends PhotoUriState {
   final String uri;
 
-  PhotoUriGenerated({required this.uri});
+  PhotoUriGenerated({
+    required this.uri,
+  });
 }
 
 class PhotoNewGenerated extends PhotoUriState {}

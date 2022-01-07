@@ -38,8 +38,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: <Widget>[
                 BlocBuilder<PhotoUriCubit, PhotoUriState>(
                   builder: (BuildContext context, state) {
-                    if (userInfo.photoURL! == '')
-                      return Image.asset('images/default_avatar.png');
+                    if (userInfo.photoURL!.isEmpty)
+                      return Image.asset(kDefaultAvatarImage);
                     else if (state is PhotoUriNotGenerated) {
                       context
                           .read<PhotoUriCubit>()
@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context.read<PhotoUriCubit>().uploadPhoto(userInfo);
                           context.read<UserInfoCubit>().readUserInfo();
                         },
-                        child: Text('Change Photo'),
+                        child: Text(kChangePhoto),
                       )
                     : SizedBox(),
                 Text(userInfo.email!),

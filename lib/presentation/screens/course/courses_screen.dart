@@ -7,7 +7,7 @@ import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
-import '../../logic/bloc/classes_bloc/classes_bloc.dart';
+import '../../../logic/bloc/classes_bloc/classes_bloc.dart';
 
 class CoursesScreen extends StatefulWidget {
   const CoursesScreen({Key? key}) : super(key: key);
@@ -54,7 +54,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                 context.read<CoursesBloc>().add(
                       CoursesEventStart(
                         coursesFilter: filter,
-                        ownerUid: currentUserEmail,
+                        ownerEmail: currentUserEmail,
                         joinedCourses:
                             context.read<UserInfoCubit>().state.joinedCourses,
                       ),
@@ -82,7 +82,16 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       : state.courses.length,
                   itemBuilder: (BuildContext context, int index) {
                     if (index >= state.courses.length) {
-                      context.read<CoursesBloc>().add(CoursesEventFetchMore());
+                      context.read<CoursesBloc>().add(
+                            CoursesEventFetchMore(
+                              coursesFilter: filter,
+                              ownerEmail: currentUserEmail,
+                              joinedCourses: context
+                                  .read<UserInfoCubit>()
+                                  .state
+                                  .joinedCourses,
+                            ),
+                          );
                       return Container(
                         margin: EdgeInsets.only(top: 15),
                         height: 30,
@@ -90,9 +99,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                         child: Center(child: CircularProgressIndicator()),
                       );
                     }
-                    return ListTile(
-                      title: Text(state.courses[index].name),
-                      subtitle: Text(state.courses[index].description),
+                    return GestureDetector(
                       onTap: () {
                         context.read<CoursesBloc>().add(CurrentCourseEvent(
                             currentCourse: state.courses[index],
@@ -101,12 +108,18 @@ class _CoursesScreenState extends State<CoursesScreen> {
                             joined: context
                                 .read<UserInfoCubit>()
                                 .state
-                                .joinedCourses
-                                .contains(state.courses[index].id)));
+                                .joinedCourseWithId(state.courses[index].id)));
                         context.read<ClassesBloc>().add(ClassesEventStart(
                             courseId: state.courses[index].id));
                         Navigator.of(context).pushNamed(kCourseScreen);
                       },
+                      child: Column(
+                        children: [
+                          Text(state.courses[index].name),
+                          Text(state.courses[index].description),
+                          Text(state.getCourseRateString(index)),
+                        ],
+                      ),
                     );
                   },
                   separatorBuilder: (context, i) {

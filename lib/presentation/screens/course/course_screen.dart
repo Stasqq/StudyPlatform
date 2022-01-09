@@ -7,11 +7,13 @@ import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
+import 'package:study_platform/logic/cubit/rate_course_cubit/rate_course_cubit.dart';
+import 'package:study_platform/logic/cubit/tests_cubit/tests_cubit.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
-import 'package:study_platform/presentation/screens/profile_screen.dart';
+import 'package:study_platform/presentation/screens/general/profile_screen.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
-import '../../logic/bloc/classes_bloc/classes_bloc.dart';
+import '../../../logic/bloc/classes_bloc/classes_bloc.dart';
 
 class CourseScreen extends StatelessWidget {
   const CourseScreen({Key? key}) : super(key: key);
@@ -22,6 +24,9 @@ class CourseScreen extends StatelessWidget {
       title: (context.read<CoursesBloc>().state as CoursesStateLoadSuccess)
           .currentCourse
           .name,
+      appBarActions: [
+        _RateDialogButton(),
+      ],
       child: Align(
         alignment: const Alignment(0, -1 / 3),
         child: BlocBuilder<CoursesBloc, CoursesState>(
@@ -44,6 +49,7 @@ class CourseScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(loadState.currentCourse.description),
+                              Text(loadState.getCurrentCourseRateString()),
                               RichText(
                                 text: TextSpan(
                                   children: <TextSpan>[
@@ -84,13 +90,18 @@ class CourseScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               if (loadState.joined || loadState.owner)
-                                _ChatButton(),
+                                Column(
+                                  children: [
+                                    _ChatButton(),
+                                    _TestsButton(),
+                                  ],
+                                ),
                               if (!loadState.owner)
                                 (loadState.joined)
                                     ? _LeaveButton()
                                     : _JoinButton(),
                               if (loadState.owner) _DeleteButton(),
-                              if (loadState.owner) _NewClassDialog(),
+                              if (loadState.owner) _NewClassDialogButton(),
                             ],
                           ),
                         ),
@@ -185,6 +196,85 @@ class CourseScreen extends StatelessWidget {
   }
 }
 
+class _RateDialogButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        final rate = await _SimpleDialog.show(context);
+        if (rate != null) {
+          context.read<RateCourseCubit>().submitRating(
+              courseId:
+                  (context.read<CoursesBloc>().state as CoursesStateLoadSuccess)
+                      .currentCourse
+                      .id);
+        }
+      },
+      child: Icon(Icons.star),
+    );
+  }
+}
+
+class _SimpleDialog extends StatelessWidget {
+  const _SimpleDialog({
+    Key? key,
+  }) : super(key: key);
+
+  static Future<int?> show(BuildContext context) async {
+    return showDialog<int>(
+      context: context,
+      builder: (BuildContext context) => _SimpleDialog(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: const Text(kRateCourse),
+      children: [
+        BlocBuilder<RateCourseCubit, RateCourseState>(
+          builder: (context, state) {
+            return Column(children: [
+              DropdownButton<int>(
+                value: state.currentRate,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (rate) {
+                  context.read<RateCourseCubit>().currentRateChanged(rate!);
+                },
+                items: <int>[5, 4, 3, 2, 1]
+                    .map<DropdownMenuItem<int>>((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text(value.toString()),
+                  );
+                }).toList(),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(state.currentRate);
+                },
+                child: Text(kConfirm),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(kCancel),
+              ),
+            ]);
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class _ChatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -257,6 +347,30 @@ class _LeaveButton extends StatelessWidget {
   }
 }
 
+class _TestsButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CoursesBloc, CoursesState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          style: kButtonStyle,
+          onPressed: () {
+            context.read<TestsCubit>().loadTests(
+                  courseId: (context.read<CoursesBloc>().state
+                          as CoursesStateLoadSuccess)
+                      .currentCourse
+                      .id,
+                  userId: context.read<UserInfoCubit>().state.uid,
+                );
+            Navigator.of(context).pushNamed(kTestsScreen);
+          },
+          child: const Text(kTestsButton),
+        );
+      },
+    );
+  }
+}
+
 class _DeleteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -275,7 +389,7 @@ class _DeleteButton extends StatelessWidget {
   }
 }
 
-class _NewClassDialog extends StatelessWidget {
+class _NewClassDialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String name = '';

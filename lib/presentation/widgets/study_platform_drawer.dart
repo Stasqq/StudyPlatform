@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:study_platform/presentation/screens/profile_screen.dart';
+import 'package:study_platform/presentation/screens/general/profile_screen.dart';
 
 class StudyPlatformDrawer extends StatelessWidget {
   const StudyPlatformDrawer({Key? key}) : super(key: key);

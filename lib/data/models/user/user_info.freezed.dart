@@ -22,7 +22,7 @@ class _$UserInfoTearOff {
   const _$UserInfoTearOff();
 
   _UserInfo call(String? email, String? uid, String firstName, String surname,
-      String? photoURL, List<String> joinedCourses) {
+      String? photoURL, List<JoinedCourseWithRate> joinedCourses) {
     return _UserInfo(
       email,
       uid,
@@ -48,7 +48,8 @@ mixin _$UserInfo {
   String get firstName => throw _privateConstructorUsedError;
   String get surname => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
-  List<String> get joinedCourses => throw _privateConstructorUsedError;
+  List<JoinedCourseWithRate> get joinedCourses =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,7 +67,7 @@ abstract class $UserInfoCopyWith<$Res> {
       String firstName,
       String surname,
       String? photoURL,
-      List<String> joinedCourses});
+      List<JoinedCourseWithRate> joinedCourses});
 }
 
 /// @nodoc
@@ -110,7 +111,7 @@ class _$UserInfoCopyWithImpl<$Res> implements $UserInfoCopyWith<$Res> {
       joinedCourses: joinedCourses == freezed
           ? _value.joinedCourses
           : joinedCourses // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<JoinedCourseWithRate>,
     ));
   }
 }
@@ -126,7 +127,7 @@ abstract class _$UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
       String firstName,
       String surname,
       String? photoURL,
-      List<String> joinedCourses});
+      List<JoinedCourseWithRate> joinedCourses});
 }
 
 /// @nodoc
@@ -171,7 +172,7 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
       joinedCourses == freezed
           ? _value.joinedCourses
           : joinedCourses // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<JoinedCourseWithRate>,
     ));
   }
 }
@@ -196,7 +197,7 @@ class _$_UserInfo implements _UserInfo {
   @override
   final String? photoURL;
   @override
-  final List<String> joinedCourses;
+  final List<JoinedCourseWithRate> joinedCourses;
 
   @override
   String toString() {
@@ -245,7 +246,7 @@ abstract class _UserInfo implements UserInfo {
       String firstName,
       String surname,
       String? photoURL,
-      List<String> joinedCourses) = _$_UserInfo;
+      List<JoinedCourseWithRate> joinedCourses) = _$_UserInfo;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) = _$_UserInfo.fromJson;
 
@@ -260,7 +261,7 @@ abstract class _UserInfo implements UserInfo {
   @override
   String? get photoURL;
   @override
-  List<String> get joinedCourses;
+  List<JoinedCourseWithRate> get joinedCourses;
   @override
   @JsonKey(ignore: true)
   _$UserInfoCopyWith<_UserInfo> get copyWith =>

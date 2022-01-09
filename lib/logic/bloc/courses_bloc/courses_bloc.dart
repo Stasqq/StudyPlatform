@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/data/models/course/course.dart';
+import 'package:study_platform/data/models/user/joined_course_with_rate.dart';
 import 'package:study_platform/data/repositories/courses_repository.dart';
 
 part 'courses_event.dart';
@@ -25,6 +26,7 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     on<CurrentCourseJoinEvent>(_onCurrentCourseJoin);
     on<CurrentCourseLeaveEvent>(_onCurrentCourseLeave);
     on<CurrentCourseDeleteEvent>(_onCurrentCourseDelete);
+    on<CurrentCourseRateUpdateEvent>(_onCurrentCourseRateUpdate);
   }
 
   final CoursesRepository _coursesRepository;
@@ -51,20 +53,19 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
         CoursesStateEmpty(),
       );
       return;
-    } else if (event.ownerUid == null &&
-        event.coursesFilter == CoursesFilter.Owner) {
-      emit(
-        CoursesStateEmpty(),
-      );
-      return;
     }
+
+    List<String> joinedCoursesIds = [];
+    event.joinedCourses.forEach((joinedCourse) {
+      joinedCoursesIds.add(joinedCourse.courseId);
+    });
 
     subscriptions.add(
       _coursesRepository
           .getCourses(
         coursesFilter: event.coursesFilter,
-        ownerUid: event.ownerUid,
-        joinedCourses: event.joinedCourses,
+        ownerEmail: event.ownerEmail,
+        joinedCoursesIds: joinedCoursesIds,
       )
           .listen(
         (snapshot) {
@@ -105,9 +106,21 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
       throw Exception(kLastDocNotSet);
     }
 
+    List<String> joinedCoursesIds = [];
+    event.joinedCourses.forEach((joinedCourse) {
+      joinedCoursesIds.add(joinedCourse.courseId);
+    });
+
     final index = courses.length;
     subscriptions.add(
-      _coursesRepository.getCoursesPage(lastDoc!).listen(
+      _coursesRepository
+          .getCoursesPage(
+        coursesFilter: event.coursesFilter,
+        ownerEmail: event.ownerEmail,
+        joinedCoursesIds: joinedCoursesIds,
+        lastDoc: lastDoc!,
+      )
+          .listen(
         (event) {
           _handleStreamEvent(index, event);
         },
@@ -138,12 +151,12 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
       ),
     );
 
-    List<String> newCoursesIdsList = [];
-    newCoursesIdsList.addAll(event.currentCoursesIds);
-    newCoursesIdsList.add(event.courseId);
+    List<JoinedCourseWithRate> newJoinedCourses = [];
+    newJoinedCourses.addAll(event.currentCoursesIds);
+    newJoinedCourses.add(JoinedCourseWithRate(event.courseId, 0));
     await _coursesRepository.updateJoinedCourses(
       userEmail: event.userEmail,
-      coursesIds: newCoursesIdsList,
+      joinedCourses: newJoinedCourses,
     );
 
     emit(
@@ -164,12 +177,15 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
       ),
     );
 
-    List<String> newCoursesIdsList = [];
-    newCoursesIdsList.addAll(event.currentCoursesIds);
-    newCoursesIdsList.add((state as CoursesStateLoadSuccess).currentCourse.id);
+    List<JoinedCourseWithRate> newJoinedCourses = [];
+    print(event.currentCoursesIds);
+    newJoinedCourses.addAll(event.currentCoursesIds);
+    newJoinedCourses.add(JoinedCourseWithRate(
+        (state as CoursesStateLoadSuccess).currentCourse.id, 0));
+
     await _coursesRepository.updateJoinedCourses(
       userEmail: event.userEmail,
-      coursesIds: newCoursesIdsList,
+      joinedCourses: newJoinedCourses,
     );
 
     emit(
@@ -189,13 +205,20 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
       ),
     );
 
-    List<String> newCoursesIdsList = [];
-    newCoursesIdsList.addAll(event.currentCoursesIds);
-    newCoursesIdsList
-        .remove((state as CoursesStateLoadSuccess).currentCourse.id);
+    List<JoinedCourseWithRate> newJoinedCourses = [];
+
+    if (event.currentCoursesIds.length != 1) {
+      newJoinedCourses.addAll(event.currentCoursesIds);
+      for (int i = 0; i < newJoinedCourses.length - 1; i++) {
+        if (newJoinedCourses[i].courseId ==
+            (state as CoursesStateLoadSuccess).currentCourse.id)
+          newJoinedCourses.remove(newJoinedCourses[i]);
+      }
+    }
+
     await _coursesRepository.updateJoinedCourses(
       userEmail: event.userEmail,
-      coursesIds: newCoursesIdsList,
+      joinedCourses: newJoinedCourses,
     );
 
     emit(
@@ -227,6 +250,39 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
       (state as CoursesStateLoadSuccess).copyWith(
         courses: newCourseList,
         currentCourse: CoursesStateLoadSuccess.emptyCourse,
+      ),
+    );
+  }
+
+  Future<void> _onCurrentCourseRateUpdate(
+    CurrentCourseRateUpdateEvent event,
+    Emitter<CoursesState> emit,
+  ) async {
+    var currentCourse = (state as CoursesStateLoadSuccess).currentCourse;
+    var newCurrentCourse = currentCourse.copyWith(
+      summaryRate: currentCourse.summaryRate + event.rate,
+      ratesNumber: currentCourse.ratesNumber + 1,
+    );
+
+    await _coursesRepository.updateCourse(
+      course: newCurrentCourse,
+    );
+
+    List<Course> newCoursesList = [];
+    for (int i = 0;
+        i < (state as CoursesStateLoadSuccess).courses.length;
+        i++) {
+      if ((state as CoursesStateLoadSuccess).courses[i].id ==
+          newCurrentCourse.id)
+        newCoursesList.add(newCurrentCourse);
+      else
+        newCoursesList.add((state as CoursesStateLoadSuccess).courses[i]);
+    }
+
+    emit(
+      (state as CoursesStateLoadSuccess).copyWith(
+        courses: newCoursesList,
+        currentCourse: newCurrentCourse,
       ),
     );
   }

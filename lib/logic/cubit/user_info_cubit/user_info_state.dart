@@ -19,7 +19,7 @@ class UserInfoState extends Equatable {
   final Email email;
   final String photoURL;
   final String uid;
-  final List<String> joinedCourses;
+  final List<JoinedCourseWithRate> joinedCourses;
   final FormzStatus status;
   final String? errorMessage;
 
@@ -33,7 +33,7 @@ class UserInfoState extends Equatable {
     Email? email,
     String? uid,
     String? photoURL,
-    List<String>? joinedCourses,
+    List<JoinedCourseWithRate>? joinedCourses,
     FormzStatus? status,
     String? errorMessage,
   }) {
@@ -47,6 +47,14 @@ class UserInfoState extends Equatable {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
     );
+  }
+
+  bool joinedCourseWithId(String courseId) {
+    bool output = false;
+    joinedCourses.forEach((element) {
+      if (element.courseId == courseId) output = true;
+    });
+    return output;
   }
 
   String get userName => this.firstName.value + ' ' + this.surname.value;

@@ -10,13 +10,13 @@ abstract class CoursesEvent extends Equatable {
 class CoursesEventStart extends CoursesEvent {
   const CoursesEventStart({
     required this.coursesFilter,
-    this.ownerUid,
-    List<String>? joinedCourses,
+    this.ownerEmail,
+    List<JoinedCourseWithRate>? joinedCourses,
   }) : joinedCourses = joinedCourses ?? const [];
 
   final CoursesFilter coursesFilter;
-  final String? ownerUid;
-  final List<String> joinedCourses;
+  final String? ownerEmail;
+  final List<JoinedCourseWithRate> joinedCourses;
 
   @override
   List<Object> get props => [coursesFilter, joinedCourses];
@@ -31,7 +31,20 @@ class CoursesEventLoad extends CoursesEvent {
   List<Object> get props => [courses];
 }
 
-class CoursesEventFetchMore extends CoursesEvent {}
+class CoursesEventFetchMore extends CoursesEvent {
+  final CoursesFilter coursesFilter;
+  final String? ownerEmail;
+  final List<JoinedCourseWithRate> joinedCourses;
+
+  CoursesEventFetchMore({
+    required this.coursesFilter,
+    required this.ownerEmail,
+    required this.joinedCourses,
+  });
+
+  @override
+  List<Object> get props => [coursesFilter, joinedCourses];
+}
 
 class CurrentCourseEvent extends CoursesEvent {
   final Course currentCourse;
@@ -49,7 +62,7 @@ class CurrentCourseEvent extends CoursesEvent {
 }
 
 class CurrentCourseJoinEvent extends CoursesEvent {
-  final List<String> currentCoursesIds;
+  final List<JoinedCourseWithRate> currentCoursesIds;
   final String userEmail;
 
   CurrentCourseJoinEvent({
@@ -62,7 +75,7 @@ class CurrentCourseJoinEvent extends CoursesEvent {
 }
 
 class CurrentCourseLeaveEvent extends CoursesEvent {
-  final List<String> currentCoursesIds;
+  final List<JoinedCourseWithRate> currentCoursesIds;
   final String userEmail;
 
   CurrentCourseLeaveEvent({
@@ -75,7 +88,7 @@ class CurrentCourseLeaveEvent extends CoursesEvent {
 }
 
 class CourseJoinEvent extends CoursesEvent {
-  final List<String> currentCoursesIds;
+  final List<JoinedCourseWithRate> currentCoursesIds;
   final String userEmail;
   final String courseId;
 
@@ -90,3 +103,9 @@ class CourseJoinEvent extends CoursesEvent {
 }
 
 class CurrentCourseDeleteEvent extends CoursesEvent {}
+
+class CurrentCourseRateUpdateEvent extends CoursesEvent {
+  final int rate;
+
+  CurrentCourseRateUpdateEvent({required this.rate});
+}

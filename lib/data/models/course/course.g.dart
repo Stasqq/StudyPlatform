@@ -6,13 +6,15 @@ part of 'course.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Course _$$_CourseFromJson(Map<String, dynamic> json) => _$_Course(
+_$_Course _$$_CourseFromJson(Map json) => _$_Course(
       json['id'] as String,
       json['ownerEmail'] as String,
       json['ownerName'] as String,
       json['name'] as String,
       json['description'] as String,
       json['public'] as bool,
+      json['summaryRate'] as int,
+      json['ratesNumber'] as int,
     );
 
 Map<String, dynamic> _$$_CourseToJson(_$_Course instance) => <String, dynamic>{
@@ -22,4 +24,6 @@ Map<String, dynamic> _$$_CourseToJson(_$_Course instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'public': instance.public,
+      'summaryRate': instance.summaryRate,
+      'ratesNumber': instance.ratesNumber,
     };

@@ -11,7 +11,7 @@ class ClassContentPreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StudyPlatformScaffold(
-      title: kClassContent,
+      title: kClassContentScreenText,
       child: BlocBuilder<ClassContentCubit, ClassContentState>(
         builder: (context, state) {
           if (state is ClassContentDataLoadingState)

@@ -6,7 +6,7 @@ part of 'message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Message _$$_MessageFromJson(Map<String, dynamic> json) => _$_Message(
+_$_Message _$$_MessageFromJson(Map json) => _$_Message(
       json['text'] as String,
       json['senderEmail'] as String,
       json['senderName'] as String,

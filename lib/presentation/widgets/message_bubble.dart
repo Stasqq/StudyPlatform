@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
-import 'package:study_platform/presentation/screens/profile_screen.dart';
+import 'package:study_platform/presentation/screens/general/profile_screen.dart';
 
 class MessageBubble extends StatelessWidget {
   final String senderEmail;

@@ -22,7 +22,7 @@ class _$CourseTearOff {
   const _$CourseTearOff();
 
   _Course call(String id, String ownerEmail, String ownerName, String name,
-      String description, bool public) {
+      String description, bool public, int summaryRate, int ratesNumber) {
     return _Course(
       id,
       ownerEmail,
@@ -30,6 +30,8 @@ class _$CourseTearOff {
       name,
       description,
       public,
+      summaryRate,
+      ratesNumber,
     );
   }
 
@@ -49,6 +51,8 @@ mixin _$Course {
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   bool get public => throw _privateConstructorUsedError;
+  int get summaryRate => throw _privateConstructorUsedError;
+  int get ratesNumber => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -65,7 +69,9 @@ abstract class $CourseCopyWith<$Res> {
       String ownerName,
       String name,
       String description,
-      bool public});
+      bool public,
+      int summaryRate,
+      int ratesNumber});
 }
 
 /// @nodoc
@@ -84,6 +90,8 @@ class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
     Object? name = freezed,
     Object? description = freezed,
     Object? public = freezed,
+    Object? summaryRate = freezed,
+    Object? ratesNumber = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -110,6 +118,14 @@ class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
           ? _value.public
           : public // ignore: cast_nullable_to_non_nullable
               as bool,
+      summaryRate: summaryRate == freezed
+          ? _value.summaryRate
+          : summaryRate // ignore: cast_nullable_to_non_nullable
+              as int,
+      ratesNumber: ratesNumber == freezed
+          ? _value.ratesNumber
+          : ratesNumber // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -125,7 +141,9 @@ abstract class _$CourseCopyWith<$Res> implements $CourseCopyWith<$Res> {
       String ownerName,
       String name,
       String description,
-      bool public});
+      bool public,
+      int summaryRate,
+      int ratesNumber});
 }
 
 /// @nodoc
@@ -145,6 +163,8 @@ class __$CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
     Object? name = freezed,
     Object? description = freezed,
     Object? public = freezed,
+    Object? summaryRate = freezed,
+    Object? ratesNumber = freezed,
   }) {
     return _then(_Course(
       id == freezed
@@ -171,15 +191,24 @@ class __$CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
           ? _value.public
           : public // ignore: cast_nullable_to_non_nullable
               as bool,
+      summaryRate == freezed
+          ? _value.summaryRate
+          : summaryRate // ignore: cast_nullable_to_non_nullable
+              as int,
+      ratesNumber == freezed
+          ? _value.ratesNumber
+          : ratesNumber // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_Course implements _Course {
+class _$_Course extends _Course {
   const _$_Course(this.id, this.ownerEmail, this.ownerName, this.name,
-      this.description, this.public);
+      this.description, this.public, this.summaryRate, this.ratesNumber)
+      : super._();
 
   factory _$_Course.fromJson(Map<String, dynamic> json) =>
       _$$_CourseFromJson(json);
@@ -196,10 +225,14 @@ class _$_Course implements _Course {
   final String description;
   @override
   final bool public;
+  @override
+  final int summaryRate;
+  @override
+  final int ratesNumber;
 
   @override
   String toString() {
-    return 'Course(id: $id, ownerEmail: $ownerEmail, ownerName: $ownerName, name: $name, description: $description, public: $public)';
+    return 'Course(id: $id, ownerEmail: $ownerEmail, ownerName: $ownerName, name: $name, description: $description, public: $public, summaryRate: $summaryRate, ratesNumber: $ratesNumber)';
   }
 
   @override
@@ -214,7 +247,11 @@ class _$_Course implements _Course {
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
-            const DeepCollectionEquality().equals(other.public, public));
+            const DeepCollectionEquality().equals(other.public, public) &&
+            const DeepCollectionEquality()
+                .equals(other.summaryRate, summaryRate) &&
+            const DeepCollectionEquality()
+                .equals(other.ratesNumber, ratesNumber));
   }
 
   @override
@@ -225,7 +262,9 @@ class _$_Course implements _Course {
       const DeepCollectionEquality().hash(ownerName),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(description),
-      const DeepCollectionEquality().hash(public));
+      const DeepCollectionEquality().hash(public),
+      const DeepCollectionEquality().hash(summaryRate),
+      const DeepCollectionEquality().hash(ratesNumber));
 
   @JsonKey(ignore: true)
   @override
@@ -238,9 +277,17 @@ class _$_Course implements _Course {
   }
 }
 
-abstract class _Course implements Course {
-  const factory _Course(String id, String ownerEmail, String ownerName,
-      String name, String description, bool public) = _$_Course;
+abstract class _Course extends Course {
+  const factory _Course(
+      String id,
+      String ownerEmail,
+      String ownerName,
+      String name,
+      String description,
+      bool public,
+      int summaryRate,
+      int ratesNumber) = _$_Course;
+  const _Course._() : super._();
 
   factory _Course.fromJson(Map<String, dynamic> json) = _$_Course.fromJson;
 
@@ -256,6 +303,10 @@ abstract class _Course implements Course {
   String get description;
   @override
   bool get public;
+  @override
+  int get summaryRate;
+  @override
+  int get ratesNumber;
   @override
   @JsonKey(ignore: true)
   _$CourseCopyWith<_Course> get copyWith => throw _privateConstructorUsedError;

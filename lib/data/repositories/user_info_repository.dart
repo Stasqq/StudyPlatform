@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/data/models/user/joined_course_with_rate.dart';
 import 'package:study_platform/data/models/user/user_info.dart' as user_info;
 import 'package:study_platform/utility/cache.dart';
 
@@ -47,12 +48,17 @@ class UserInfoRepository {
   }
 
   Future<void> updateJoinedCourses({
-    required String uid,
-    required List<String> joinedCourses,
+    required String userEmail,
+    required List<JoinedCourseWithRate> joinedCourses,
   }) async {
     try {
-      await _firebaseFirestore.collection(kUsers).doc(uid).update(
-            ({kJoinedCourses, joinedCourses} as Map<String, dynamic>),
+      List<Map<String, dynamic>> joinedCoursesMapsList = [];
+
+      joinedCourses.forEach((element) {
+        joinedCoursesMapsList.add(element.toJson());
+      });
+      await _firebaseFirestore.collection(kUsers).doc(userEmail).update(
+            ({kJoinedCourses: joinedCoursesMapsList}),
           );
     } catch (_) {
       throw SaveUserInfoToFirestoreFailure();

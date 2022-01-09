@@ -34,7 +34,7 @@ class CoursesStateLoadSuccess extends CoursesState {
   final bool owner;
   final bool joined;
 
-  static const emptyCourse = Course('', '', '', '', '', false);
+  static const emptyCourse = Course('', '', '', '', '', false, 0, 0);
 
   const CoursesStateLoadSuccess({
     required this.courses,
@@ -64,6 +64,20 @@ class CoursesStateLoadSuccess extends CoursesState {
         currentCourse: currentCourse ?? this.currentCourse,
         owner: owner ?? this.owner,
         joined: joined ?? this.joined);
+  }
+
+  String getCourseRateString(int index) {
+    if (courses[index].getRate() != 0)
+      return courses[index].getRate().toStringAsFixed(1) + kCourseRateMax;
+    else
+      return kNoRatesYet;
+  }
+
+  String getCurrentCourseRateString() {
+    if (currentCourse.getRate() != 0)
+      return currentCourse.getRate().toStringAsFixed(1) + kCourseRateMax;
+    else
+      return kNoRatesYet;
   }
 
   @override

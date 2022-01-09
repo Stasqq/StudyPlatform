@@ -6,7 +6,7 @@ part of 'class.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Class _$$_ClassFromJson(Map<String, dynamic> json) => _$_Class(
+_$_Class _$$_ClassFromJson(Map json) => _$_Class(
       json['name'] as String,
       json['orderIndex'] as int,
       json['description'] as String,

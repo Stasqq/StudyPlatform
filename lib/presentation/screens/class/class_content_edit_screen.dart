@@ -5,7 +5,7 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
 
-import '../widgets/study_platform_scaffold.dart';
+import '../../widgets/study_platform_scaffold.dart';
 
 class ClassContentEditScreen extends StatefulWidget {
   ClassContentEditScreen({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class _ClassContentEditScreenState extends State<ClassContentEditScreen> {
               }
             },
             child: StudyPlatformScaffold(
-              title: kClassContentEditor,
+              title: kClassContentEditorScreenText,
               appBarActions: [
                 ElevatedButton(
                   onPressed: () async {

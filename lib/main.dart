@@ -12,15 +12,23 @@ import 'package:study_platform/data/repositories/chat_repository.dart';
 import 'package:study_platform/data/repositories/classes_repository.dart';
 import 'package:study_platform/data/repositories/courses_repository.dart';
 import 'package:study_platform/data/repositories/files_repository.dart';
+import 'package:study_platform/data/repositories/test_repository.dart';
 import 'package:study_platform/data/repositories/user_info_repository.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/chat_bloc/chat_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
+import 'package:study_platform/logic/cubit/answer_cubit/answer_cubit.dart';
 import 'package:study_platform/logic/cubit/course_cubit/course_cubit.dart';
+import 'package:study_platform/logic/cubit/create_question_cubit/create_question_cubit.dart';
+import 'package:study_platform/logic/cubit/create_test_cubit/create_test_cubit.dart';
 import 'package:study_platform/logic/cubit/login_cubit/login_cubit.dart';
 import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
 import 'package:study_platform/logic/cubit/photo_uri_cubit/photo_uri_cubit.dart';
+import 'package:study_platform/logic/cubit/rate_course_cubit/rate_course_cubit.dart';
 import 'package:study_platform/logic/cubit/signup_cubit/sign_cubit.dart';
+import 'package:study_platform/logic/cubit/take_test_cubit/take_test_cubit.dart';
+import 'package:study_platform/logic/cubit/test_results_cubit/test_result_cubit.dart';
+import 'package:study_platform/logic/cubit/tests_cubit/tests_cubit.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/app_router/app_router.dart';
 import 'package:study_platform/utility/app_bloc_observer.dart';
@@ -42,6 +50,7 @@ final chatRepository = ChatRepository(firebaseFirestore: firebaseFirestore);
 final classesRepository =
     ClassesRepository(firebaseFirestore: firebaseFirestore);
 final filesRepository = FilesRepository(firebaseStorage: firebaseStorage);
+final testRepository = TestRepository(firebaseFirestore: firebaseFirestore);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,66 +89,101 @@ class StudyPlatform extends StatelessWidget {
         RepositoryProvider(
           create: (context) => classesRepository,
         ),
+        RepositoryProvider(
+          create: (context) => testRepository,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
-            create: (authenticationBlocContext) => AuthenticationBloc(
+            create: (context) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
             ),
           ),
           BlocProvider<CoursesBloc>(
-            create: (coursesContext) => CoursesBloc(
+            create: (context) => CoursesBloc(
               coursesRepository: coursesRepository,
             ),
           ),
           BlocProvider<LoginCubit>(
-            create: (loginCubitContext) => LoginCubit(
+            create: (context) => LoginCubit(
               authenticationRepository: authenticationRepository,
             ),
           ),
           BlocProvider<SignUpCubit>(
-            create: (signUpCubitContext) => SignUpCubit(
+            create: (context) => SignUpCubit(
               authenticationRepository: authenticationRepository,
             ),
           ),
           BlocProvider<UserInfoCubit>(
-            create: (userInfoCubitContext) => UserInfoCubit(
+            create: (context) => UserInfoCubit(
               authenticationRepository: authenticationRepository,
               userInfoRepository: userInfoRepository,
             ),
           ),
           BlocProvider<CourseCubit>(
-            create: (courseCubitContext) => CourseCubit(
+            create: (context) => CourseCubit(
               authenticationRepository: authenticationRepository,
               coursesRepository: coursesRepository,
             ),
           ),
           BlocProvider<ChatBloc>(
-            create: (chatBlocContext) => ChatBloc(
+            create: (context) => ChatBloc(
               chatRepository: chatRepository,
             ),
           ),
           BlocProvider<ClassesBloc>(
-            create: (classesBlocContext) => ClassesBloc(
+            create: (context) => ClassesBloc(
               classesRepository: classesRepository,
               filesRepository: filesRepository,
             ),
           ),
           BlocProvider<ClassContentCubit>(
-            create: (classContentEditCubitContext) => ClassContentCubit(
+            create: (context) => ClassContentCubit(
               filesRepository: filesRepository,
             ),
           ),
           BlocProvider<OtherUserInfoCubit>(
-            create: (otherUserInfoCubitContext) => OtherUserInfoCubit(
+            create: (context) => OtherUserInfoCubit(
               userInfoRepository: userInfoRepository,
             ),
           ),
           BlocProvider<PhotoUriCubit>(
-            create: (photoUriCubitContext) => PhotoUriCubit(
+            create: (context) => PhotoUriCubit(
               userInfoRepository: userInfoRepository,
               filesRepository: filesRepository,
+            ),
+          ),
+          BlocProvider<CreateTestCubit>(
+            create: (context) => CreateTestCubit(
+              testRepository: testRepository,
+            ),
+          ),
+          BlocProvider<CreateQuestionCubit>(
+            create: (context) => CreateQuestionCubit(),
+          ),
+          BlocProvider<AnswerCubit>(
+            create: (context) => AnswerCubit(),
+          ),
+          BlocProvider<TestsCubit>(
+            create: (context) => TestsCubit(
+              testRepository: testRepository,
+            ),
+          ),
+          BlocProvider<TakeTestCubit>(
+            create: (context) => TakeTestCubit(
+              testRepository: testRepository,
+            ),
+          ),
+          BlocProvider<TestResultCubit>(
+            create: (context) => TestResultCubit(
+              testRepository: testRepository,
+            ),
+          ),
+          BlocProvider<RateCourseCubit>(
+            create: (context) => RateCourseCubit(
+              coursesBloc: context.read<CoursesBloc>(),
+              userInfoCubit: context.read<UserInfoCubit>(),
             ),
           ),
         ],

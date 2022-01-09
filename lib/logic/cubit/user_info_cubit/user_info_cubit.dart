@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:study_platform/data/forms/email_form.dart';
 import 'package:study_platform/data/forms/name_form.dart';
+import 'package:study_platform/data/models/user/joined_course_with_rate.dart';
 import 'package:study_platform/data/models/user/user_info.dart';
 import 'package:study_platform/data/repositories/authentication_repository.dart';
 import 'package:study_platform/data/repositories/user_info_repository.dart';
@@ -122,8 +123,8 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   }
 
   void joinCourse(String courseId) {
-    List<String> newCoursesList = state.joinedCourses;
-    newCoursesList.add(courseId);
+    List<JoinedCourseWithRate> newCoursesList = state.joinedCourses;
+    newCoursesList.add(JoinedCourseWithRate(courseId, 0));
 
     emit(
       state.copyWith(
@@ -133,12 +134,32 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   }
 
   void leaveCourse(String courseId) {
-    List<String> newCoursesList = state.joinedCourses;
+    List<JoinedCourseWithRate> newCoursesList = state.joinedCourses;
     newCoursesList.remove(courseId);
 
     emit(
       state.copyWith(
         joinedCourses: newCoursesList,
+      ),
+    );
+  }
+
+  void updateCourseRate(String courseId, int rate) {
+    List<JoinedCourseWithRate> newJoinedCourses = [];
+
+    for (int i = 0; i < state.joinedCourses.length; i++) {
+      if (state.joinedCourses[i].courseId == courseId)
+        newJoinedCourses.add(JoinedCourseWithRate(courseId, rate));
+      else
+        newJoinedCourses.add(state.joinedCourses[i]);
+    }
+
+    _userInfoRepository.updateJoinedCourses(
+        userEmail: state.email.value, joinedCourses: newJoinedCourses);
+
+    emit(
+      state.copyWith(
+        joinedCourses: newJoinedCourses,
       ),
     );
   }

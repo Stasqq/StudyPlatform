@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/presentation/screens/class/class_content_preview_screen.dart';
 import 'package:study_platform/presentation/screens/class/class_edit_screen.dart';
-import 'package:study_platform/presentation/screens/class/class_screen.dart';
 import 'package:study_platform/presentation/screens/course/chat_screen.dart';
 import 'package:study_platform/presentation/screens/course/course_screen.dart';
 import 'package:study_platform/presentation/screens/course/courses_screen.dart';
@@ -70,10 +69,6 @@ class AppRouter {
       case kClassContentPreviewScreen:
         return MaterialPageRoute(
           builder: (_) => ClassContentPreviewScreen(),
-        );
-      case kClassScreen:
-        return MaterialPageRoute(
-          builder: (_) => ClassScreen(),
         );
       case kCreateTestScreen:
         return MaterialPageRoute(

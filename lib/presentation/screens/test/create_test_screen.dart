@@ -14,12 +14,19 @@ class CreateTestScreen extends StatelessWidget {
     return StudyPlatformScaffold(
       title: kCreateTestScreenText,
       appBarActions: [
-        ElevatedButton(
-          onPressed: () async {
-            context.read<CreateTestCubit>().creatingFinished();
-          },
-          child: Icon(Icons.save),
-        )
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                context.read<CreateTestCubit>().creatingFinished();
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.save),
+              style: kAppBarButtonStyle,
+            ),
+            SizedBox(width: 8),
+          ],
+        ),
       ],
       child: BlocBuilder<CreateTestCubit, CreateTestState>(
         builder: (context, state) {

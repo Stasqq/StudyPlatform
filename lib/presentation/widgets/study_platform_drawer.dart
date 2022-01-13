@@ -18,10 +18,12 @@ class StudyPlatformDrawer extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         children: [
           const DrawerHeader(
-            child: Text(
-              kMenuText,
-              style: TextStyle(
-                fontSize: 24,
+            child: Center(
+              child: Text(
+                kAppTitle,
+                style: TextStyle(
+                  fontSize: 48,
+                ),
               ),
             ),
           ),
@@ -68,7 +70,7 @@ class StudyPlatformDrawer extends StatelessWidget {
             visible: !kIsWeb,
             child: _DrawerItem(
               iconData: Icons.close,
-              title: kCloseText,
+              title: kCloseAppText,
               onTap: () {
                 Platform.isAndroid ? SystemNavigator.pop() : exit(0);
               },
@@ -95,10 +97,23 @@ class _DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(iconData),
-      title: Text(title),
-      onTap: onTap,
+    return SizedBox(
+      height: 80,
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            iconData,
+            size: 32,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          onTap: onTap,
+        ),
+      ),
     );
   }
 }

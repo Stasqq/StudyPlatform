@@ -1,7 +1,9 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
@@ -47,6 +49,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
             DropdownButton(
               value: filter,
               items: filterItems.map(buildMenuItem).toList(),
+              dropdownColor: accentColor,
               onChanged: (value) {
                 setState(() {
                   filter = value as CoursesFilter;
@@ -116,14 +119,19 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       child: Column(
                         children: [
                           Text(state.courses[index].name),
-                          Text(state.courses[index].description),
+                          Text(
+                            state.courses[index].description,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           Text(state.getCourseRateString(index)),
                         ],
                       ),
                     );
                   },
                   separatorBuilder: (context, i) {
-                    return Divider();
+                    return Divider(
+                      color: lightPrimaryColor,
+                    );
                   },
                 );
               } else {
@@ -141,6 +149,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
         value: item,
         child: Text(
           EnumToString.convertToString(item),
+          style: TextStyle(color: textIconsColor),
         ),
       );
 }
@@ -155,33 +164,44 @@ class JoinCourseDialogButton extends StatelessWidget {
         builder: (BuildContext context) => SimpleDialog(
           title: const Text(kEnterCourseId),
           children: [
-            TextField(
-              onChanged: (id) => courseId = id,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<CoursesBloc>().add(CourseJoinEvent(
-                      userEmail:
-                          context.read<AuthenticationBloc>().state.user.email,
-                      currentCoursesIds:
-                          context.read<UserInfoCubit>().state.joinedCourses,
-                      courseId: courseId,
-                    ));
-                context.read<UserInfoCubit>().readUserInfo();
-                Navigator.of(context).pop();
-              },
-              child: Text(kJoin),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(kCancel),
+            Column(
+              children: [
+                TextField(
+                  onChanged: (id) => courseId = id,
+                  decoration: kTextFieldDecoration,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<CoursesBloc>().add(CourseJoinEvent(
+                          userEmail: context
+                              .read<AuthenticationBloc>()
+                              .state
+                              .user
+                              .email,
+                          currentCoursesIds:
+                              context.read<UserInfoCubit>().state.joinedCourses,
+                          courseId: courseId,
+                        ));
+                    context.read<UserInfoCubit>().readUserInfo();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(kJoin),
+                  style: kButtonStyle,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(kCancel),
+                  style: kButtonStyle,
+                ),
+              ],
             ),
           ],
         ),
       ),
       child: Text(kJoinCourse),
+      style: kButtonStyle,
     );
   }
 }

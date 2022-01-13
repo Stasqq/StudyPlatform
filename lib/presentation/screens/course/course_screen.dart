@@ -2,10 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
+import 'package:study_platform/logic/cubit/class_content_cubit/class_content_cubit.dart';
 import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
 import 'package:study_platform/logic/cubit/rate_course_cubit/rate_course_cubit.dart';
 import 'package:study_platform/logic/cubit/tests_cubit/tests_cubit.dart';
@@ -25,7 +27,12 @@ class CourseScreen extends StatelessWidget {
           .currentCourse
           .name,
       appBarActions: [
-        _RateDialogButton(),
+        Row(
+          children: [
+            _RateDialogButton(),
+            SizedBox(width: 8),
+          ],
+        ),
       ],
       child: Align(
         alignment: const Alignment(0, -1 / 3),
@@ -39,70 +46,104 @@ class CourseScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Expanded(
-                  flex: 2,
-                  child: Row(
+                  flex: 6,
+                  child: Column(
                     children: [
                       Expanded(
                         flex: 1,
                         child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(loadState.currentCourse.description),
-                              Text(loadState.getCurrentCourseRateString()),
-                              RichText(
-                                text: TextSpan(
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: loadState.currentCourse.ownerName,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    if (loadState.joined || loadState.owner)
+                                      Row(
+                                        children: [
+                                          _ChatButton(),
+                                          SizedBox(width: 8),
+                                          _TestsButton(),
+                                          SizedBox(width: 8),
+                                        ],
                                       ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          context
-                                              .read<OtherUserInfoCubit>()
-                                              .loadOtherUserInfo(loadState
-                                                  .currentCourse.ownerEmail);
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfileScreen(
-                                                      currentUser: false,
-                                                    )),
-                                          );
-                                        },
-                                    ),
+                                    if (!loadState.owner)
+                                      (loadState.joined)
+                                          ? _LeaveButton()
+                                          : _JoinButton(),
                                   ],
                                 ),
-                              ),
-                              if (loadState.owner)
-                                Text(loadState.currentCourse.id),
-                            ],
+                                if (loadState.owner)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _NewClassDialogButton(),
+                                      SizedBox(width: 8),
+                                      _DeleteCourseDialogButton(),
+                                    ],
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (loadState.joined || loadState.owner)
-                                Column(
-                                  children: [
-                                    _ChatButton(),
-                                    _TestsButton(),
-                                  ],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  loadState.currentCourse.description,
+                                  style: kNormalTextStyle,
                                 ),
-                              if (!loadState.owner)
-                                (loadState.joined)
-                                    ? _LeaveButton()
-                                    : _JoinButton(),
-                              if (loadState.owner) _DeleteButton(),
-                              if (loadState.owner) _NewClassDialogButton(),
-                            ],
+                                SizedBox(height: 8),
+                                Text(
+                                  loadState.getCurrentCourseRateString(),
+                                  style: kNormalTextStyle,
+                                ),
+                                SizedBox(height: 8),
+                                RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: kCourseOwner +
+                                            loadState.currentCourse.ownerName,
+                                        style: kNormalTextStyle.copyWith(
+                                          color: accentColor,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            context
+                                                .read<OtherUserInfoCubit>()
+                                                .loadOtherUserInfo(loadState
+                                                    .currentCourse.ownerEmail);
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileScreen(
+                                                        currentUser: false,
+                                                      )),
+                                            );
+                                          },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (loadState.owner)
+                                  Column(
+                                    children: [
+                                      SizedBox(height: 8),
+                                      Text(
+                                        kCourseId + loadState.currentCourse.id,
+                                        style: kNormalTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -112,11 +153,14 @@ class CourseScreen extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Center(
-                    child: Text(kClassesText),
+                    child: Text(
+                      kClassesText,
+                      style: kBigTextStyle,
+                    ),
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 7,
                   child: BlocBuilder<ClassesBloc, ClassesState>(
                     builder: (context, state) {
                       if (state is ClassesStateLoading) {
@@ -145,8 +189,14 @@ class CourseScreen extends StatelessWidget {
                             if (state is ClassesStateActionLoading)
                               return Center(child: CircularProgressIndicator());
                             return ListTile(
-                              title: Text(state.classes[index].name),
-                              subtitle: Text(state.classes[index].description),
+                              title: Text(
+                                state.classes[index].name,
+                                style: kNormalTextStyle,
+                              ),
+                              subtitle: Text(
+                                state.classes[index].description,
+                                style: kSmallTextStyle,
+                              ),
                               trailing: ((context.read<CoursesBloc>().state
                                           as CoursesStateLoadSuccess)
                                       .owner)
@@ -160,6 +210,7 @@ class CourseScreen extends StatelessWidget {
                                             .pushNamed(kClassEditScreen);
                                       },
                                       child: Icon(Icons.edit),
+                                      style: kAppBarButtonStyle,
                                     )
                                   : SizedBox(),
                               onTap: () {
@@ -172,7 +223,11 @@ class CourseScreen extends StatelessWidget {
                                   context.read<ClassesBloc>().add(
                                       CurrentClassEvent(
                                           currentClass: state.classes[index]));
-                                  Navigator.of(context).pushNamed(kClassScreen);
+                                  context
+                                      .read<ClassContentCubit>()
+                                      .loadClass(context.read<ClassesBloc>());
+                                  Navigator.of(context)
+                                      .pushNamed(kClassContentPreviewScreen);
                                 }
                               },
                             );
@@ -201,16 +256,20 @@ class _RateDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        final rate = await _SimpleDialog.show(context);
-        if (rate != null) {
-          context.read<RateCourseCubit>().submitRating(
-              courseId:
-                  (context.read<CoursesBloc>().state as CoursesStateLoadSuccess)
-                      .currentCourse
-                      .id);
+        if ((context.read<CoursesBloc>().state as CoursesStateLoadSuccess)
+            .joined) {
+          final rate = await _SimpleDialog.show(context);
+          if (rate != null) {
+            context.read<RateCourseCubit>().submitRating(
+                courseId: (context.read<CoursesBloc>().state
+                        as CoursesStateLoadSuccess)
+                    .currentCourse
+                    .id);
+          }
         }
       },
       child: Icon(Icons.star),
+      style: kAppBarButtonStyle,
     );
   }
 }
@@ -239,10 +298,11 @@ class _SimpleDialog extends StatelessWidget {
                 value: state.currentRate,
                 icon: const Icon(Icons.arrow_downward),
                 elevation: 16,
-                style: const TextStyle(color: Colors.deepPurple),
+                style: TextStyle(
+                    color: darkPrimaryColor, fontWeight: FontWeight.bold),
                 underline: Container(
                   height: 2,
-                  color: Colors.deepPurpleAccent,
+                  color: darkPrimaryColor,
                 ),
                 onChanged: (rate) {
                   context.read<RateCourseCubit>().currentRateChanged(rate!);
@@ -260,12 +320,14 @@ class _SimpleDialog extends StatelessWidget {
                   Navigator.of(context).pop(state.currentRate);
                 },
                 child: Text(kConfirm),
+                style: kButtonStyle,
               ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: Text(kCancel),
+                style: kButtonStyle,
               ),
             ]);
           },
@@ -317,7 +379,13 @@ class _JoinButton extends StatelessWidget {
                 ));
             context.read<UserInfoCubit>().readUserInfo();
           },
-          child: const Text(kJoin),
+          child: Row(
+            children: [
+              Icon(Icons.group_add),
+              SizedBox(width: 8),
+              Text(kJoin),
+            ],
+          ),
         );
       },
     );
@@ -340,7 +408,13 @@ class _LeaveButton extends StatelessWidget {
                 ));
             context.read<UserInfoCubit>().readUserInfo();
           },
-          child: const Text(kLeave),
+          child: Row(
+            children: [
+              Icon(Icons.cancel_outlined),
+              SizedBox(width: 8),
+              Text(kLeave),
+            ],
+          ),
         );
       },
     );
@@ -364,25 +438,59 @@ class _TestsButton extends StatelessWidget {
                 );
             Navigator.of(context).pushNamed(kTestsScreen);
           },
-          child: const Text(kTestsButton),
+          child: Row(
+            children: [
+              Icon(Icons.school),
+              SizedBox(width: 8),
+              Text(kTestsButton),
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class _DeleteButton extends StatelessWidget {
+class _DeleteCourseDialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CoursesBloc, CoursesState>(
       builder: (context, state) {
         return ElevatedButton(
           style: kButtonStyle,
-          onPressed: () {
-            context.read<CoursesBloc>().add(CurrentCourseDeleteEvent());
-            Navigator.of(context).pop();
-          },
-          child: const Text(kDelete),
+          onPressed: () => showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(kDeleteCourse),
+                actions: [
+                  TextButton(
+                    child: Text(kYes),
+                    onPressed: () {
+                      context
+                          .read<CoursesBloc>()
+                          .add(CurrentCourseDeleteEvent());
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(kNo),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.delete),
+              SizedBox(width: 8),
+              Text(kDelete),
+            ],
+          ),
         );
       },
     );
@@ -402,37 +510,61 @@ class _NewClassDialogButton extends StatelessWidget {
         builder: (BuildContext context) => SimpleDialog(
           title: const Text(kEnterClassDescription),
           children: [
-            TextField(
-              onChanged: (value) => name = value,
-            ),
-            TextField(
-              onChanged: (value) => description = value,
-            ),
-            TextField(
-              onChanged: (value) => index = int.parse(value),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+            Column(
+              children: [
+                TextField(
+                  onChanged: (value) => name = value,
+                  decoration: kTextFieldDecoration.copyWith(
+                    labelText: kClassName,
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  onChanged: (value) => description = value,
+                  decoration: kTextFieldDecoration.copyWith(
+                    labelText: kClassDescription,
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  onChanged: (value) => index = int.parse(value),
+                  keyboardType: TextInputType.number,
+                  decoration: kTextFieldDecoration.copyWith(
+                    labelText: kClassListIndex,
+                  ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                ),
+                SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<ClassesBloc>().add(ClassCreateEvent(
+                        name: name, description: description, index: index));
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(kConfirm),
+                  style: kButtonStyle,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(kCancel),
+                  style: kButtonStyle,
+                ),
               ],
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<ClassesBloc>().add(ClassCreateEvent(
-                    name: name, description: description, index: index));
-                Navigator.of(context).pop();
-              },
-              child: Text(kConfirm),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(kCancel),
             ),
           ],
         ),
       ),
-      child: Text(kAddClass),
+      child: Row(
+        children: [
+          Icon(Icons.add_circle_outline),
+          SizedBox(width: 8),
+          Text(kAddClass),
+        ],
+      ),
     );
   }
 }

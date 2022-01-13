@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_platform/constants/colors.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/classes_bloc/classes_bloc.dart';
-import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
+import 'package:study_platform/logic/cubit/class_content_cubit/class_content_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
 import '../../../constants/string_variables.dart';
@@ -16,7 +18,12 @@ class ClassEditScreen extends StatelessWidget {
           .currentClass
           .name,
       appBarActions: [
-        _DeleteClassDialogButton(),
+        Row(
+          children: [
+            _DeleteClassDialogButton(),
+            SizedBox(width: 8),
+          ],
+        ),
       ],
       child: Align(
         alignment: const Alignment(0, -1 / 3),
@@ -24,6 +31,7 @@ class ClassEditScreen extends StatelessWidget {
           builder: (context, state) {
             return Column(
               children: [
+                SizedBox(height: 16),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -33,9 +41,16 @@ class ClassEditScreen extends StatelessWidget {
                       Navigator.of(context).pushNamed(kClassContentEditScreen);
                     },
                     child: Text(kContent),
+                    style: kButtonStyle,
                   ),
                 ),
-                Text(kMaterialsText),
+                SizedBox(height: 8),
+                Divider(color: lightPrimaryColor),
+                SizedBox(height: 8),
+                Text(
+                  kMaterialsText,
+                  style: kNormalTextStyle,
+                ),
                 _GetClassMaterials(),
                 ElevatedButton(
                   onPressed: () {
@@ -44,6 +59,7 @@ class ClassEditScreen extends StatelessWidget {
                         .add(CurrentClassMaterialAddEvent());
                   },
                   child: Icon(Icons.add),
+                  style: kButtonStyle,
                 )
               ],
             );
@@ -70,15 +86,19 @@ class _GetClassMaterials extends StatelessWidget {
             .map((element) => Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(element),
+                    Text(
+                      element,
+                      style: kNormalTextStyle,
+                    ),
                     SizedBox(width: 8),
                     ElevatedButton(
-                        onPressed: () {
-                          context.read<ClassesBloc>().add(
-                              CurrentClassMaterialDeleteEvent(
-                                  fileName: element));
-                        },
-                        child: Icon(Icons.delete)),
+                      onPressed: () {
+                        context.read<ClassesBloc>().add(
+                            CurrentClassMaterialDeleteEvent(fileName: element));
+                      },
+                      child: Icon(Icons.delete),
+                      style: kButtonStyle,
+                    ),
                   ],
                 ))
             .toList(),
@@ -91,6 +111,7 @@ class _DeleteClassDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       child: Text(kDelete),
+      style: kButtonStyle,
       onPressed: () => showDialog<void>(
         context: context,
         builder: (BuildContext context) {

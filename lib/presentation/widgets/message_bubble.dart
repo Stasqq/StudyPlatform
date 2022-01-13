@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/logic/cubit/other_user_info_cubit/other_user_info_cubit.dart';
 import 'package:study_platform/presentation/screens/general/profile_screen.dart';
 
@@ -31,9 +32,9 @@ class MessageBubble extends StatelessWidget {
               children: <TextSpan>[
                 TextSpan(
                   text: senderName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12.0,
-                    color: Colors.black54,
+                    color: secondaryTextColor,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
@@ -65,7 +66,7 @@ class MessageBubble extends StatelessWidget {
                     bottomRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isMe ? Colors.lightBlueAccent : Colors.white,
+            color: isMe ? accentColor : textIconsColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 10.0,
@@ -74,7 +75,7 @@ class MessageBubble extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  color: isMe ? Colors.white : Colors.black54,
+                  color: isMe ? textIconsColor : primaryText,
                   fontSize: 15.0,
                 ),
               ),

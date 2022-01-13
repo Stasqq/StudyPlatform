@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/cubit/login_cubit/login_cubit.dart';
@@ -31,9 +32,18 @@ class LoginScreen extends StatelessWidget {
         },
         child: Align(
           alignment: const Alignment(0, -1 / 3),
-          child: ListView(
-            shrinkWrap: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              Hero(
+                tag: kLogoTag,
+                child: Image.asset(
+                  kEducationImage,
+                  color: darkPrimaryColor,
+                  width: 150,
+                  height: 150,
+                ),
+              ),
               const SizedBox(height: 16),
               _EmailInput(),
               const SizedBox(height: 8),
@@ -59,9 +69,8 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kEmailLabel,
-            helperText: kEmailLabelHelper,
             errorText: state.email.invalid ? kEmailLabelInvalid : null,
           ),
         );
@@ -80,9 +89,8 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) =>
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kPasswordLabel,
-            helperText: kPasswordLabelHelper,
             errorText: state.password.invalid ? kPasswordLabelInvalid : null,
           ),
         );

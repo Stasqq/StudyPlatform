@@ -33,6 +33,7 @@ dependencies:
   equatable: ^2.0.3
   formz: ^0.4.1
   mocktail: ^0.2.0
+  animated_text_kit: ^4.2.1
 
 
 dev_dependencies:

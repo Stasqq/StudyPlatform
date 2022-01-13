@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
 import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/cubit/signup_cubit/sign_cubit.dart';
@@ -32,6 +33,16 @@ class SignUpScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Hero(
+                tag: kLogoTag,
+                child: Image.asset(
+                  kEducationImage,
+                  color: darkPrimaryColor,
+                  width: 150,
+                  height: 150,
+                ),
+              ),
+              SizedBox(height: 16),
               _EmailInput(),
               const SizedBox(height: 8),
               _PasswordInput(),
@@ -56,7 +67,7 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kEmailLabel,
             helperText: kEmailLabelHelper,
             errorText: state.email.invalid ? kEmailLabelInvalid : null,
@@ -74,15 +85,14 @@ class _PasswordInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          onChanged: (password) =>
-              context.read<SignUpCubit>().passwordChanged(password),
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: kPasswordLabel,
-            helperText: kPasswordLabelHelper,
-            errorText: state.password.invalid ? kPasswordLabelInvalid : null,
-          ),
-        );
+            onChanged: (password) =>
+                context.read<SignUpCubit>().passwordChanged(password),
+            obscureText: true,
+            decoration: kTextFieldDecoration.copyWith(
+              labelText: kPasswordLabel,
+              helperText: kPasswordLabelHelper,
+              errorText: state.password.invalid ? kPasswordLabelInvalid : null,
+            ));
       },
     );
   }
@@ -101,7 +111,7 @@ class _ConfirmPasswordInput extends StatelessWidget {
               .read<SignUpCubit>()
               .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kConfirmPasswordLabel,
             helperText: kConfirmPasswordLabelHelper,
             errorText: state.confirmedPassword.invalid

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/take_test_cubit/take_test_cubit.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
@@ -26,8 +27,10 @@ class TakingTestScreen extends StatelessWidget {
                           .currentCourse
                           .id,
                     );
+                Navigator.of(context).pop();
               },
               child: Icon(Icons.save),
+              style: kAppBarButtonStyle,
             ),
             SizedBox(width: 8),
           ],
@@ -47,10 +50,17 @@ class TakingTestScreen extends StatelessWidget {
                   itemBuilder: (context, questionIndex) {
                     return Column(
                       children: [
-                        Text(kQuestion +
-                            state.test.questions[questionIndex].number
-                                .toString()),
-                        Text(state.test.questions[questionIndex].text),
+                        Text(
+                          kQuestion +
+                              state.test.questions[questionIndex].number
+                                  .toString(),
+                          style: kBigTextStyle,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          state.test.questions[questionIndex].text,
+                          style: kNormalTextStyle,
+                        ),
                         ListView.builder(
                             shrinkWrap: true,
                             itemCount: state
@@ -68,9 +78,12 @@ class TakingTestScreen extends StatelessWidget {
                                               answerIndex, value!);
                                     },
                                   ),
-                                  Text(
-                                    state.userAnswers[questionIndex]
-                                        .answers[answerIndex].text,
+                                  Flexible(
+                                    child: Text(
+                                      state.userAnswers[questionIndex]
+                                          .answers[answerIndex].text,
+                                      softWrap: true,
+                                    ),
                                   ),
                                 ],
                               );

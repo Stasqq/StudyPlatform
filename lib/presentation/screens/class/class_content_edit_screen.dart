@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:study_platform/constants/string_variables.dart';
-import 'package:study_platform/logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
+import 'package:study_platform/constants/styles.dart';
+import 'package:study_platform/logic/cubit/class_content_cubit/class_content_cubit.dart';
 
 import '../../widgets/study_platform_scaffold.dart';
 
@@ -33,15 +34,31 @@ class _ClassContentEditScreenState extends State<ClassContentEditScreen> {
             child: StudyPlatformScaffold(
               title: kClassContentEditorScreenText,
               appBarActions: [
-                ElevatedButton(
-                  onPressed: () async {
-                    context
-                        .read<ClassContentCubit>()
-                        .saveContent(htmlText: await controller.getText());
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(Icons.save),
-                )
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (state.isTextValid) {
+                          context.read<ClassContentCubit>().saveContent(
+                              htmlText: await controller.getText());
+                          Navigator.of(context).pop();
+                        } else {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                content: Text(kClassContentFileIsToBig),
+                                duration: Duration(seconds: 5),
+                              ),
+                            );
+                        }
+                      },
+                      child: Icon(Icons.save),
+                      style: kAppBarButtonStyle,
+                    ),
+                    SizedBox(width: 8),
+                  ],
+                ),
               ],
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
@@ -61,7 +78,7 @@ class _ClassContentEditScreenState extends State<ClassContentEditScreen> {
                         shouldEnsureVisible: true,
                         initialText: state.htmlText,
                       ),
-                      otherOptions: OtherOptions(height: 1000),
+                      otherOptions: OtherOptions(height: 500),
                     ),
                   ],
                 ),

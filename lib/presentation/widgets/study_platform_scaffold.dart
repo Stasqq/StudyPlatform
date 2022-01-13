@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/variables.dart';
 import 'package:study_platform/presentation/widgets/study_platform_drawer.dart';
 
@@ -22,6 +23,7 @@ class StudyPlatformScaffold extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
         actions: appBarActions,
+        backgroundColor: primaryColor,
       ),
       floatingActionButton: floatingActionButton,
       drawer: kInvisibleDrawerScreensTitles.contains(title)

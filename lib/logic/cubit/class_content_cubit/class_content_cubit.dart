@@ -42,7 +42,7 @@ class ClassContentCubit extends Cubit<ClassContentState> {
     emit(
       ClassContentDataSavingState(
         htmlFilePath: loadedState.htmlFilePath!,
-        htmlText: loadedState.htmlText!,
+        htmlText: loadedState.htmlText,
         classesBloc: loadedState.classesBloc!,
       ),
     );

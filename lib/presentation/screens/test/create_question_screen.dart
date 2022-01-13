@@ -16,14 +16,20 @@ class CreateQuestionScreen extends StatelessWidget {
     return StudyPlatformScaffold(
       title: kCreateQuestionScreenText,
       appBarActions: [
-        ElevatedButton(
-          onPressed: () {
-            context.read<CreateTestCubit>().creatingQuestionFinished(
-                  context.read<CreateQuestionCubit>().state.question,
-                );
-            Navigator.of(context).pop();
-          },
-          child: Icon(Icons.add),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                context.read<CreateTestCubit>().creatingQuestionFinished(
+                      context.read<CreateQuestionCubit>().state.question,
+                    );
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.add),
+              style: kAppBarButtonStyle,
+            ),
+            SizedBox(width: 8),
+          ],
         ),
       ],
       child: BlocBuilder<CreateQuestionCubit, CreateQuestionState>(
@@ -55,7 +61,7 @@ class _QuestionTextInput extends StatelessWidget {
         return TextField(
           onChanged: (text) =>
               context.read<CreateQuestionCubit>().textChanged(text),
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kQuestionTextLabel,
           ),
         );
@@ -145,6 +151,7 @@ class _SimpleDialog extends StatelessWidget {
               TextField(
                 onChanged: (text) =>
                     context.read<AnswerCubit>().textChanged(text),
+                decoration: kTextFieldDecoration,
               ),
               Row(
                 children: [
@@ -153,7 +160,7 @@ class _SimpleDialog extends StatelessWidget {
                     onChanged: (value) =>
                         context.read<AnswerCubit>().correctChanged(value!),
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 4),
                   Text(kCorrectAnswer),
                 ],
               ),
@@ -162,12 +169,14 @@ class _SimpleDialog extends StatelessWidget {
                   Navigator.of(context).pop(state.answer);
                 },
                 child: Text(kConfirm),
+                style: kButtonStyle,
               ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: Text(kCancel),
+                style: kButtonStyle,
               ),
             ]);
           },

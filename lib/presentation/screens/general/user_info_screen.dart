@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/cubit/user_info_cubit/user_info_cubit.dart';
 import 'package:study_platform/presentation/widgets/study_platform_scaffold.dart';
 
@@ -55,10 +55,10 @@ class _FirstNameInput extends StatelessWidget {
         return TextField(
           onChanged: (firstName) =>
               context.read<UserInfoCubit>().firstNameChanged(firstName),
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kFirstNameLabel,
             helperText: kFirstNameLabelHelper,
-            errorText: state.surname.invalid ? kFirstNameLabelInvalid : null,
+            errorText: state.firstName.invalid ? kFirstNameLabelInvalid : null,
           ),
         );
       },
@@ -75,7 +75,7 @@ class _SurnameInput extends StatelessWidget {
         return TextField(
           onChanged: (surname) =>
               context.read<UserInfoCubit>().surnameChanged(surname),
-          decoration: InputDecoration(
+          decoration: kTextFieldDecoration.copyWith(
             labelText: kSurnameLabel,
             helperText: kSurnameLabelHelper,
             errorText: state.surname.invalid ? kSurnameLabelInvalid : null,
@@ -95,12 +95,7 @@ class _SaveUserInfoButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  primary: kButtonColor,
-                ),
+                style: kButtonStyle,
                 onPressed: state.status.isValidated
                     ? () =>
                         context.read<UserInfoCubit>().userInfoFormSubmitted()

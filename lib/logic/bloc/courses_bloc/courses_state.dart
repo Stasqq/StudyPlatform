@@ -68,14 +68,18 @@ class CoursesStateLoadSuccess extends CoursesState {
 
   String getCourseRateString(int index) {
     if (courses[index].getRate() != 0)
-      return courses[index].getRate().toStringAsFixed(1) + kCourseRateMax;
+      return courses[index].getRate().toStringAsFixed(1) +
+          kCourseRateMax +
+          ' (${courses[index].ratesNumber})';
     else
       return kNoRatesYet;
   }
 
   String getCurrentCourseRateString() {
     if (currentCourse.getRate() != 0)
-      return currentCourse.getRate().toStringAsFixed(1) + kCourseRateMax;
+      return currentCourse.getRate().toStringAsFixed(1) +
+          kCourseRateMax +
+          ' (${currentCourse.ratesNumber})';
     else
       return kNoRatesYet;
   }

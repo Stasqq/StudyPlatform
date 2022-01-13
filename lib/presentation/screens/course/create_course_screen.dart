@@ -85,8 +85,11 @@ class _DescriptionInput extends StatelessWidget {
           maxLines: null,
           onChanged: (description) =>
               context.read<CourseCubit>().descriptionChanged(description),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: kDescriptionLabel,
+            helperText: kDescriptionLabelHelper,
+            errorText:
+                state.isDescriptionValid() ? null : kDescriptionLabelInvalid,
           ),
         );
       },
@@ -103,7 +106,7 @@ class _PublicInput extends StatelessWidget {
         return ListTile(
           title: const Text(kSetPublic),
           leading: Checkbox(
-            checkColor: kButtonColor,
+            checkColor: accentColor,
             value: state.public,
             onChanged: (bool? value) =>
                 context.read<CourseCubit>().publicChanged(value!),

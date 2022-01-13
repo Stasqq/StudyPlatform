@@ -35,7 +35,7 @@ import 'package:study_platform/utility/app_bloc_observer.dart';
 
 import 'data/repositories/authentication_repository.dart';
 import 'logic/bloc/classes_bloc/classes_bloc.dart';
-import 'logic/cubit/class_content_edit_cubit/class_content_cubit.dart';
+import 'logic/cubit/class_content_cubit/class_content_cubit.dart';
 
 final firebaseAuth = FirebaseAuth.instance;
 final firebaseFirestore = FirebaseFirestore.instance;
@@ -201,7 +201,7 @@ class _App extends StatelessWidget {
     return MaterialApp(
       title: kAppTitle,
       theme: ThemeData(
-        primaryColor: primaryColor,
+        primaryColor: darkPrimaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       onGenerateRoute: AppRouter.onGenerateRoute,

@@ -17,7 +17,6 @@ const String kChatScreen = '/chat';
 const String kClassEditScreen = '/class_edit';
 const String kClassContentEditScreen = '/class_content_edit';
 const String kClassContentPreviewScreen = '/class_content_preview';
-const String kClassScreen = '/class';
 const String kCreateTestScreen = '/create_test';
 const String kCreateQuestionScreen = '/create_question';
 const String kTestsScreen = '/tests';
@@ -28,6 +27,11 @@ const String kTestResultScreen = '/test_result';
 // * Assets
 
 const String kDefaultAvatarImage = 'images/default_avatar.png';
+const String kEducationImage = 'images/education.png';
+
+// * Hero Tag
+
+const String kLogoTag = 'logo_tag';
 
 // * Exceptions
 
@@ -83,8 +87,9 @@ const String kClassChatTitleEnding = ' Chat';
 const String kEnterCourseId = 'Enter Course Id';
 const String kEnterClassDescription = 'Enter Class Description';
 const String kDeleteClass = 'Delete this class?';
+const String kDeleteCourse = 'Delete this course?';
 const String kEnterAnswer = 'Enter Answer';
-const String kRateCourse = 'RateCourse';
+const String kRateCourse = 'Rate Course';
 
 // ? Button
 
@@ -92,7 +97,7 @@ const String kAppTitle = 'Study Platform';
 const String kSubmitText = 'Submit';
 const String kMenuText = 'Menu';
 const String kLogoutText = 'Logout';
-const String kCloseText = 'Close';
+const String kCloseAppText = 'Close App';
 const String kChangePhoto = 'Change Photo';
 const String kCreateAccount = 'CREATE ACCOUNT';
 const String kSetPublic = 'Set Public';
@@ -152,6 +157,12 @@ const String kTestNameLabelInvalid = 'Invalid test name!';
 const String kQuestionTextLabel = 'Question Text';
 
 const String kDescriptionLabel = 'Description';
+const String kDescriptionLabelHelper = 'Up to 400 characters';
+const String kDescriptionLabelInvalid = 'Description is to long!';
+
+const String kClassName = 'Class name';
+const String kClassDescription = 'Class description';
+const String kClassListIndex = 'Class list index';
 
 // ? Text
 
@@ -169,6 +180,11 @@ const String kQuestion = 'Question ';
 const String kCurrentResult = 'Current Result ';
 const String kCourseRateMax = ' / 5';
 const String kNoRatesYet = 'No rates yet';
+const String kFirstname = 'Firstname:';
+const String kSurname = 'Surname:';
+const String kEmail = 'Email:';
+const String kCourseId = 'Course ID: ';
+const String kCourseOwner = 'Owner: ';
 
 // ? Error message
 
@@ -176,3 +192,4 @@ const String kUserInfoSavingFailure = 'User Info Saving Failure';
 const String kSignUpFailure = 'Sign Up Failure';
 const String kAuthenticationFailure = 'Authentication Failure';
 const String kCourseCreatingFailure = 'Course Creating Failure';
+const String kClassContentFileIsToBig = 'Content file is to big (max. 10MB)!';

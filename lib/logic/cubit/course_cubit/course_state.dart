@@ -26,8 +26,23 @@ class CourseState extends Equatable {
   final String? errorMessage;
 
   @override
-  List<Object?> get props =>
-      [id, ownerUid, ownerName, courseName, description, classes, public, status];
+  List<Object?> get props => [
+        id,
+        ownerUid,
+        ownerName,
+        courseName,
+        description,
+        classes,
+        public,
+        status
+      ];
+
+  bool isDescriptionValid() {
+    if (description != null) {
+      return description!.length < 400;
+    }
+    return true;
+  }
 
   CourseState copyWith({
     String? id,

@@ -8,7 +8,7 @@ class ClassContentState extends Equatable {
 class ClassContentDataLoadingState extends ClassContentState {}
 
 class ClassContentDataLoadingSuccessState extends ClassContentState {
-  final String? htmlText;
+  final String htmlText;
   final String? htmlFilePath;
   final ClassesBloc? classesBloc;
 
@@ -17,6 +17,8 @@ class ClassContentDataLoadingSuccessState extends ClassContentState {
     required this.htmlFilePath,
     required this.classesBloc,
   });
+
+  bool get isTextValid => htmlText.length <= 10000000;
 
   @override
   List<Object?> get props => [htmlText, htmlFilePath, classesBloc];

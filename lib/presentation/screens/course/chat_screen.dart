@@ -100,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   .add(ChatMessageSentEvent());
                               messageTextController.clear();
                             },
-                            child: const Text(
+                            child: Text(
                               kSend,
                               style: kSendButtonTextStyle,
                             ),

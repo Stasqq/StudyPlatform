@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_platform/constants/colors.dart';
 import 'package:study_platform/constants/string_variables.dart';
+import 'package:study_platform/constants/styles.dart';
 import 'package:study_platform/logic/bloc/courses_bloc/courses_bloc.dart';
 import 'package:study_platform/logic/cubit/create_test_cubit/create_test_cubit.dart';
 import 'package:study_platform/logic/cubit/take_test_cubit/take_test_cubit.dart';
@@ -32,6 +34,7 @@ class TestsScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed(kCreateTestScreen);
                 },
                 child: Icon(Icons.add),
+                style: kAppBarButtonStyle,
               ),
             SizedBox(width: 8),
           ],
@@ -51,11 +54,18 @@ class TestsScreen extends StatelessWidget {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(state.tests[index].name),
+                    Text(
+                      state.tests[index].name,
+                      style: kBigTextStyle,
+                    ),
                     if ((context.read<CoursesBloc>().state
                             as CoursesStateLoadSuccess)
                         .joined)
-                      Text(kCurrentResult + state.getTestResultString(index)),
+                      Text(
+                        kCurrentResult + state.getTestResultString(index),
+                        style: kNormalTextStyle,
+                      ),
+                    SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -69,6 +79,7 @@ class TestsScreen extends StatelessWidget {
                                 }
                               : null,
                           child: Text(kTestStart),
+                          style: kButtonStyle,
                         ),
                         if ((context.read<CoursesBloc>().state
                                 as CoursesStateLoadSuccess)
@@ -88,6 +99,7 @@ class TestsScreen extends StatelessWidget {
                                 child: Text(
                                   state.tests[index].open ? kClose : kOpen,
                                 ),
+                                style: kButtonStyle,
                               ),
                               SizedBox(width: 8),
                               ElevatedButton(
@@ -108,6 +120,7 @@ class TestsScreen extends StatelessWidget {
                                 child: Text(
                                   kResultsText,
                                 ),
+                                style: kButtonStyle,
                               ),
                             ],
                           ),
@@ -117,7 +130,7 @@ class TestsScreen extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return Divider();
+                return Divider(color: lightPrimaryColor);
               },
             );
           } else {

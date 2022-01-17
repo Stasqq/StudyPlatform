@@ -11,7 +11,7 @@ class UserInfo with _$UserInfo {
       String? uid,
       String firstName,
       String surname,
-      String? photoURL,
+      String? photoPath,
       List<JoinedCourseWithRate> joinedCourses) = _UserInfo;
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);

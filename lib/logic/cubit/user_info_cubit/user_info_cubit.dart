@@ -105,7 +105,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         state.copyWith(
           firstName: Name.dirty(userInfo.firstName),
           surname: Name.dirty(userInfo.surname),
-          photoURL: userInfo.photoURL,
+          photoURL: userInfo.photoPath,
           email: Email.dirty(userInfo.email ?? ''),
           uid: userInfo.uid,
           joinedCourses: userInfo.joinedCourses,

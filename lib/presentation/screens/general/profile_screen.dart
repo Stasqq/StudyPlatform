@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: <Widget>[
                 BlocBuilder<PhotoUriCubit, PhotoUriState>(
                   builder: (BuildContext context, state) {
-                    if (userInfo.photoURL!.isEmpty)
+                    if (userInfo.photoPath!.isEmpty)
                       return Image.asset(
                         kDefaultAvatarImage,
                         height: 300,
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     else if (state is PhotoUriNotGenerated) {
                       context
                           .read<PhotoUriCubit>()
-                          .generateUri(userInfo.photoURL!);
+                          .generateUri(userInfo.photoPath!);
                       return CircularProgressIndicator();
                     } else if (state is PhotoUriGenerated)
                       return Image.network(

@@ -22,13 +22,13 @@ class _$UserInfoTearOff {
   const _$UserInfoTearOff();
 
   _UserInfo call(String? email, String? uid, String firstName, String surname,
-      String? photoURL, List<JoinedCourseWithRate> joinedCourses) {
+      String? photoPath, List<JoinedCourseWithRate> joinedCourses) {
     return _UserInfo(
       email,
       uid,
       firstName,
       surname,
-      photoURL,
+      photoPath,
       joinedCourses,
     );
   }
@@ -47,7 +47,7 @@ mixin _$UserInfo {
   String? get uid => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
   String get surname => throw _privateConstructorUsedError;
-  String? get photoURL => throw _privateConstructorUsedError;
+  String? get photoPath => throw _privateConstructorUsedError;
   List<JoinedCourseWithRate> get joinedCourses =>
       throw _privateConstructorUsedError;
 
@@ -66,7 +66,7 @@ abstract class $UserInfoCopyWith<$Res> {
       String? uid,
       String firstName,
       String surname,
-      String? photoURL,
+      String? photoPath,
       List<JoinedCourseWithRate> joinedCourses});
 }
 
@@ -84,7 +84,7 @@ class _$UserInfoCopyWithImpl<$Res> implements $UserInfoCopyWith<$Res> {
     Object? uid = freezed,
     Object? firstName = freezed,
     Object? surname = freezed,
-    Object? photoURL = freezed,
+    Object? photoPath = freezed,
     Object? joinedCourses = freezed,
   }) {
     return _then(_value.copyWith(
@@ -104,9 +104,9 @@ class _$UserInfoCopyWithImpl<$Res> implements $UserInfoCopyWith<$Res> {
           ? _value.surname
           : surname // ignore: cast_nullable_to_non_nullable
               as String,
-      photoURL: photoURL == freezed
-          ? _value.photoURL
-          : photoURL // ignore: cast_nullable_to_non_nullable
+      photoPath: photoPath == freezed
+          ? _value.photoPath
+          : photoPath // ignore: cast_nullable_to_non_nullable
               as String?,
       joinedCourses: joinedCourses == freezed
           ? _value.joinedCourses
@@ -126,7 +126,7 @@ abstract class _$UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
       String? uid,
       String firstName,
       String surname,
-      String? photoURL,
+      String? photoPath,
       List<JoinedCourseWithRate> joinedCourses});
 }
 
@@ -145,7 +145,7 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
     Object? uid = freezed,
     Object? firstName = freezed,
     Object? surname = freezed,
-    Object? photoURL = freezed,
+    Object? photoPath = freezed,
     Object? joinedCourses = freezed,
   }) {
     return _then(_UserInfo(
@@ -165,9 +165,9 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
           ? _value.surname
           : surname // ignore: cast_nullable_to_non_nullable
               as String,
-      photoURL == freezed
-          ? _value.photoURL
-          : photoURL // ignore: cast_nullable_to_non_nullable
+      photoPath == freezed
+          ? _value.photoPath
+          : photoPath // ignore: cast_nullable_to_non_nullable
               as String?,
       joinedCourses == freezed
           ? _value.joinedCourses
@@ -181,7 +181,7 @@ class __$UserInfoCopyWithImpl<$Res> extends _$UserInfoCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_UserInfo implements _UserInfo {
   const _$_UserInfo(this.email, this.uid, this.firstName, this.surname,
-      this.photoURL, this.joinedCourses);
+      this.photoPath, this.joinedCourses);
 
   factory _$_UserInfo.fromJson(Map<String, dynamic> json) =>
       _$$_UserInfoFromJson(json);
@@ -195,13 +195,13 @@ class _$_UserInfo implements _UserInfo {
   @override
   final String surname;
   @override
-  final String? photoURL;
+  final String? photoPath;
   @override
   final List<JoinedCourseWithRate> joinedCourses;
 
   @override
   String toString() {
-    return 'UserInfo(email: $email, uid: $uid, firstName: $firstName, surname: $surname, photoURL: $photoURL, joinedCourses: $joinedCourses)';
+    return 'UserInfo(email: $email, uid: $uid, firstName: $firstName, surname: $surname, photoPath: $photoPath, joinedCourses: $joinedCourses)';
   }
 
   @override
@@ -213,7 +213,7 @@ class _$_UserInfo implements _UserInfo {
             const DeepCollectionEquality().equals(other.uid, uid) &&
             const DeepCollectionEquality().equals(other.firstName, firstName) &&
             const DeepCollectionEquality().equals(other.surname, surname) &&
-            const DeepCollectionEquality().equals(other.photoURL, photoURL) &&
+            const DeepCollectionEquality().equals(other.photoPath, photoPath) &&
             const DeepCollectionEquality()
                 .equals(other.joinedCourses, joinedCourses));
   }
@@ -225,7 +225,7 @@ class _$_UserInfo implements _UserInfo {
       const DeepCollectionEquality().hash(uid),
       const DeepCollectionEquality().hash(firstName),
       const DeepCollectionEquality().hash(surname),
-      const DeepCollectionEquality().hash(photoURL),
+      const DeepCollectionEquality().hash(photoPath),
       const DeepCollectionEquality().hash(joinedCourses));
 
   @JsonKey(ignore: true)
@@ -245,7 +245,7 @@ abstract class _UserInfo implements UserInfo {
       String? uid,
       String firstName,
       String surname,
-      String? photoURL,
+      String? photoPath,
       List<JoinedCourseWithRate> joinedCourses) = _$_UserInfo;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) = _$_UserInfo.fromJson;
@@ -259,7 +259,7 @@ abstract class _UserInfo implements UserInfo {
   @override
   String get surname;
   @override
-  String? get photoURL;
+  String? get photoPath;
   @override
   List<JoinedCourseWithRate> get joinedCourses;
   @override

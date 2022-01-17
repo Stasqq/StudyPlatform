@@ -11,7 +11,7 @@ _$_UserInfo _$$_UserInfoFromJson(Map json) => _$_UserInfo(
       json['uid'] as String?,
       json['firstName'] as String,
       json['surname'] as String,
-      json['photoURL'] as String?,
+      json['photoPath'] as String?,
       (json['joinedCourses'] as List<dynamic>)
           .map((e) => JoinedCourseWithRate.fromJson(
               Map<String, dynamic>.from(e as Map)))
@@ -24,6 +24,6 @@ Map<String, dynamic> _$$_UserInfoToJson(_$_UserInfo instance) =>
       'uid': instance.uid,
       'firstName': instance.firstName,
       'surname': instance.surname,
-      'photoURL': instance.photoURL,
+      'photoPath': instance.photoPath,
       'joinedCourses': instance.joinedCourses.map((e) => e.toJson()).toList(),
     };

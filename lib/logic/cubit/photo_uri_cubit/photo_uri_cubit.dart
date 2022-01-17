@@ -33,7 +33,7 @@ class PhotoUriCubit extends Cubit<PhotoUriState> {
 
   Future<void> uploadPhoto(UserInfo userInfo) async {
     try {
-      if (userInfo.photoURL != '')
+      if (userInfo.photoPath != '')
         await _filesRepository.deleteFile(
           filePath: 'users/' + userInfo.uid! + '/photo.png',
         );
@@ -47,7 +47,7 @@ class PhotoUriCubit extends Cubit<PhotoUriState> {
       );
       _userInfoRepository.saveUserInfoToFirebase(
         userInfo: userInfo.copyWith(
-          photoURL: photoURL,
+          photoPath: photoURL,
         ),
       );
 
